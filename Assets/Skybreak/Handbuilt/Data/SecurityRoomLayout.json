@@ -1,0 +1,7 @@
+{
+  "description": "Two holding-room floor additions matching the user's marked sides of the second arena. Layout only; doors and agents are not implemented.",
+  "rooms": [
+    { "id": "securityWest", "x1": 14, "x2": 22, "z1": 50, "z2": 58, "connectorX1": 22, "connectorX2": 24, "connectorZ1": 52, "connectorZ2": 56, "doorX": 22, "doorZ": 54, "doorWidth": 3, "doorHeight": 3 },
+    { "id": "securityEast", "x1": 63, "x2": 71, "z1": 42, "z2": 50, "connectorX1": 61, "connectorX2": 63, "connectorZ1": 44, "connectorZ2": 48, "doorX": 63, "doorZ": 46, "doorWidth": 3, "doorHeight": 3 }
+  ]
+}

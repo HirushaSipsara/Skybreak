@@ -1,0 +1,53 @@
+{
+  "scale": "1.5x1.5",
+  "type": 1,
+  "tags": [
+    "tiles",
+    "clean",
+    "uneven",
+    "smooth",
+    "square",
+    "large"
+  ],
+  "date_published": 1616583972,
+  "name": "Tiled Floor 001",
+  "old_id": 309,
+  "categories": [
+    "floor",
+    "indoor",
+    "man made",
+    "outdoor",
+    "clean",
+    "wall"
+  ],
+  "authors": {
+    "Rob Tuytel": "Processing",
+    "Dimitrios Savva": "Photography"
+  },
+  "sponsors": [
+    "7934315"
+  ],
+  "dimensions": [
+    1500,
+    1500
+  ],
+  "max_resolution": [
+    8192,
+    8192
+  ],
+  "files_hash": "ca611db7855aa370034f837bfc1a067515534e62",
+  "description": "Free 8K material of large square ceramic tiles with warm brown tones, smooth but slightly uneven faces, thin recessed grout lines and subtle wear with fine micro-roughness.",
+  "category_id": "ce781525-aa20-5d90-9d19-8530e8e243ba",
+  "category": "Ceramic/Glazed Tiles/Glossy Glazed",
+  "attributes": {
+    "surface_use": "floor",
+    "condition": [
+      "worn"
+    ],
+    "origin": "man_made",
+    "setting": "either"
+  },
+  "img_version": "0de65332",
+  "download_count": 113457,
+  "thumbnail_url": "https://cdn.polyhaven.com/asset_img/thumbs/tiled_floor_001.png?width=256&height=256&v=0de65332"
+}

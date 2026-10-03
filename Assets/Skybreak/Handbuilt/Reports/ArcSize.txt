@@ -1,0 +1,5 @@
+Visual scale: 1.3 (30 percent larger)
+Root scale remains 1; only the visual and explicit capsule dimensions were resized.
+Capsule height: 2.444m / radius: 0.416m
+Camera pivot: 2.08m / distance: 5m / shoulder offset: 0.8m
+Original Arc prefab and map geometry unchanged. Shared controller gained adjustable camera offsets, with its previous values as defaults.

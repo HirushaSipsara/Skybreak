@@ -1,0 +1,10 @@
+PASS Ground contact at entry
+PASS W direction and walk speed
+PASS Sprint faster than walk
+PASS Wall blocks character
+PASS Crate blocks character
+PASS Jump rises and lands
+PASS Camera stays inside rear boundary
+PASS Character hides when camera is very close
+PASS Capsule can walk entire entry-to-boss route
+Checks passed: 9 / 9

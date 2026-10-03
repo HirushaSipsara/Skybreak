@@ -1,0 +1,5 @@
+Play mode verified: True
+Preview component: True
+Viewpoints: 5
+Keyboard / mouse present: True / True
+World-space tile size: (0.99, 0.14, 0.99)

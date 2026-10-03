@@ -1,0 +1,3 @@
+System.InvalidOperationException: Descent scene already exists; preserving it.
+  at Skybreak.Descent.Editor.DescentMapBuilder.Build () [0x00265] in F:\UnityProjects\Skybreak\Assets\Skybreak\Descent\Editor\DescentMapBuilder.cs:317 
+  at PipelineEvaluation.PipelineEval_2af04386+<>c.<Execute>b__0_0 () [0x00002] in <2a69d57f40134e179f699bb9645b79ed>:0 

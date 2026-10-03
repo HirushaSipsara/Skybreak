@@ -1,0 +1,6 @@
+Scene: Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity
+Tiles: 2639
+Connected cells: 2639 / 2639
+Floor collider checks: 2639 / 2639
+Original map was not edited.
+Textures imported at 2K (grass 1K); performance on Intel graphics has not been measured.

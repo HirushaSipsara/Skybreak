@@ -1,0 +1,20 @@
+Backup: Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor_BeforeOriginalColours_20261002.unity
+Only scene floor material references were changed.
+Original palette hues with 1.65 brightness compensation for the darker downloaded stone albedo.
+Floor0: source #6E7C7E, stone tint #B5CDD0
+Floor1: source #798686, stone tint #C8DDDD
+Floor2: source #84908F, stone tint #DAEEEC
+Floor3: source #8F9998, stone tint #ECFCFB
+Floor4: source #9AA3A0, stone tint #FEFFFF
+PassageFloor: source #4F6972, stone tint #82ADBC
+CoreFloor: source #696577, stone tint #ADA7C4
+Floor0 tiles: 346
+Floor1 tiles: 334
+Floor2 tiles: 369
+Floor3 tiles: 366
+Floor4 tiles: 344
+PassageFloor tiles: 330
+CoreFloor tiles: 694
+Preserved floor tiles/colliders: 2783
+Recoloured material slots: 8349
+14 shared palette materials; original albedo, normal and smoothness maps retained. Original neutral materials and prefab assets unchanged.

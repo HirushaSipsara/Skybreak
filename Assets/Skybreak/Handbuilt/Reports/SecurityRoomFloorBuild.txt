@@ -1,0 +1,10 @@
+Backup: Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor_BeforeSideRooms_20261002.unity
+Original tiles retained: 2639
+Added floor tiles: 144
+Total floor tiles: 2783
+Connected cells: 2783 / 2783
+New floor collider checks: 144 / 144
+Door markers: 2 / no blocking colliders
+securityWest: floor [14, 22] x [50, 58]; door (22, 0, 54) / Y rotation 90 / 3m x 3m.
+securityEast: floor [63, 71] x [42, 50]; door (63, 0, 46) / Y rotation 90 / 3m x 3m.
+Layout stage only: working doors, walls and agents are not added.

@@ -1,0 +1,1 @@
+Adjusted 4128 lamp-lens vertices; depth-tested lettering; improved light fill and reduced overview fog.

@@ -1,0 +1,266 @@
+{
+  "blend": "F:/UnityProjects/Skybreak/ArtSource/FloorKit/SkybreakStoneFloorKit.blend",
+  "source": "F:/UnityProjects/Skybreak/resources/Stone Floor",
+  "assets": [
+    {
+      "name": "StoneFloor_SlabOne",
+      "dimensions_m": [
+        0.94936203956604,
+        0.943966269493103,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_SlabOne.fbx"
+    },
+    {
+      "name": "StoneFloor_SlabTwo",
+      "dimensions_m": [
+        0.9472494125366211,
+        0.9441666603088379,
+        0.13659200072288513
+      ],
+      "triangles": 154,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_SlabTwo.fbx"
+    },
+    {
+      "name": "StoneFloor_Ground",
+      "dimensions_m": [
+        1.0,
+        1.0,
+        0.16805291175842285
+      ],
+      "triangles": 29,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_Ground.fbx"
+    },
+    {
+      "name": "StoneFloor_FragmentOne",
+      "dimensions_m": [
+        0.12744079530239105,
+        0.10721787810325623,
+        0.0634583830833435
+      ],
+      "triangles": 40,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_FragmentOne.fbx"
+    },
+    {
+      "name": "StoneFloor_FragmentTwo",
+      "dimensions_m": [
+        0.09710784256458282,
+        0.09988372027873993,
+        0.055252522230148315
+      ],
+      "triangles": 44,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_FragmentTwo.fbx"
+    },
+    {
+      "name": "StoneFloor_FragmentThree",
+      "dimensions_m": [
+        0.11690597236156464,
+        0.1272108256816864,
+        0.08017310500144958
+      ],
+      "triangles": 54,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_FragmentThree.fbx"
+    },
+    {
+      "name": "StoneFloor_FragmentFour",
+      "dimensions_m": [
+        0.11034820973873138,
+        0.10710374265909195,
+        0.08347146213054657
+      ],
+      "triangles": 50,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_FragmentFour.fbx"
+    },
+    {
+      "name": "StoneFloor_FragmentFive",
+      "dimensions_m": [
+        0.17320068180561066,
+        0.09057137370109558,
+        0.06535971909761429
+      ],
+      "triangles": 52,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_FragmentFive.fbx"
+    },
+    {
+      "name": "StoneFloor_GrassOne",
+      "dimensions_m": [
+        0.1568397581577301,
+        0.2151888608932495,
+        0.1542264074087143
+      ],
+      "triangles": 16,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_GrassOne.fbx"
+    },
+    {
+      "name": "StoneFloor_GrassTwo",
+      "dimensions_m": [
+        0.18591353297233582,
+        0.21951556205749512,
+        0.1507192850112915
+      ],
+      "triangles": 16,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/StoneFloor_GrassTwo.fbx"
+    },
+    {
+      "name": "FloorTile_01",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_01.fbx"
+    },
+    {
+      "name": "FloorTile_02",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_02.fbx"
+    },
+    {
+      "name": "FloorTile_03",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_03.fbx"
+    },
+    {
+      "name": "FloorTile_04",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_04.fbx"
+    },
+    {
+      "name": "FloorTile_05",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_05.fbx"
+    },
+    {
+      "name": "FloorTile_06",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_06.fbx"
+    },
+    {
+      "name": "FloorTile_07",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_07.fbx"
+    },
+    {
+      "name": "FloorTile_08",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_08.fbx"
+    },
+    {
+      "name": "FloorTile_09",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_09.fbx"
+    },
+    {
+      "name": "FloorTile_10",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_10.fbx"
+    },
+    {
+      "name": "FloorTile_11",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_11.fbx"
+    },
+    {
+      "name": "FloorTile_12",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_12.fbx"
+    },
+    {
+      "name": "FloorTile_13",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_13.fbx"
+    },
+    {
+      "name": "FloorTile_14",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_14.fbx"
+    },
+    {
+      "name": "FloorTile_15",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_15.fbx"
+    },
+    {
+      "name": "FloorTile_16",
+      "dimensions_m": [
+        0.9850000143051147,
+        0.9850000143051147,
+        0.1372358351945877
+      ],
+      "triangles": 146,
+      "fbx": "F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/FloorTile_16.fbx"
+    }
+  ]
+}

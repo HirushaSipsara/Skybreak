@@ -1,0 +1,10 @@
+Grounded at spawn: True
+W forward distance: 4.7m (expected 4.7m)
+D right distance: 2.35m (expected 2.35m)
+Blocked by west wall at X: -4.544
+Jump peak: 1.091455m / landed: True
+West doorway traversed: True
+East doorway traversed: True
+Route waypoints reached using real CharacterController: 12 / 12
+Camera stayed inside rear wall: True
+Checks use the controller's movement API in Play Mode; no synthetic keyboard or mouse events injected.

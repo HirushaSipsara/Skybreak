@@ -1,0 +1,7 @@
+Backup: Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor_BeforeExplorer_20261002.unity
+Explorer: 08 / ARC / Walk around the map
+Reused ArcExplorer prefab; original prefab and controller source unchanged.
+Spawn: (0, 0.12, -4); floor support checked.
+One CharacterController, one existing camera. Flying preview disabled.
+WASD / arrows move; mouse look; Shift run; Space jump; Esc releases cursor.
+Floor, walls and room openings unchanged. No combat components added.

@@ -1,0 +1,9 @@
+Backup: Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor_BeforeWalls_20261002.unity
+Editable perimeter modules: 568 (120 taller passage modules)
+Open doorway wall frames: 2 / opening width 3m, height 3m
+Boundary collider hits: 568 / 568
+Floor centres blocked by walls: 0
+Mission route segments blocked: 0
+Open room entrances: 2 / 2
+Original floor tiles/colliders: 2783 / retained: True
+Only wall geometry and wall colliders added; no doors, props, agents or lights added.

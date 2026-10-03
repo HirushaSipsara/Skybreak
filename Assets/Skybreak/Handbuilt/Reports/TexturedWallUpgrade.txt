@@ -1,0 +1,12 @@
+Backup: Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor_BeforeTexturedWalls_20261002.unity
+Standard wall modules: 448 / 6.5m high
+Passage modules: 120 / 7m high
+Doorway frames: 2 / 6.5m high, 3m clear opening retained
+Actual floor-boundary collider hits: 568 / 568
+Incorrect collider heights: 0
+Floor centres blocked: 0
+Mission route segments blocked: 0
+Open doorway checks: 2 / 2
+Shared floor albedo, normal and smoothness maps: True
+Floor tiles retained: 2783
+Old wall prefab/mesh/material assets unchanged; only scene wall instances replaced.
