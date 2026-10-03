@@ -1,6 +1,6 @@
 # Skybreak team work guide
 
-Prepared 3 October 2026. Read this page first, then the guide for your graphics role.
+Updated 3 October 2026 for the reorganised project. **Start with [what each member should do next](START_HERE.md)**, then use this page and the detailed guide for your graphics role.
 
 ## 1. What the assignment actually requires
 
@@ -104,21 +104,21 @@ For each Student 3 model, keep the original `.blend` under `<ModelName>/Source/`
 
 Keep each agent's decision-making and behaviour under `Assets/Scripts/AI/<AgentName>/`. `Core/World/` contains observations, world-state access and integration/navigation adapters, not agent decisions. Use the functional folders for gameplay code; GV/IS grouping belongs in Docs and evidence.
 
-Let Student 1 integrate the main handbuilt scene. Other Unity members develop in small separate test scenes and reusable prefabs. This reduces competing edits to a large scene file. Preserve `Assets` `.meta` files; they hold reference identities.
+Let Student 1 integrate `Assets/Scenes/GameLevel/SkybreakMain.unity`. Other Unity members develop in small separate test scenes and reusable prefabs. This reduces competing edits to a large scene file. Preserve `Assets` `.meta` files; they hold reference identities.
 
-The first baseline captures the saved Unity project, original art sources, folder scaffold and guides. The configured remote is `https://github.com/HirushaSipsara/Skybreak.git`; its default branch is `main`. Student 1 prepares and verifies publication before teammates clone. See Git history for the actual commit/push state; a documentation statement alone is not proof of publication.
+The first baseline captures the saved Unity project, original art sources, folder scaffold and guides. The configured remote is `https://github.com/HirushaSipsara/Skybreak.git`; its default branch is `main`. The reviewed asset reorganisation has been pushed to main; teammates should update their clones before starting new work. See Git history for the actual commit/push state; a documentation statement alone is not proof of publication.
 
 The current `.gitattributes` already marks `.blend`, `.fbx` and many other binaries for Git LFS. Check/install LFS before adding assets. Verify another clone actually downloads the models, not only pointer text. Do not track Library, Temp, Logs or local build outputs.
 
 ### First setup on each teammate's computer
 
-Do this after Student 1 has published the reviewed baseline and given everyone access to the repository.
+Student 1 must give everyone collaborator access to the private repository. Existing clones follow the update steps in [Start here](START_HERE.md#1-get-the-current-shared-project).
 
 1. Install [Git for Windows](https://git-scm.com/install/windows) and [Git LFS](https://git-lfs.com/), then reopen your terminal. Run `git --version`, `git lfs version`, and `git lfs install`. The LFS setup command installs its hooks/configuration for your account; follow the official LFS setup if the command is unavailable.
-2. Clone the shared repository to a local working folder using its actual URL. Do not create a separate unrelated Unity project or copy only the scene file. Example with a placeholder URL you must replace:
+2. Clone the shared repository to a local working folder using its actual URL. Do not create a separate unrelated Unity project or copy only the scene file. Use this repository URL:
 
    ```powershell
-   git clone "PASTE_THE_ACTUAL_TEAM_REPOSITORY_URL_HERE" Skybreak
+   git clone https://github.com/HirushaSipsara/Skybreak.git Skybreak
    Set-Location -LiteralPath '.\Skybreak'
    git lfs pull
    git config user.name "YOUR REAL NAME"

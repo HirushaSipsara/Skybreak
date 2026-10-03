@@ -1,5 +1,7 @@
 # Student 3 — original Blender models and assisted Unity import
 
+**Before starting:** follow [the current setup and first-task checklist](START_HERE.md), including pulling the reorganised project.
+
 Read the [team agreement](README.md) first. You can complete the modelling/export work on your computer **without Unity**. Student 1 performs the Unity import and testing on their machine using your handoff package.
 
 ## 1. What you must demonstrate

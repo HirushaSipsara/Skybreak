@@ -1,6 +1,8 @@
 # Student 2 — player interaction and physics
 
-Read the [team agreement](README.md) first. This is a guide for work to implement; it does not claim these systems already exist in the handbuilt scene.
+**Before starting:** follow [the current setup and first-task checklist](START_HERE.md), including pulling the reorganised project.
+
+Read the [team agreement](README.md) first. This is a guide for work to implement; it does not claim these systems already exist in the main scene.
 
 ## 1. Your assignment responsibility
 
@@ -14,13 +16,14 @@ Your finished demonstration should show: the player interacts deliberately, the 
 
 - Same Unity Editor as the project: 6000.6.0f1; keep package versions from the repository.
 - C# editor such as Visual Studio or Rider, Git and Git LFS.
-- Existing player: `Assets/Scripts/Player/DescentCharacterController.cs`.
+- Existing player prefab: `Assets/Prefabs/Player/ArcExplorer.prefab`. Controller: `Assets/Scripts/Player/DescentCharacterController.cs`.
+- The saved main-scene player is enlarged; compare its CharacterController and camera settings when setting up the lab rather than assuming the prefab defaults match it.
 - Existing controls: WASD/arrows, mouse, Shift, Space, Esc. Input System is already installed. Read `Keyboard.current`/`Mouse.current` or agree an Input Action setup; do not mix in legacy input accidentally.
 - Current player collision height 2.444 m, radius 0.416 m, root scale 1.
 
-Create your own `Assets/Scenes/Tests/Student2Interactions/InteractionLab.unity`. Put player interaction code in `Assets/Scripts/Player/`, physics code in `Assets/Scripts/Physics/`, and reusable prefabs in `Assets/Prefabs/InteractiveObjects/`. Start with a floor, two walls, the existing Arc prefab and one door opening. Test there before asking Student 1 to place your prefab in the main map. Do not run the old Descent builder on the handbuilt map.
+Create your own `Assets/Scenes/Tests/Student2Interactions/InteractionLab.unity`. Put player interaction code in `Assets/Scripts/Player/`, physics code in `Assets/Scripts/Physics/`, and reusable prefabs in `Assets/Prefabs/InteractiveObjects/`. Start with a floor, two walls, the existing Arc prefab and one door opening. Test there before asking Student 1 to place your prefab in the main map. Do not run the old Descent builder on the main map.
 
-The existing `DescentGate.cs` belongs to an older map. It snaps leaves vertically and changes colliders; it is a reference, not a complete physics/interaction system for this map. Write your reusable door component in your own folder.
+The existing `Assets/Scripts/Physics/DescentGate.cs` belongs to an older map. It snaps leaves vertically and changes colliders; it is a reference, not a complete physics/interaction system for this map. Write your reusable door component in your own folder.
 
 ## 3. Plan your components
 

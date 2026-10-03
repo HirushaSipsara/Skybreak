@@ -59,7 +59,7 @@ Agent decisions belong in `Assets/Scripts/AI/<AgentName>/`. `Assets/Scripts/Core
 
 ## Working together
 
-- Read [the complete team guide](Docs/TeamGuide/README.md) and [the folder map](Docs/FOLDER_STRUCTURE.md).
+- Start with [what each member should do next](Docs/TeamGuide/START_HERE.md), then read [the complete team guide](Docs/TeamGuide/README.md) and [the folder map](Docs/FOLDER_STRUCTURE.md).
 - Keep `main` as the reviewed integrated project. Use a feature branch for each task.
 - Student 1 owns the main map scene. Other Unity members use the separate test-scene folders and reusable prefabs, then hand those to Student 1 for placement.
 - Save your work, review the diff, commit only the intended changes and matching `.meta` files, push your branch and open a pull request.

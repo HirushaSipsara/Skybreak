@@ -1,5 +1,7 @@
 # Student 4 — agent movement, rotation and animation
 
+**Before starting:** follow [the current setup and first-task checklist](START_HERE.md), including pulling the reorganised project.
+
 Read [the team guide](README.md) first. This is a build guide and proposed design, not an already implemented or tested movement system. Recommended values are starting points, not numbers specified by the assignment.
 
 ## 1. Your responsibility
