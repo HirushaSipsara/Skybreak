@@ -82,7 +82,7 @@ Each member must explain why their architecture and heuristic/weights suit the a
 
 ## 4. Project organisation and Git
 
-The team folder scaffold is created for the first baseline; folders do not create working game components. See [the complete folder map](../FOLDER_STRUCTURE.md). Existing `Assets/Skybreak/` work remains in place.
+The team folder scaffold is created for the first baseline; folders do not create working game components. See [the complete folder map](../FOLDER_STRUCTURE.md). Existing work has been migrated into the functional folders, with asset GUIDs preserved. See the folder map for current paths.
 
 ```text
 Assets/Scripts/Core/Interfaces/       # agreed interfaces

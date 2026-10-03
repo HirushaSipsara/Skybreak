@@ -70,5 +70,5 @@ finally
     player.enabled=wasEnabled;
 }
 report.AppendLine("Checks passed: "+passed+" / 9");
-System.IO.File.WriteAllText("F:/UnityProjects/Skybreak/Assets/Skybreak/Descent/Reports/CharacterValidation.txt",report.ToString());
+System.IO.File.WriteAllText("F:/UnityProjects/Skybreak/Docs/GV/LevelDesign/Reports/Dungeon/CharacterValidation.txt",report.ToString());
 return report.ToString();

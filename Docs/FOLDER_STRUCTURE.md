@@ -1,6 +1,31 @@
 # Repository folder map
 
-Updated 3 October 2026. The main scene and preserved demos are organised under `Assets/Scenes/`. Existing supporting meshes, materials, prefabs and scripts remain under `Assets/Skybreak/` with their references preserved. The other new folders are scaffolding for future work.
+Updated 3 October 2026. The main scene and preserved demos are organised under `Assets/Scenes/`. Existing assets now use the functional Models, Materials, Textures, Prefabs, Scripts and Tools folders with their original GUIDs preserved. The other new folders are scaffolding for future work.
+
+## Existing assets: where to work now
+
+| Asset | Current path |
+| --- | --- |
+| Floor FBX models | `Assets/Models/Environment/StoneFloor/` |
+| Wall meshes | `Assets/Models/Environment/StoneKit/Meshes/` |
+| Earlier dungeon meshes | `Assets/Models/Environment/Dungeon/Meshes/` |
+| Stone materials | `Assets/Materials/Environment/StoneKit/` |
+| Stone textures | `Assets/Textures/Environment/StoneKit/` |
+| Floor and wall prefabs | `Assets/Prefabs/Environment/StoneKit/` |
+| Arc explorer prefab | `Assets/Prefabs/Player/ArcExplorer.prefab` |
+| Arc controller | `Assets/Scripts/Player/DescentCharacterController.cs` |
+| Arc materials | `Assets/Materials/Characters/Arc/` |
+| Map layout inputs | `Assets/Data/World/StoneKit/` and `Dungeon/` |
+| Editor tools | `Assets/Tools/Editor/StoneKit/`, `Dungeon/` and `Demos/` |
+| Lighting profiles and demo pipeline settings | `Assets/Lighting/StoneKit/` and `Dungeon/` |
+| Existing demo NavMesh | `Assets/Navigation/NavMesh/DescentNavMesh.asset` |
+| Saved reports and screenshots | `Docs/GV/LevelDesign/Reports/StoneKit/` and `Dungeon/` |
+| Map editing guide | [Stone map guide](GV/LevelDesign/StoneKit_EDITING.md) |
+| Earlier demo guide | [Dungeon demo guide](GV/LevelDesign/Dungeon_EDITING.md) |
+
+The old `Assets/Skybreak/` folder has been retired. All 670 existing files were preserved; the 641 imported assets retain their GUIDs. Reports and guides, including their existing metadata records, were moved outside Unity's imported Assets tree. Historical reports retain old paths as evidence of the original checks.
+
+## Overall layout
 
 ```text
 Skybreak/
@@ -8,9 +33,6 @@ Skybreak/
 ├── .gitignore
 ├── .gitattributes
 ├── Assets/
-│   ├── Skybreak/                       # existing work; keep current references
-│   │   ├── Handbuilt/                  # supporting stone environment assets/tools
-│   │   └── Descent/                    # shared explorer and earlier demo assets
 │   ├── Scenes/
 │   │   ├── MainMenu/
 │   │   ├── GameLevel/
@@ -22,7 +44,7 @@ Skybreak/
 │   │       ├── Student2Interactions/
 │   │       └── Student4Movement/
 │   ├── Models/
-│   │   ├── Environment/
+│   │   ├── Environment/               # StoneFloor FBX, StoneKit and Dungeon meshes
 │   │   └── Custom/
 │   │       ├── SecurityRobot/
 │   │       └── AccessConsole/
@@ -34,6 +56,9 @@ Skybreak/
 │   │   ├── Environment/
 │   │   ├── Characters/
 │   │   └── InteractiveObjects/
+│   ├── Data/World/                    # StoneKit and Dungeon layout inputs
+│   ├── Shaders/Environment/
+│   ├── Tools/Editor/                  # StoneKit, Dungeon, Demos and shared scene tools
 │   ├── Lighting/
 │   ├── Navigation/NavMesh/
 │   ├── Animations/

@@ -14,7 +14,7 @@ Your finished demonstration should show: the player interacts deliberately, the 
 
 - Same Unity Editor as the project: 6000.6.0f1; keep package versions from the repository.
 - C# editor such as Visual Studio or Rider, Git and Git LFS.
-- Existing player: `Assets/Skybreak/Descent/Scripts/DescentCharacterController.cs`.
+- Existing player: `Assets/Scripts/Player/DescentCharacterController.cs`.
 - Existing controls: WASD/arrows, mouse, Shift, Space, Esc. Input System is already installed. Read `Keyboard.current`/`Mouse.current` or agree an Input Action setup; do not mix in legacy input accidentally.
 - Current player collision height 2.444 m, radius 0.416 m, root scale 1.
 

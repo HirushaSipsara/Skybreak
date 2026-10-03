@@ -6,7 +6,7 @@ import bpy, os
 obj = bpy.context.view_layer.objects.active
 if obj is None or obj.type != 'MESH':
     raise RuntimeError('Select a Stone Floor kit mesh first.')
-target = 'F:/UnityProjects/Skybreak/Assets/Skybreak/Handbuilt/Models/StoneFloor/' + obj.name + '.fbx'
+target = 'F:/UnityProjects/Skybreak/Assets/Models/Environment/StoneFloor/' + obj.name + '.fbx'
 if not os.path.exists(target):
     raise RuntimeError('This object has no existing working-kit FBX: ' + obj.name)
 selected = list(bpy.context.selected_objects)

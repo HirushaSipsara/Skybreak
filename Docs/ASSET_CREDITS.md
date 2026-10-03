@@ -2,7 +2,7 @@
 
 ## Stone Floor — 4engine
 
-The downloaded Stone Floor kit is credited to **4engine**, as identified in the user's supplied download-page screenshot. Original supplied files are under `resources/Stone Floor/`; the prepared Blender source is in `ArtSource/FloorKit/`. Imported mesh/texture assets are under `Assets/Skybreak/Handbuilt/`.
+The downloaded Stone Floor kit is credited to **4engine**, as identified in the user's supplied download-page screenshot. Original supplied files are under `resources/Stone Floor/`; the prepared Blender source is in `ArtSource/FloorKit/`. Imported FBX assets are under `Assets/Models/Environment/StoneFloor/`, and the original floor textures are under `Assets/Textures/Environment/StoneKit/StoneFloor/`.
 
 These meshes and their slab-based variations remain externally sourced. Metre conversion, repaired materials, changed UV variations and Unity map assembly do not turn them into Student 3's original models.
 

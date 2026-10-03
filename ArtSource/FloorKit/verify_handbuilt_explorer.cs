@@ -36,7 +36,7 @@ try
     place(new UnityEngine.Vector3(0,.12f,-8.5f));p.UpdateCamera(1);
     bool cameraClear=p.viewCamera.transform.position.z> -8.95f;
     var report=new[]{"Grounded at spawn: "+grounded,"W forward distance: "+walked+"m (expected 4.7m)","D right distance: "+strafed+"m (expected 2.35m)","Blocked by west wall at X: "+wallX,"Jump peak: "+peak+"m / landed: "+landed,"West doorway traversed: "+westDoor,"East doorway traversed: "+eastDoor,"Route waypoints reached using real CharacterController: "+reached+" / "+route.Length,"Camera stayed inside rear wall: "+cameraClear,"Checks use the controller's movement API in Play Mode; no synthetic keyboard or mouse events injected."};
-    System.IO.File.WriteAllLines("Assets/Skybreak/Handbuilt/Reports/ExplorerPlayCheck.txt",report);
+    System.IO.File.WriteAllLines("Docs/GV/LevelDesign/Reports/StoneKit/ExplorerPlayCheck.txt",report);
     if(!grounded||walked<4.5f||strafed<2.2f||wallX< -4.8f||wallX> -4.4f||peak<.8f||!landed||!westDoor||!eastDoor||reached!=route.Length||!cameraClear)throw new System.InvalidOperationException(string.Join("\n",report));
     return string.Join("\n",report);
 }

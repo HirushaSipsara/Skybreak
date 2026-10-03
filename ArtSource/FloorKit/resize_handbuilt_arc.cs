@@ -19,5 +19,5 @@ p.viewCamera.transform.SetPositionAndRotation(pivot+offset.normalized*distance,r
 UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
 if(!UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene))throw new System.IO.IOException("Could not save Arc size change.");
 var report=new[]{"Visual scale: 1.3 (30 percent larger)","Root scale remains 1; only the visual and explicit capsule dimensions were resized.","Capsule height: "+capsule.height+"m / radius: "+capsule.radius+"m","Camera pivot: "+p.cameraPivotHeight+"m / distance: "+p.cameraDistance+"m / shoulder offset: "+p.cameraShoulderOffset+"m","Original Arc prefab and map geometry unchanged. Shared controller gained adjustable camera offsets, with its previous values as defaults."};
-System.IO.File.WriteAllLines("Assets/Skybreak/Handbuilt/Reports/ArcSize.txt",report);
+System.IO.File.WriteAllLines("Docs/GV/LevelDesign/Reports/StoneKit/ArcSize.txt",report);
 return string.Join("\n",report);

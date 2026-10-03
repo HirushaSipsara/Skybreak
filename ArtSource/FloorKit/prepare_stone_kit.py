@@ -11,7 +11,7 @@ if bpy.data.collections.get('02 - One metre tile variations') is not None:
     raise RuntimeError('The tile kit already exists. Edit it and use export_selected_stone.py; do not regenerate over your edits.')
 kit = bpy.data.collections['01 - Editable source kit']
 texdir = project + '/resources/Stone Floor/Textures/Textures'
-exportdir = project + '/Assets/Skybreak/Handbuilt/Models/StoneFloor'
+exportdir = project + '/Assets/Models/Environment/StoneFloor'
 os.makedirs(exportdir, exist_ok=True)
 
 def material(name, prefix, grass=False):

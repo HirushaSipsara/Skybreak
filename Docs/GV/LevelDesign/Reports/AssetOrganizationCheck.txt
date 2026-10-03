@@ -1,0 +1,8 @@
+Assets/Scenes/GameLevel/SkybreakMain.unity | objects=9244 | missingScripts=0 | missingMeshes=0 | missingMaterials=0
+Assets/Scenes/Demos/SkybreakLastLightDemo.unity | objects=745 | missingScripts=0 | missingMeshes=0 | missingMaterials=0
+Assets/Scenes/Demos/SkybreakDescentDemo.unity | objects=1298 | missingScripts=0 | missingMeshes=0 | missingMaterials=0
+Compiled without errors: True
+
+641 imported GUIDs retained; 670 files preserved.
+Main Play Mode smoke check: Arc present and grounded at (0, 0.04, -4), camera and visual references assigned.
+Legacy Assets/Skybreak folder removed only after becoming empty.

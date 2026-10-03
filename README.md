@@ -83,7 +83,7 @@ The first commit captures the current saved project and team scaffolding. Static
 - [Student 2 — interaction physics](Docs/TeamGuide/STUDENT_2_INTERACTION_PHYSICS.md)
 - [Student 3 — Blender models and Unity handoff](Docs/TeamGuide/STUDENT_3_BLENDER_MODELS.md)
 - [Student 4 — path movement and animation](Docs/TeamGuide/STUDENT_4_AGENT_MOVEMENT.md)
-- [Existing map editing instructions](Assets/Skybreak/Handbuilt/README.md)
+- [Existing map editing instructions](Docs/GV/LevelDesign/StoneKit_EDITING.md)
 - [External asset credits](Docs/ASSET_CREDITS.md)
 
 GV requires source and a 3-minute demo, with the supplied brief's deadline of 21 October 2026. Confirm IS submission details separately. See the team guide for requirements, role evidence, calendar targets and viva preparation.
