@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 public static class SkybreakStarterScene
 {
-    const string ScenePath = "Assets/Skybreak/Scenes/SkybreakStarter.unity";
+    const string ScenePath = Skybreak.Editor.SkybreakScenePaths.LastLightDemo;
     const string MaterialDirectory = "Assets/Skybreak/Materials";
     static readonly Dictionary<string, Material> Materials = new Dictionary<string, Material>();
     static Transform section;
@@ -105,18 +105,18 @@ public static class SkybreakStarterScene
         return root;
     }
 
-    [MenuItem("Skybreak/Build starter scene")]
+    [MenuItem("Skybreak/Demos/Build Last Light demo")]
     public static string Build()
     {
         var original = SceneManager.GetActiveScene();
         if (original.isDirty) throw new InvalidOperationException("Save the open scene before building Skybreak.");
         if (File.Exists(ScenePath)) throw new InvalidOperationException("Starter scene already exists; preserving it.");
-        Directory.CreateDirectory("Assets/Skybreak/Scenes");
+        Directory.CreateDirectory(Path.GetDirectoryName(ScenePath));
         Directory.CreateDirectory(MaterialDirectory);
         AssetDatabase.Refresh();
         Materials.Clear();
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        scene.name = "SkybreakStarter";
+        scene.name = "SkybreakLastLightDemo";
         RenderSettings.ambientLight = new Color(.73f, .81f, .78f);
         RenderSettings.fog = true;
         RenderSettings.fogColor = new Color(.82f, .89f, .86f);
@@ -224,7 +224,7 @@ public static class SkybreakStarterScene
         mission.districtLights = lights.ToArray();
 
         if (!EditorSceneManager.SaveScene(scene, ScenePath)) throw new InvalidOperationException("Unity did not save " + ScenePath);
-        EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
+        Skybreak.Editor.SkybreakScenePaths.ConfigureBuildScenes();
         AssetDatabase.SaveAssets();
         Selection.activeGameObject = player;
         if (SceneView.lastActiveSceneView != null) SceneView.lastActiveSceneView.Frame(new Bounds(new Vector3(0, 1, -1), new Vector3(50, 20, 84)), false);

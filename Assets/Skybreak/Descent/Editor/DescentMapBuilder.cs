@@ -18,7 +18,7 @@ namespace Skybreak.Descent.Editor
     public static class DescentMapBuilder
     {
         public const string Root = "Assets/Skybreak/Descent";
-        public const string ScenePath = Root + "/Scenes/SkybreakDescent.unity";
+        public const string ScenePath = Skybreak.Editor.SkybreakScenePaths.DescentDemo;
         [Serializable] public class Zone { public string id,kind; public float x1,x2,z1,z2,x,z,radius; public int phase; }
         [Serializable] public class Cover { public float x,z,w,d,h; }
         [Serializable] public class Pillar { public float x,z,radius; }
@@ -304,15 +304,15 @@ namespace Skybreak.Descent.Editor
             if(EditorApplication.isPlaying)throw new InvalidOperationException("Stop Play Mode before building.");
             if(SceneManager.GetActiveScene().isDirty)throw new InvalidOperationException("Save the current scene before building.");
             if(File.Exists(ScenePath))throw new InvalidOperationException("Descent scene already exists; preserving it.");
-            foreach(string dir in new[]{"Scenes","Materials","Meshes","Textures","Prefabs","Settings","Reports"})Directory.CreateDirectory(Root+"/"+dir);AssetDatabase.Refresh();
+            foreach(string dir in new[]{"Materials","Meshes","Textures","Prefabs","Settings","Reports"})Directory.CreateDirectory(Root+"/"+dir);Directory.CreateDirectory(Path.GetDirectoryName(ScenePath));AssetDatabase.Refresh();
             map=JsonUtility.FromJson<Layout>(File.ReadAllText(Root+"/Data/DescentMapLayout.json"));paints.Clear();batches.Clear();chunks.Clear();crystals.Clear();pieceCount=0;font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            Scene scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);scene.name="SkybreakDescent";
+            Scene scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);scene.name="SkybreakDescentDemo";
             environment=Group("SKYBREAK / THE DESCENT / Environment");colliders=Group("Physical collision",environment);
             CreatePalette();CreateMeshes();FloorsAndWalls();Props();Architecture();Gates();Reactor();RouteAndAnchors();FlushBatches();LightingAndCamera();
             var navigation=environment.gameObject.AddComponent<NavMeshSurface>();navigation.collectObjects=CollectObjects.Children;navigation.useGeometry=NavMeshCollectGeometry.PhysicsColliders;navigation.agentTypeID=NavMesh.GetSettingsByIndex(0).agentTypeID;navigation.overrideVoxelSize=true;navigation.voxelSize=.12f;navigation.BuildNavMesh();
             if(navigation.navMeshData==null)throw new InvalidOperationException("Navigation bake produced no data.");AssetDatabase.CreateAsset(navigation.navMeshData,Root+"/Settings/DescentNavMesh.asset");
             EditorSceneManager.SaveScene(scene,ScenePath);AssetDatabase.SaveAssets();
-            var entries=EditorBuildSettings.scenes.ToList();entries.Insert(0,new EditorBuildSettingsScene(ScenePath,true));EditorBuildSettings.scenes=entries.ToArray();
+            Skybreak.Editor.SkybreakScenePaths.ConfigureBuildScenes();
             Selection.activeGameObject=environment.gameObject;if(SceneView.lastActiveSceneView!=null)SceneView.lastActiveSceneView.Frame(new Bounds(new Vector3(22,0,45),new Vector3(85,15,114)),false);
             return "Created "+ScenePath+"; "+pieceCount+" modular pieces, "+batches.Count+" spatial material batches, baked navigation and five preview views.";
         }

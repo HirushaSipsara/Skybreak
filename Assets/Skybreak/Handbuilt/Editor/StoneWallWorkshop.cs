@@ -13,7 +13,7 @@ namespace Skybreak.Handbuilt.Editor
     public static class StoneWallWorkshop
     {
         const string Root = "Assets/Skybreak/Handbuilt";
-        const string ScenePath = Root + "/Scenes/SkybreakStoneFloor.unity";
+        const string ScenePath = Skybreak.Editor.SkybreakScenePaths.Main;
         const string WallRoot = "07 / Modular walls";
         const float Depth = .72f;
         static readonly Vector2Int[] Directions = { Vector2Int.left, Vector2Int.right, Vector2Int.up, Vector2Int.down };
@@ -99,7 +99,7 @@ namespace Skybreak.Handbuilt.Editor
         }
         static bool Passage(float x, float z) => x > 6 && x < 28 && z > 24 && z < 50;
 
-        [MenuItem("Skybreak/Handbuilt Floor/Add modular walls (once)")]
+        [MenuItem("Skybreak/World Editing/Add modular walls (once)")]
         public static string Add()
         {
             var scene = SceneManager.GetActiveScene();
@@ -111,8 +111,8 @@ namespace Skybreak.Handbuilt.Editor
             var cells = new HashSet<Vector2Int>(tileColliders.Select(c => new Vector2Int(Mathf.FloorToInt(c.transform.position.x), Mathf.FloorToInt(c.transform.position.z))));
             if (cells.Count != tileColliders.Length) throw new InvalidOperationException("Floor cells overlap; fix those before placing walls.");
             if (!EditorSceneManager.SaveScene(scene)) throw new IOException("Could not save the current scene.");
-            string backup = AssetDatabase.GenerateUniqueAssetPath(Root + "/Scenes/SkybreakStoneFloor_BeforeWalls_20261002.unity");
-            if (!AssetDatabase.CopyAsset(ScenePath, backup)) throw new IOException("Backup failed; stopped before adding walls.");
+            string backup = Skybreak.Editor.SkybreakScenePaths.BackupMainScene("BeforeWalls");
+
             var paints = Paints();
             var normal = WallPrefab(4.5f, paints); var passage = WallPrefab(4.9f, paints); var door = DoorPrefab(paints);
             var root = new GameObject(WallRoot).transform;

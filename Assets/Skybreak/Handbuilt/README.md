@@ -1,8 +1,8 @@
-# Skybreak — stone floor workshop
+# Skybreak — main map editing and supporting environment assets
 
-## Open the new floor
+## Open the main game scene
 
-In Unity's Project window, open `Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity`.
+In Unity's Project window, open `Assets/Scenes/GameLevel/SkybreakMain.unity`. Supporting stone meshes, materials, prefabs and authoring tools remain in this asset-kit folder; the main game scene is under Scenes/GameLevel.
 Click **Play**, then click inside the **Game** window.
 
 | Control | Action |
@@ -22,13 +22,13 @@ The character is under **08 / ARC / Walk around the map** in the Hierarchy, star
 
 Arc is now **30% larger**: his visual child uses scale `1.3`, with a matching 2.444 metre high collision capsule (radius 0.416 metres). The player root stays at scale 1. His follow camera uses a 2.08 metre pivot, 5 metre distance and 0.8 metre shoulder offset. These are scene overrides; the source Arc prefab keeps its original size. Stop Play Mode before adjusting these Inspector values. If changing visual scale later, resize the CharacterController height/centre/radius too.
 
-The previous size is preserved in `Scenes/SkybreakStoneFloor_BeforeLargerArc_20261002.unity`; size settings are recorded in `Reports/ArcSize.txt`. The shared controller now exposes camera pivot height, shoulder offset and body-hide distance, using its former values as defaults for existing scenes.
+The previous size is recoverable from the pre-cleanup Git revision `cfc629c`; size settings are recorded in `Reports/ArcSize.txt`. The shared controller now exposes camera pivot height, shoulder offset and body-hide distance, using its former values as defaults for existing scenes.
 
 The existing map camera now follows Arc in third person. It pulls closer near walls and temporarily hides Arc when the camera is too close to his body. Mouse look supports looking up and down. If Arc falls below the map, he returns to the starting position.
 
 The flying inspection component **DescentMapPreview** is disabled to prevent two control systems driving the same camera. F1–F5 and Q/E flying controls are therefore inactive while exploring. To return to the former free-camera mode, stop Play Mode, deactivate the Arc object, and enable DescentMapPreview on the inspection camera. Its saved viewpoints remain available: F1 whole map, F2 entrance, F3 passage, F4 second arena/rooms, F5 boss chamber.
 
-The pre-character scene is preserved in `Scenes/SkybreakStoneFloor_BeforeExplorer_20261002.unity`. Build verification is in `Reports/ExplorerBuild.txt`; Play Mode movement/collision checks are in `Reports/ExplorerPlayCheck.txt`. The real CharacterController reached all 12 route waypoints, passed both room doorways, collided with the perimeter wall, and jumped/landed successfully. These checks used the movement API; actual keyboard/mouse event injection was not used. An actual Unity camera capture is `Reports/ExplorerInMap.png`.
+The pre-character scene is recoverable from Git revision `cfc629c`. Historical build verification is in `Reports/ExplorerBuild.txt`; Play Mode movement/collision checks are in `Reports/ExplorerPlayCheck.txt`. The real CharacterController reached all 12 route waypoints, passed both room doorways, collided with the perimeter wall, and jumped/landed successfully. These checks used the movement API; actual keyboard/mouse event injection was not used. An actual Unity camera capture is `Reports/ExplorerInMap.png`. Historical reports retain the paths used when they were recorded.
 
 ## Edit the walls
 
@@ -42,9 +42,9 @@ Wall materials are `Wall_Textured_Floor2_Body/Cap/Base`, `Wall_Textured_PassageF
 
 Both security-room entrances have 6.5 metre doorway walls leaving a **3 metre wide × 3 metre high** clear opening. The taller header and two side pieces have their own colliders; no moving door has been added. The existing door-position guides remain under **06 / Security holding rooms**.
 
-The pre-wall scene is backed up as `Scenes/SkybreakStoneFloor_BeforeWalls_20261002.unity`. Wall verification is in `Reports/WallBuild.txt`. The editor menu **Skybreak → Handbuilt Floor → Add modular walls (once)** refuses to add another wall set if this wall root already exists. Continue by editing the saved modules manually.
+The pre-wall scene is recoverable from Git revision `cfc629c`. Wall verification is in `Reports/WallBuild.txt`. The editor menu **Skybreak → World Editing → Add modular walls (once)** refuses to add another wall set if this wall root already exists. Continue by editing the saved modules manually.
 
-The short untextured walls are preserved in `Scenes/SkybreakStoneFloor_BeforeTexturedWalls_20261002.unity`; their original wall prefabs, meshes and materials are also unchanged. The upgrade report is `Reports/TexturedWallUpgrade.txt`. Actual Unity captures are `Reports/TexturedWallsCloseup.png` and `Reports/TexturedWallsOverview.png`. The upgrade menu refuses to repeat the replacement once textured walls exist.
+The short untextured wall scene is recoverable from Git revision `cfc629c`; its original wall prefabs, meshes and materials are unchanged. The upgrade report is `Reports/TexturedWallUpgrade.txt`. Actual Unity captures are `Reports/TexturedWallsCloseup.png` and `Reports/TexturedWallsOverview.png`. The upgrade menu refuses to repeat the replacement once textured walls exist.
 
 ## Security holding rooms
 
@@ -132,11 +132,11 @@ These downloaded models remain **external assets**, including the slab geometry 
 
 ## Original map and source credit
 
-The original `Assets/Skybreak/Descent/Scenes/SkybreakDescent.unity` was preserved, and its file hash was checked after the floor build. A separate saved copy is `SkybreakDescent_Preserved_20261002.unity` in the same folder.
+The earlier Descent demo is preserved at `Assets/Scenes/Demos/SkybreakDescentDemo.unity`, with its original scene GUID and contents. The identical duplicate copy was removed during scene organisation.
 
-The stone floor before these side-room additions is backed up at `Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor_BeforeSideRooms_20261002.unity`. Room layout coordinates are stored in `Data/SecurityRoomLayout.json`; extension verification is recorded in `Reports/SecurityRoomFloorBuild.txt`. Do not edit that backup scene when continuing the new map.
+The map before side-room additions is recoverable from Git revision `cfc629c`. Room layout coordinates are stored in `Data/SecurityRoomLayout.json`; extension verification is recorded in `Reports/SecurityRoomFloorBuild.txt`. Continue working in the main game scene.
 
-The complete floor with both rooms, before recolouring, is backed up at `Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor_BeforeOriginalColours_20261002.unity`. Palette verification is recorded in `Reports/FloorPalette.txt`; actual Unity captures are `Reports/FloorOriginalColoursOverview.png` and `Reports/FloorOriginalColoursCloseup.png`. All 2,783 tile colliders were retained. The editor menu **Skybreak → Handbuilt Floor → Apply original floor colours** can reapply the region colours after manual layout edits, creating a fresh backup each time; it overwrites scene floor material choices with the region palette.
+The map before recolouring is recoverable from Git revision `cfc629c`. Palette verification is recorded in `Reports/FloorPalette.txt`; actual Unity captures are `Reports/FloorOriginalColoursOverview.png` and `Reports/FloorOriginalColoursCloseup.png`. All 2,783 tile colliders were retained. The editor menu **Skybreak → World Editing → Apply original floor colours** can reapply the region colours after manual layout edits; it overwrites scene floor material choices with the region palette. Authoring snapshots now go to ignored `Tools/SceneSnapshots/` outside Assets.
 
 **Downloaded asset:** Stone Floor, creator **4engine**, as shown in the user's download-page screenshot. Local source: `F:/UnityProjects/Skybreak/resources/Stone Floor`. The exact listing URL and license text were not supplied with these files; no CC0 status is assumed. The previously downloaded Poly Haven ceramic textures are retained separately and are not used in this scene.
 

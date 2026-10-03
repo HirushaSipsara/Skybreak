@@ -29,7 +29,7 @@ Shared project: `F:/UnityProjects/Skybreak` on Student 1's machine. Everyone els
 
 Unity version recorded in ProjectSettings: **6000.6.0f1**. Packages include URP **17.6.0**, Input System **1.20.0**, AI Navigation **2.0.14**. Match these project versions; do not independently upgrade packages.
 
-Main scene: `Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity`.
+Main scene: `Assets/Scenes/GameLevel/SkybreakMain.unity`. Earlier demos are stored separately in `Assets/Scenes/Demos/`; the main map is the only enabled default build scene. See [the scene guide](../SCENES.md).
 
 Saved files and previous Play Mode reports show:
 
@@ -128,7 +128,7 @@ Do this after Student 1 has published the reviewed baseline and given everyone a
 
    These identity settings are repository-local. Use your own identity, not Student 1's. If authentication fails, ask Student 1 to verify repository access; do not share passwords or tokens in commits.
 3. **Students 2 and 4:** install Unity Hub and the project's exact Editor version, **6000.6.0f1**, plus your C# editor. In Hub choose **Projects → Add → Add project from disk**, then select the cloned root containing Assets, Packages and ProjectSettings. Open it with the matching version. [Unity Hub project workflow](https://docs.unity.com/en-us/hub/project-manage)
-4. Wait for package/asset import; the first opening can take longer than later openings. Check Console for errors, open `Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity`, and enter Play Mode briefly to confirm the shared baseline opens. Stop Play Mode before editing/saving permanent changes.
+4. Wait for package/asset import; the first opening can take longer than later openings. Check Console for errors, open `Assets/Scenes/GameLevel/SkybreakMain.unity`, and enter Play Mode briefly to confirm the shared baseline opens. Stop Play Mode before editing/saving permanent changes.
 5. Create your separate lab scene from the appropriate role guide. Keep the shared map scene with Student 1, and add your work through prefabs/scripts rather than rebuilding their scene.
 6. **Student 3:** install Blender and open/create sources under ArtSource. You can skip Unity Hub/Editor entirely. Test FBX exports by reimporting in Blender and send the handoff files to Student 1 using the same repository.
 7. Before your first change, create your agreed branch using `git switch -c "feature/student2-doors"`, for example. Student 3/4 choose their own descriptive branch name; do not all use the example branch.

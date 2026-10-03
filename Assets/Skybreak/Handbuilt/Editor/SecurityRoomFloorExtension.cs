@@ -14,7 +14,7 @@ namespace Skybreak.Handbuilt.Editor
     public static class SecurityRoomFloorExtension
     {
         const string Root = "Assets/Skybreak/Handbuilt";
-        const string ScenePath = Root + "/Scenes/SkybreakStoneFloor.unity";
+        const string ScenePath = Skybreak.Editor.SkybreakScenePaths.Main;
         const string AdditionRoot = "06 / Security holding rooms";
         [Serializable] class Layout { public Room[] rooms; }
         [Serializable] class Room
@@ -44,7 +44,7 @@ namespace Skybreak.Handbuilt.Editor
             r.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;r.receiveShadows=false;
         }
 
-        [MenuItem("Skybreak/Handbuilt Floor/Add security room floors (once)")]
+        [MenuItem("Skybreak/World Editing/Add security room floors (once)")]
         public static string Add()
         {
             if(EditorApplication.isPlaying)throw new InvalidOperationException("Stop Play Mode before adding the room floors.");
@@ -57,8 +57,8 @@ namespace Skybreak.Handbuilt.Editor
             var prefabs=Enumerable.Range(1,16).Select(i=>AssetDatabase.LoadAssetAtPath<GameObject>(Root+"/Prefabs/FloorTile_"+i.ToString("00")+".prefab")).ToArray();
             if(prefabs.Any(p=>p==null))throw new InvalidOperationException("A required floor tile prefab is missing.");
             EditorSceneManager.SaveScene(scene);
-            string backup=AssetDatabase.GenerateUniqueAssetPath(Root+"/Scenes/SkybreakStoneFloor_BeforeSideRooms_20261002.unity");
-            if(!AssetDatabase.CopyAsset(ScenePath,backup))throw new IOException("The floor backup could not be saved; stopped before adding geometry.");
+            string backup=Skybreak.Editor.SkybreakScenePaths.BackupMainScene("BeforeSideRooms");
+
             var originalColliders=floor.GetComponentsInChildren<BoxCollider>();
             var occupied=new HashSet<Vector2Int>(originalColliders.Select(c=>new Vector2Int(Mathf.FloorToInt(c.transform.position.x),Mathf.FloorToInt(c.transform.position.z))));
             int originalCount=occupied.Count,added=0;

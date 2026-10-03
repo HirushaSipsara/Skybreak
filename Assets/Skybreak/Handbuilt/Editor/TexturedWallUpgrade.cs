@@ -13,7 +13,7 @@ namespace Skybreak.Handbuilt.Editor
     public static class TexturedWallUpgrade
     {
         const string Root = "Assets/Skybreak/Handbuilt";
-        const string ScenePath = Root + "/Scenes/SkybreakStoneFloor.unity";
+        const string ScenePath = Skybreak.Editor.SkybreakScenePaths.Main;
         struct Block { public Vector3 centre, size; public int material, pattern; }
         static Material[] Palette(string region)
         {
@@ -100,7 +100,7 @@ namespace Skybreak.Handbuilt.Editor
             }
             return Kit("Wall_Textured_Doorway_65_3mClear",blocks,mats,6.5f,true);
         }
-        [MenuItem("Skybreak/Handbuilt Floor/Upgrade walls with stone textures and height")]
+        [MenuItem("Skybreak/World Editing/Upgrade walls with stone textures and height")]
         public static string Apply()
         {
             var scene=SceneManager.GetActiveScene();var root=GameObject.Find("07 / Modular walls");
@@ -108,8 +108,8 @@ namespace Skybreak.Handbuilt.Editor
             var existing=root.GetComponentsInChildren<MeshRenderer>();
             if(existing.Any(r=>r.sharedMaterials.Any(m=>m!=null&&m.name.StartsWith("Wall_Textured_"))))throw new InvalidOperationException("Textured wall upgrade already exists; edit the saved modules manually.");
             if(!EditorSceneManager.SaveScene(scene))throw new IOException("Scene save failed.");
-            string backup=AssetDatabase.GenerateUniqueAssetPath(Root+"/Scenes/SkybreakStoneFloor_BeforeTexturedWalls_20261002.unity");
-            if(!AssetDatabase.CopyAsset(ScenePath,backup))throw new IOException("Backup failed; stopped before changing walls.");
+            string backup=Skybreak.Editor.SkybreakScenePaths.BackupMainScene("BeforeTexturedWalls");
+
             var grey=Palette("Floor2");var blue=Palette("PassageFloor");var violet=Palette("CoreFloor");
             var normal=Enumerable.Range(0,4).Select(i=>Wall(6.5f,i,grey)).ToArray();
             var passage=Enumerable.Range(0,4).Select(i=>Wall(7,i,grey)).ToArray();var door=Door(grey);
@@ -180,7 +180,7 @@ namespace Skybreak.Handbuilt.Editor
             var source=AssetDatabase.LoadAssetAtPath<Material>(Root+"/Materials/Skybreak_StoneAtlas_Floor2.mat");
             bool shared=renderers.All(r=>r.sharedMaterials.All(m=>new[]{"_BaseMap","_BumpMap","_MetallicGlossMap"}.All(p=>m.GetTexture(p)==source.GetTexture(p))));
             string path=Root+"/Reports/TexturedWallUpgrade.txt";
-            string backup=File.Exists(path)?File.ReadLines(path).First():"Backup: see Scenes/SkybreakStoneFloor_BeforeTexturedWalls_20261002.unity";
+            string backup=File.Exists(path)?File.ReadLines(path).First():"Backup: see local Tools/SceneSnapshots or Git history";
             var report=new[]{backup,"Standard wall modules: "+standard+" / 6.5m high","Passage modules: "+tall+" / 7m high","Doorway frames: "+doors+" / 6.5m high, 3m clear opening retained","Actual floor-boundary collider hits: "+hits+" / "+expected,"Incorrect collider heights: "+wrongHeights,"Floor centres blocked: "+blockedCentres,"Mission route segments blocked: "+blockedRoute,"Open doorway checks: "+clearDoors+" / "+doors,"Shared floor albedo, normal and smoothness maps: "+shared,"Floor tiles retained: "+tiles.Length,"Old wall prefab/mesh/material assets unchanged; only scene wall instances replaced."};
             File.WriteAllLines(path,report);
             if(hits!=expected||wrongHeights!=0||blockedCentres!=0||blockedRoute!=0||clearDoors!=doors||!shared)throw new InvalidOperationException("Wall validation needs attention: "+string.Join("\n",report));

@@ -17,7 +17,7 @@ namespace Skybreak.Handbuilt.Editor
     public static class StoneFloorWorkshopBuilder
     {
         const string Root = "Assets/Skybreak/Handbuilt";
-        public const string ScenePath = Root + "/Scenes/SkybreakStoneFloor.unity";
+        public const string ScenePath = Skybreak.Editor.SkybreakScenePaths.Main;
         const string TextureRoot = Root + "/Textures/StoneFloor";
         const string ModelRoot = Root + "/Models/StoneFloor";
         [Serializable] public class Zone
@@ -151,7 +151,7 @@ namespace Skybreak.Handbuilt.Editor
             return "Prepared 26 imported meshes and 16 tile prefabs.";
         }
 
-        [MenuItem("Skybreak/Handbuilt Floor/Create floor scene (new only)")]
+        [MenuItem("Skybreak/World Editing/Create floor scene (new only)")]
         public static string BuildScene()
         {
             if (EditorApplication.isPlaying) throw new InvalidOperationException("Stop Play Mode first.");
@@ -177,6 +177,7 @@ namespace Skybreak.Handbuilt.Editor
             AddDetails(map);
             LightingAndPreview();
             EditorSceneManager.SaveScene(scene,ScenePath);
+            Skybreak.Editor.SkybreakScenePaths.ConfigureBuildScenes();
             AssetDatabase.SaveAssets();
             Physics.SyncTransforms();
             var expected=new HashSet<Vector2Int>();

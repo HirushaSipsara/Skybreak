@@ -1,6 +1,6 @@
 # Repository folder map
 
-Created 3 October 2026. Existing `Assets/Skybreak/` scenes, assets and references are preserved. New folders below provide a shared layout for future work; they contain no finished gameplay components yet.
+Updated 3 October 2026. The main scene and preserved demos are organised under `Assets/Scenes/`. Existing supporting meshes, materials, prefabs and scripts remain under `Assets/Skybreak/` with their references preserved. The other new folders are scaffolding for future work.
 
 ```text
 Skybreak/
@@ -9,11 +9,15 @@ Skybreak/
 ├── .gitattributes
 ├── Assets/
 │   ├── Skybreak/                       # existing work; keep current references
-│   │   ├── Handbuilt/                  # current stone map and explorer
-│   │   └── Descent/                    # preserved earlier experiment
+│   │   ├── Handbuilt/                  # supporting stone environment assets/tools
+│   │   └── Descent/                    # shared explorer and earlier demo assets
 │   ├── Scenes/
 │   │   ├── MainMenu/
-│   │   ├── GameLevel/                  # future scenes; current map stays in Handbuilt
+│   │   ├── GameLevel/
+│   │   │   └── SkybreakMain.unity      # current main game map
+│   │   ├── Demos/
+│   │   │   ├── SkybreakLastLightDemo.unity
+│   │   │   └── SkybreakDescentDemo.unity
 │   │   └── Tests/
 │   │       ├── Student2Interactions/
 │   │       └── Student4Movement/
@@ -96,7 +100,8 @@ Skybreak/
 
 | Work | Location |
 | --- | --- |
-| Current main map | `Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity` |
+| Current main map | `Assets/Scenes/GameLevel/SkybreakMain.unity` |
+| Preserved earlier demos | `Assets/Scenes/Demos/` |
 | Door/prop scripts | `Assets/Scripts/Physics/` |
 | Player interaction/shooting scripts | `Assets/Scripts/Player/` |
 | Tested reusable door/prop prefabs | `Assets/Prefabs/InteractiveObjects/` |
@@ -133,5 +138,7 @@ Keep GV/IS grouping in documentation and evidence under `Docs/`. Gameplay script
 Empty Git folders need a tracked file, so scaffolding uses `.gitkeep`. New Unity folders also have their own `.meta` files with unique GUIDs. Never delete/recreate existing metadata to tidy filenames.
 
 No empty placeholder `.cs` files or fake scenes were created. Add actual tested components through Unity when the member starts that task. A future move of existing assets must be performed through Unity with references checked afterwards.
+
+The main map and two demos were moved through Unity's AssetDatabase with their original GUIDs and scene bytes preserved. Redundant scene copies were removed; see [the scene guide](SCENES.md) for locations and recovery details.
 
 There is no automatic CI build yet. Add `.github/workflows/` when the team deliberately configures a real build job; an empty YAML file would not provide a useful check.

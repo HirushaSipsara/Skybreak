@@ -4,7 +4,7 @@ Shared Unity coursework project for SE3032 Graphics & Visualization and SE3062 I
 
 ## Current playable scene
 
-Open **`Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity`**, press Play, then click the Game window.
+Open **`Assets/Scenes/GameLevel/SkybreakMain.unity`**, press Play, then click the Game window. This is the main project scene and the only enabled scene in the default build list.
 
 | Control | Action |
 | --- | --- |
@@ -17,7 +17,9 @@ Open **`Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity`**, press Play
 
 This scene currently contains editable stone floors, textured walls, two security-room extensions and a controllable Arc explorer. Combat, operating room doors, four autonomous agents and final encounter progression are still work to implement. Completed lighting/NavMesh bakes and weakest-laptop performance are not claimed.
 
-The older `Assets/Skybreak/Scenes/SkybreakStarter.unity` and `Assets/Skybreak/Descent/Scenes/SkybreakDescent.unity` remain preserved experiments. Their controls/features differ; use the handbuilt scene for current map work. Backup scenes remain in their existing folders.
+Earlier demos are preserved under `Assets/Scenes/Demos/`: `SkybreakLastLightDemo.unity` (city/escort prototype) and `SkybreakDescentDemo.unity` (earlier dungeon environment). Their controls/features differ. They are excluded from the default game build. See [the scene guide](Docs/SCENES.md).
+
+The template scene, duplicate demo copy and six incremental map backups have been removed from Assets. Their original files remain recoverable from Git history. New editor-tool snapshots go to ignored `Tools/SceneSnapshots/` outside Assets.
 
 ## Open a fresh clone
 
@@ -46,7 +48,7 @@ Save each original `.blend` in `ArtSource/Student3/<ModelName>/Source/`; keep Ex
 
 | Member | Graphics responsibility | Starting locations |
 | --- | --- | --- |
-| Student 1 | World layout, textures, lighting, initial NavMesh and main-scene integration | Existing `Assets/Skybreak/Handbuilt/`; new environment folders |
+| Student 1 | World layout, textures, lighting, initial NavMesh and main-scene integration | `Assets/Scenes/GameLevel/SkybreakMain.unity`; existing environment assets and new environment folders |
 | Student 2 | Player interactions and physics | `Assets/Scripts/Player/`, `Assets/Scripts/Physics/`, `Assets/Prefabs/InteractiveObjects/` |
 | Student 3 | Two original Blender models and assisted import workflow | `ArtSource/Student3/`, imported assets in `Assets/Models/Custom/` |
 | Student 4 | Follow IS path arrays, smooth turning and animation | `Assets/Scripts/AgentMovement/`, `Assets/Animations/`, enemy prefabs |

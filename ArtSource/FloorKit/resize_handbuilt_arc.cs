@@ -1,5 +1,5 @@
 var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-if(UnityEditor.EditorApplication.isPlaying||scene.path!="Assets/Skybreak/Handbuilt/Scenes/SkybreakStoneFloor.unity")throw new System.InvalidOperationException("Open the map in Edit Mode.");
+if(UnityEditor.EditorApplication.isPlaying||scene.path!="Assets/Scenes/GameLevel/SkybreakMain.unity")throw new System.InvalidOperationException("Open the map in Edit Mode.");
 var p=UnityEngine.Object.FindFirstObjectByType<Skybreak.Descent.DescentCharacterController>();
 var capsule=p.GetComponent<UnityEngine.CharacterController>();
 UnityEditor.Undo.RecordObjects(new UnityEngine.Object[]{p,p.visual,capsule,p.viewCamera.transform},"Enlarge Arc and adjust camera");

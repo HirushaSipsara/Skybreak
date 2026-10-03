@@ -13,11 +13,11 @@ namespace Skybreak.Handbuilt.Editor
     public static class StoneFloorPalette
     {
         const string Root = "Assets/Skybreak/Handbuilt";
-        const string ScenePath = Root + "/Scenes/SkybreakStoneFloor.unity";
+        const string ScenePath = Skybreak.Editor.SkybreakScenePaths.Main;
         const float TextureTintCompensation = 1.65f;
         static readonly string[] Names = { "Floor0", "Floor1", "Floor2", "Floor3", "Floor4", "PassageFloor", "CoreFloor" };
 
-        [MenuItem("Skybreak/Handbuilt Floor/Apply original floor colours")]
+        [MenuItem("Skybreak/World Editing/Apply original floor colours")]
         public static string Apply()
         {
             var scene = SceneManager.GetActiveScene();
@@ -31,8 +31,7 @@ namespace Skybreak.Handbuilt.Editor
             if (bases.Any(m => m == null) || originals.Any(m => m == null))
                 throw new InvalidOperationException("A source stone material or original palette material is missing.");
             if (!EditorSceneManager.SaveScene(scene)) throw new IOException("Could not save the current floor.");
-            string backup = AssetDatabase.GenerateUniqueAssetPath(Root + "/Scenes/SkybreakStoneFloor_BeforeOriginalColours_20261002.unity");
-            if (!AssetDatabase.CopyAsset(ScenePath, backup)) throw new IOException("Could not back up the floor; stopped before recolouring.");
+            string backup = Skybreak.Editor.SkybreakScenePaths.BackupMainScene("BeforeOriginalColours");
 
             var palette = new Material[Names.Length, 2];
             var report = new List<string> { "Backup: " + backup, "Only scene floor material references were changed.", "Original palette hues with 1.65 brightness compensation for the darker downloaded stone albedo." };

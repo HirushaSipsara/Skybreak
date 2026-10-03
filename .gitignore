@@ -119,6 +119,9 @@ InitTestScene*.unity*
 # Derived guide archives; editable Markdown sources are tracked.
 /Docs/*.zip
 
+# Local authoring snapshots stay outside Unity's imported scene list.
+/Tools/SceneSnapshots/
+
 # Private local environment overrides and keys.
 .env
 .env.*

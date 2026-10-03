@@ -1,6 +1,6 @@
-# Skybreak: The Descent — Unity map
+# Skybreak — preserved Descent demo assets
 
-Open `Assets/Skybreak/Descent/Scenes/SkybreakDescent.unity`.
+Open `Assets/Scenes/Demos/SkybreakDescentDemo.unity`. The main game map is `Assets/Scenes/GameLevel/SkybreakMain.unity`; this folder contains shared explorer components and the earlier demo's supporting assets.
 
 This is the native Unity environment pass for the continuous dungeon map agreed in the HTML prototype. The scene contains the loading court, winding service passage with ambush bays, generator hall, inner checkpoint and circular Aurora reactor chamber. Gameplay anchors mark encounter, spawn and checkpoint positions for later combat integration.
 
@@ -38,4 +38,4 @@ The scene uses `Settings/DescentBalancedURP.asset`: 2x MSAA, 1024 main light sha
 
 The hierarchy groups the environment, reusable props, collision, gameplay anchors, lighting and camera viewpoints. Edit the scene directly in Unity. `Editor/DescentMapBuilder.cs` creates the initial assets; its menu command refuses to replace an existing Descent scene.
 
-The existing `SkybreakStarter` scene remains available. The Descent scene is first in Build Settings.
+The earlier city prototype is preserved at `Assets/Scenes/Demos/SkybreakLastLightDemo.unity`. Both demos are excluded from the default build list; `SkybreakMain` is the enabled main game scene.

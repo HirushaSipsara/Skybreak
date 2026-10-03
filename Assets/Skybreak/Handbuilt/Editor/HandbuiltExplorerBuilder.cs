@@ -11,9 +11,9 @@ namespace Skybreak.Handbuilt.Editor
     public static class HandbuiltExplorerBuilder
     {
         const string Root = "Assets/Skybreak/Handbuilt";
-        const string ScenePath = Root + "/Scenes/SkybreakStoneFloor.unity";
+        const string ScenePath = Skybreak.Editor.SkybreakScenePaths.Main;
 
-        [MenuItem("Skybreak/Handbuilt Floor/Add controllable explorer")]
+        [MenuItem("Skybreak/World Editing/Add controllable explorer")]
         public static string Add()
         {
             var scene = SceneManager.GetActiveScene();
@@ -26,8 +26,8 @@ namespace Skybreak.Handbuilt.Editor
             var camera = preview != null ? preview.view : Camera.main;
             if (prefab == null || camera == null) throw new InvalidOperationException("Explorer prefab or inspection camera is missing.");
             if (!EditorSceneManager.SaveScene(scene)) throw new IOException("Scene save failed.");
-            string backup = AssetDatabase.GenerateUniqueAssetPath(Root + "/Scenes/SkybreakStoneFloor_BeforeExplorer_20261002.unity");
-            if (!AssetDatabase.CopyAsset(ScenePath, backup)) throw new IOException("Could not back up the map; stopped before adding the explorer.");
+            string backup = Skybreak.Editor.SkybreakScenePaths.BackupMainScene("BeforeExplorer");
+
             Undo.IncrementCurrentGroup(); int undo = Undo.GetCurrentGroup(); Undo.SetCurrentGroupName("Add handbuilt map explorer");
             var player = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
             Undo.RegisterCreatedObjectUndo(player, "Add Arc explorer");
