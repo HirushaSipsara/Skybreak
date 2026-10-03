@@ -100,6 +100,10 @@ ArtSource/Student3/                   # editable Blender files, export notes and
 Docs/TeamGuide/                       # this guide
 ```
 
+For each Student 3 model, keep the original `.blend` under `<ModelName>/Source/`, FBX files under Exports, image files under Textures, and modelling/UV screenshots under Evidence. Both Source folders are present in the scaffold. Materials and Textures each have actual Environment, Characters and InteractiveObjects subfolders.
+
+Keep each agent's decision-making and behaviour under `Assets/Scripts/AI/<AgentName>/`. `Core/World/` contains observations, world-state access and integration/navigation adapters, not agent decisions. Use the functional folders for gameplay code; GV/IS grouping belongs in Docs and evidence.
+
 Let Student 1 integrate the main handbuilt scene. Other Unity members develop in small separate test scenes and reusable prefabs. This reduces competing edits to a large scene file. Preserve `Assets` `.meta` files; they hold reference identities.
 
 The first baseline captures the saved Unity project, original art sources, folder scaffold and guides. The configured remote is `https://github.com/HirushaSipsara/Skybreak.git`; its default branch is `main`. Student 1 prepares and verifies publication before teammates clone. See Git history for the actual commit/push state; a documentation statement alone is not proof of publication.

@@ -24,13 +24,13 @@ Create this source structure in the team's repository:
 ```text
 ArtSource/Student3/
   SecurityRobot/
-    SecurityRobot.blend
+    Source/SecurityRobot.blend
     Exports/SecurityRobot.fbx
     Textures/                         # only if you use image textures
     Evidence/                         # design, modelling, wireframe, UV screenshots
     MODEL_NOTES.md
   AccessConsole/
-    AccessConsole.blend
+    Source/AccessConsole.blend
     Exports/AccessConsole.fbx
     Textures/
     Evidence/
@@ -82,7 +82,7 @@ Use the menu equivalents if your keyboard lacks a numpad or your keymap is diffe
 
 ## 5. Set up a modelling scene
 
-1. Open Blender and start a new General file. Save it as `SecurityRobot.blend` immediately.
+1. Open Blender and start a new General file. Save it as `ArtSource/Student3/SecurityRobot/Source/SecurityRobot.blend` immediately, relative to your repository root.
 2. In **Scene Properties → Units**, choose Metric, Unit Scale 1, Length Metres.
 3. Keep camera/lights in a separate `PreviewOnly` collection. They must not be included in the game FBX export.
 4. Make a `SecurityRobot_Source` collection and name every object as you create it.
@@ -167,7 +167,7 @@ This rigid-part workflow has no skin weights. Explain that honestly; do not clai
 
 ## 7. Model 2 — AccessConsole, step by step
 
-Create a separate `AccessConsole.blend`, using the same units, palette and front-direction convention. Add `AccessConsole_Root` at the base origin.
+Create a separate `ArtSource/Student3/AccessConsole/Source/AccessConsole.blend`, using the same units, palette and front-direction convention. Add `AccessConsole_Root` at the base origin.
 
 Suggested starting parts:
 
@@ -261,7 +261,7 @@ Unity feedback and revision made:
 
 These are the steps **you** perform on your computer, with Student 3 reviewing the result.
 
-1. Keep source `.blend` files in ArtSource; copy the FBX to `Assets/Models/Custom/<ModelName>/` through the project workflow. Put its maps/materials in the appropriate `Assets/Textures/Characters/` and `Assets/Materials/Characters/` folders for the robot, or the corresponding InteractiveObjects folders for the console.
+1. Keep source `.blend` files in `ArtSource/Student3/<ModelName>/Source/`; copy the FBX from its Exports folder to `Assets/Models/Custom/<ModelName>/` through the project workflow. Put its maps/materials in the appropriate `Assets/Textures/Characters/` and `Assets/Materials/Characters/` folders for the robot, or the corresponding InteractiveObjects folders for the console.
 2. Select the FBX in the Project window. Inspect Model/Materials/Animation settings. Check actual world dimensions using a 1 m Unity cube and the known 2.444 m player capsule.
 3. Confirm the robot is upright, front faces +Z after agreed conversion, feet/base are at Y=0, and joint names/pivots survived. Test one limb rotation with Student 4.
 4. If scale/orientation is wrong, send clear measurements back to Student 3 to fix the source/export. Do not compensate with an unexplained 100× prefab scale and then build physics around it.

@@ -40,6 +40,8 @@ The older `Assets/Skybreak/Scenes/SkybreakStarter.unity` and `Assets/Skybreak/De
 
 Student 3 can skip Unity entirely and work on `ArtSource/Student3/` in Blender. Student 1 imports her FBX exports into Unity, with her reviewing the result. See her guide for the assessed import-workflow handoff.
 
+Save each original `.blend` in `ArtSource/Student3/<ModelName>/Source/`; keep Exports, Textures and Evidence alongside that Source folder. Materials and Textures already have Environment, Characters and InteractiveObjects subfolders under Assets.
+
 ## Team roles
 
 | Member | Graphics responsibility | Starting locations |
@@ -50,6 +52,8 @@ Student 3 can skip Unity entirely and work on `ArtSource/Student3/` in Blender. 
 | Student 4 | Follow IS path arrays, smooth turning and animation | `Assets/Scripts/AgentMovement/`, `Assets/Animations/`, enemy prefabs |
 
 Every member also owns one distinct IS agent. The four AI folders use the proposed names Striker, Bastion, Gunner and Disruptor; these folders are scaffolding, not implemented agents or proof of an agreed final allocation.
+
+Agent decisions belong in `Assets/Scripts/AI/<AgentName>/`. `Assets/Scripts/Core/World/` is for observations, world-state access and adapters connecting navigation/perception to the game; it is not a home for agent behaviour. Gameplay folders are organised by function, while GV/IS evidence is grouped under Docs.
 
 ## Working together
 

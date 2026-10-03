@@ -22,12 +22,27 @@ Skybreak/
 │   │   └── Custom/
 │   │       ├── SecurityRobot/
 │   │       └── AccessConsole/
-│   ├── Materials/                     # Environment, Characters, InteractiveObjects
-│   ├── Textures/                      # Environment, Characters, InteractiveObjects
+│   ├── Materials/
+│   │   ├── Environment/
+│   │   ├── Characters/
+│   │   └── InteractiveObjects/
+│   ├── Textures/
+│   │   ├── Environment/
+│   │   ├── Characters/
+│   │   └── InteractiveObjects/
 │   ├── Lighting/
 │   ├── Navigation/NavMesh/
-│   ├── Animations/                    # Striker, Bastion, Gunner, Disruptor, SharedRobot
-│   ├── Prefabs/                       # Player, Enemies, Environment, InteractiveObjects
+│   ├── Animations/
+│   │   ├── Striker/
+│   │   ├── Bastion/
+│   │   ├── Gunner/
+│   │   ├── Disruptor/
+│   │   └── SharedRobot/
+│   ├── Prefabs/
+│   │   ├── Player/
+│   │   ├── Enemies/
+│   │   ├── Environment/
+│   │   └── InteractiveObjects/
 │   ├── Audio/
 │   ├── UI/
 │   └── Scripts/
@@ -46,13 +61,31 @@ Skybreak/
 ├── ArtSource/
 │   ├── FloorKit/                      # existing editable source and preparation tools
 │   └── Student3/
-│       ├── SecurityRobot/             # .blend source, Exports, Textures, Evidence
-│       └── AccessConsole/             # .blend source, Exports, Textures, Evidence
+│       ├── SecurityRobot/
+│       │   ├── Source/                # original editable SecurityRobot.blend
+│       │   ├── Exports/
+│       │   ├── Textures/
+│       │   └── Evidence/
+│       └── AccessConsole/
+│           ├── Source/                # original editable AccessConsole.blend
+│           ├── Exports/
+│           ├── Textures/
+│           └── Evidence/
 ├── Docs/
 │   ├── TeamGuide/
-│   ├── GV/                            # Concept, LevelDesign, Lighting, Texturing,
-│   │                                  # CustomModels, Physics, Optimization
-│   └── IS/                            # AgentDesign, Algorithms, Architecture, Testing
+│   ├── GV/
+│   │   ├── Concept/
+│   │   ├── LevelDesign/
+│   │   ├── Lighting/
+│   │   ├── Texturing/
+│   │   ├── CustomModels/
+│   │   ├── Physics/
+│   │   └── Optimization/
+│   └── IS/
+│       ├── AgentDesign/
+│       ├── Algorithms/
+│       ├── Architecture/
+│       └── Testing/
 ├── resources/                         # existing original downloaded source files
 ├── Tools/                             # existing external checks/helpers
 ├── Packages/
@@ -68,7 +101,7 @@ Skybreak/
 | Player interaction/shooting scripts | `Assets/Scripts/Player/` |
 | Tested reusable door/prop prefabs | `Assets/Prefabs/InteractiveObjects/` |
 | Student 2 lab scene | `Assets/Scenes/Tests/Student2Interactions/InteractionLab.unity` |
-| Student 3 editable Blender source | `ArtSource/Student3/<ModelName>/<ModelName>.blend` |
+| Student 3 editable Blender source | `ArtSource/Student3/<ModelName>/Source/<ModelName>.blend` |
 | Her FBX handoff | `ArtSource/Student3/<ModelName>/Exports/` |
 | FBX imported by Student 1 | `Assets/Models/Custom/<ModelName>/` |
 | Imported model's materials/textures | `Assets/Materials/Characters/` or `InteractiveObjects/`; corresponding Textures folders |
@@ -82,6 +115,18 @@ Skybreak/
 | Evidence, diagrams and test notes | Relevant `Docs/GV/` or `Docs/IS/` folder |
 
 Use descriptive filenames, namespaces and stable prefab references. A folder named for an agent does not create an AI or require a separate pathfinding engine for each brain. The four members agree interfaces and shared contributions before coding.
+
+## System boundaries
+
+- `Scripts/AI/<AgentName>/`: that agent's decisions, action selection, behaviour state, memory and configuration. Each member owns their distinct agent's logic.
+- `Scripts/Pathfinding/`: route data, graph/search algorithms and shared planning services.
+- `Scripts/AgentMovement/`: follows supplied paths, turns actors and drives animation presentation.
+- `Scripts/Core/World/`: perception observations, world-state access and navigation/game-world adapters. It supplies information and integration services; it does not own agent behaviour or choose attacks.
+- `Scripts/Core/Interfaces/`: the agreed contracts between these systems.
+
+Typical locomotion flow: AI decision → path calculation → agent motor → animation → visible 3D character. Other actions, such as an attack request, use the agreed action interface rather than forcing every action through pathfinding.
+
+Keep GV/IS grouping in documentation and evidence under `Docs/`. Gameplay scripts remain organised by function; do not create `Assets/Scripts/GV/` or `Assets/Scripts/IS/`.
 
 ## Git and Unity notes
 
