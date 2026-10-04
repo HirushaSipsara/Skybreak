@@ -1,0 +1,154 @@
+{
+  "verification": "FBX reimported in fresh Blender process; not a Unity runtime test",
+  "action_count": 20,
+  "bone_count": 19,
+  "skinned_mesh_count": 16,
+  "rest_size_metres": [
+    3.163144826889038,
+    1.2450922131538391,
+    3.390000097453594
+  ],
+  "missing_actions": [],
+  "actions": [
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_ArmBreakLeft",
+      "frames": [
+        1.0,
+        43.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_ArmBreakRight",
+      "frames": [
+        1.0,
+        43.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_BladeSlash",
+      "frames": [
+        1.0,
+        54.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CannonBurst",
+      "frames": [
+        1.0,
+        55.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CoreHit",
+      "frames": [
+        1.0,
+        25.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CoreIdle",
+      "frames": [
+        1.0,
+        91.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CoreOpen",
+      "frames": [
+        1.0,
+        61.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CoreSlam",
+      "frames": [
+        1.0,
+        91.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CoreTeleportIn",
+      "frames": [
+        1.0,
+        25.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CoreTeleportOut",
+      "frames": [
+        1.0,
+        24.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_CoreWalk",
+      "frames": [
+        1.0,
+        41.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_Death",
+      "frames": [
+        1.0,
+        91.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_DoubleTeleportSlash",
+      "frames": [
+        1.0,
+        91.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_Idle",
+      "frames": [
+        1.0,
+        91.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_Run",
+      "frames": [
+        1.0,
+        31.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_TeleportIn",
+      "frames": [
+        1.0,
+        25.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_TeleportOut",
+      "frames": [
+        1.0,
+        24.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_TurnLeft",
+      "frames": [
+        1.0,
+        37.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_TurnRight",
+      "frames": [
+        1.0,
+        37.0
+      ]
+    },
+    {
+      "name": "RiftWardenRig|RiftWardenRig|RW_Walk",
+      "frames": [
+        1.0,
+        41.0
+      ]
+    }
+  ]
+}

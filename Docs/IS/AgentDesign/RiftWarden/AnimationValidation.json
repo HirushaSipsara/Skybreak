@@ -1,0 +1,87 @@
+{
+  "RW_Idle": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true,
+    "loop_matrix_max_error": 9.404612603628785e-18
+  },
+  "RW_CoreIdle": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true,
+    "loop_matrix_max_error": 9.404612603628785e-18
+  },
+  "RW_Walk": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true,
+    "loop_matrix_max_error": 1.3016837050445584e-16
+  },
+  "RW_Run": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true,
+    "loop_matrix_max_error": 2.045503040697962e-16
+  },
+  "RW_CoreWalk": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true,
+    "loop_matrix_max_error": 1.3016837050445584e-16
+  },
+  "RW_TurnLeft": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_TurnRight": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_CannonBurst": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_BladeSlash": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_TeleportOut": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_TeleportIn": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_CoreTeleportOut": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_CoreTeleportIn": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_DoubleTeleportSlash": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_ArmBreakLeft": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_ArmBreakRight": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_CoreOpen": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_CoreSlam": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_CoreHit": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  },
+  "RW_Death": {
+    "sampled_lowest_z": 0.01,
+    "floor_pass": true
+  }
+}

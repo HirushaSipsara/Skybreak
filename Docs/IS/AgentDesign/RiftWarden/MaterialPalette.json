@@ -1,0 +1,128 @@
+[
+  {
+    "name": "RW | Blue steel panels",
+    "base_color_linear": [
+      0.10000000149011612,
+      0.27000001072883606,
+      0.3400000035762787,
+      1.0
+    ],
+    "metallic": 0.5799999833106995,
+    "roughness": 0.3199999928474426,
+    "emission_color_linear": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "emission_strength": 0.0
+  },
+  {
+    "name": "RW | Core cyan",
+    "base_color_linear": [
+      0.014999999664723873,
+      0.6700000166893005,
+      1.0,
+      1.0
+    ],
+    "metallic": 0.18000000715255737,
+    "roughness": 0.2199999988079071,
+    "emission_color_linear": [
+      0.004999999888241291,
+      0.6499999761581421,
+      1.0,
+      1.0
+    ],
+    "emission_strength": 3.5
+  },
+  {
+    "name": "RW | Deep teal armor",
+    "base_color_linear": [
+      0.03500000014901161,
+      0.14000000059604645,
+      0.18000000715255737,
+      1.0
+    ],
+    "metallic": 0.6299999952316284,
+    "roughness": 0.30000001192092896,
+    "emission_color_linear": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "emission_strength": 0.0
+  },
+  {
+    "name": "RW | Graphite joints",
+    "base_color_linear": [
+      0.027000000700354576,
+      0.0430000014603138,
+      0.054999999701976776,
+      1.0
+    ],
+    "metallic": 0.6600000262260437,
+    "roughness": 0.3400000035762787,
+    "emission_color_linear": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "emission_strength": 0.0
+  },
+  {
+    "name": "RW | Rift violet",
+    "base_color_linear": [
+      0.2800000011920929,
+      0.054999999701976776,
+      0.800000011920929,
+      1.0
+    ],
+    "metallic": 0.25,
+    "roughness": 0.27000001072883606,
+    "emission_color_linear": [
+      0.4300000071525574,
+      0.00800000037997961,
+      1.0,
+      1.0
+    ],
+    "emission_strength": 2.5
+  },
+  {
+    "name": "RW | Signal orange",
+    "base_color_linear": [
+      0.949999988079071,
+      0.25,
+      0.03500000014901161,
+      1.0
+    ],
+    "metallic": 0.2800000011920929,
+    "roughness": 0.3400000035762787,
+    "emission_color_linear": [
+      0.949999988079071,
+      0.25,
+      0.03500000014901161,
+      1.0
+    ],
+    "emission_strength": 1.100000023841858
+  },
+  {
+    "name": "RW | Warm ivory trim",
+    "base_color_linear": [
+      0.7200000286102295,
+      0.6700000166893005,
+      0.5299999713897705,
+      1.0
+    ],
+    "metallic": 0.3499999940395355,
+    "roughness": 0.3799999952316284,
+    "emission_color_linear": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "emission_strength": 0.0
+  }
+]
