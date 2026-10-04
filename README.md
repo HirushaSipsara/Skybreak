@@ -2,6 +2,26 @@
 
 Shared Unity coursework project for SE3032 Graphics & Visualization and SE3062 Intelligent Systems. The current direction is a single-player stylised shooter in one continuous facility: entrance → first encounter → winding passage → second encounter and security rooms → final chamber.
 
+## Game story and mission
+
+**Skybreak — The Descent** follows **Arc**, a rescue engineer sent into the **Aurora Vault** to restore emergency power to Skybreak's district hospital. The Vault is an old underground facility with stone chambers, winding passages and energy machinery. An unexplained failure has shut down its power controls, sealed its gates and cut communication with the surface. The player must reach the central reactor, overcome the dangers inside and restart the emergency supply.
+
+The journey takes place in **one connected map**: the loading court, the maintenance passage and security wing, and the final reactor chamber. Each section takes the player deeper into the facility.
+
+| Section | Player objective | Possible enemy appearances |
+| --- | --- | --- |
+| **Loading court** | Enter the Vault and open the maintenance passage. | Near the entrance checkpoint, behind cover or around the first gate. |
+| **Maintenance passage and security wing** | Follow the winding tunnel and reach the reactor access gate. | Around corners, at corridor junctions and inside the side rooms. Opening room doors can reveal threats or release them onto the route. |
+| **Reactor chamber** | Overcome the final obstacle, reach the control console and restore power. | Inside the chamber, near its entrances or in concealed positions around the reactor. |
+
+The tunnel becomes quieter and darker as the player descends. Warning lights, opening doors and movement from hidden rooms build tension. The player continues towards a clear rescue objective throughout the journey.
+
+After the final danger is overcome, Arc activates the reactor console. Lights return through the facility, communication reconnects and the hospital confirms that its emergency systems are online. The closing message is **“Power restored. People first.”**
+
+**Enemy designs are open for each member to develop.** This story does not assign enemy types, numbers, abilities, attack patterns or member roles. Encounter locations provide a shared setting for those designs.
+
+The visual direction remains a stylised cartoon environment with readable lighting and effects, designed for the team's weakest Intel-integrated laptop. This is the intended story; implementation status is listed below. Read the [shareable story and encounter-location guide](Docs/GV/Concept/GAME_STORY.md).
+
 ## Current playable scene
 
 Open **`Assets/Scenes/GameLevel/SkybreakMain.unity`**, press Play, then click the Game window. This is the main project scene and the only enabled scene in the default build list.
@@ -15,7 +35,7 @@ Open **`Assets/Scenes/GameLevel/SkybreakMain.unity`**, press Play, then click th
 | Escape | Release the cursor |
 | Click Game view | Capture the cursor again |
 
-This scene currently contains editable stone floors, textured walls, two security-room extensions and a controllable Arc explorer. Combat, operating room doors, four autonomous agents and final encounter progression are still work to implement. Completed lighting/NavMesh bakes and weakest-laptop performance are not claimed.
+This scene currently contains editable stone floors, textured walls, two security-room extensions and a controllable Arc explorer. Combat, operating room doors, the planned agents and final encounter progression are still work to implement. Completed lighting/NavMesh bakes and weakest-laptop performance are not claimed.
 
 Earlier demos are preserved under `Assets/Scenes/Demos/`: `SkybreakLastLightDemo.unity` (city/escort prototype) and `SkybreakDescentDemo.unity` (earlier dungeon environment). Their controls/features differ. They are excluded from the default game build. See [the scene guide](Docs/SCENES.md).
 
@@ -53,7 +73,9 @@ Save each original `.blend` in `ArtSource/Student3/<ModelName>/Source/`; keep Ex
 | Student 3 | Two original Blender models and assisted import workflow | `ArtSource/Student3/`, imported assets in `Assets/Models/Custom/` |
 | Student 4 | Follow IS path arrays, smooth turning and animation | `Assets/Scripts/AgentMovement/`, `Assets/Animations/`, enemy prefabs |
 
-Every member also owns one distinct IS agent. The four AI folders use the proposed names Striker, Bastion, Gunner and Disruptor; these folders are scaffolding, not implemented agents or proof of an agreed final allocation.
+Each member designs their own IS agent and agrees its integration with the group. The shared story establishes the mission and possible encounter locations; it does not require other members to build regular hostile enemies or use a particular enemy type. Existing AI folder names are earlier scaffolding, not an agreed roster or behaviour requirement.
+
+Student 1's boss model, 19-bone rig and 20 animation clips are available at `ArtSource/Student1/RiftWarden/Source/RiftWarden_Animated.blend` and `Assets/Models/Custom/RiftWarden/RiftWarden_Animated.fbx`. The FBX has been imported into Unity, but boss gameplay, controller and scene placement remain to implement. See the [boss handoff guide](Docs/IS/AgentDesign/RiftWarden/HANDOFF.md).
 
 Agent decisions belong in `Assets/Scripts/AI/<AgentName>/`. `Assets/Scripts/Core/World/` is for observations, world-state access and adapters connecting navigation/perception to the game; it is not a home for agent behaviour. Gameplay folders are organised by function, while GV/IS evidence is grouped under Docs.
 

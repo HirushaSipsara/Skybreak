@@ -50,7 +50,7 @@ Suggested scene design for this work:
 3. Give each agent its own AI brain; connect all brains to one shared movement/animation interface.
 4. Finish lighting, navigation, combat and mission integration, then demonstrate them together.
 
-A larger final boss is a later scope decision. It must not delay the four distinct agents and required role deliverables.
+Student 1's own agent work includes a support agent and final boss, with the boss model, rig and animation export available. Other members choose their own agents and coordinate integration with the shared mission. Preserve each member's required role deliverables.
 
 ## 3. Work ownership and handoff
 
@@ -67,16 +67,11 @@ A larger final boss is a later scope decision. It must not delay the four distin
 
 She can still own an IS agent: write its independent logic in plain C# with a lightweight console test project and fake world inputs, then have you/Student 4 integrate the Unity adapter. Its behaviour, weights, tests and commits are hers. If this arrangement is impractical, resolve it with the lecturer; do not silently assign her entire agent to another member.
 
-### Suggested IS allocation — agree before coding
+### IS ownership and design freedom
 
-This is a proposal, not an assignment requirement or an already accepted allocation:
+Student 1's own designs are Relay and the Rift Warden. Other members choose their own agent concepts, roles and behaviours; they are not assigned regular hostile enemies by the story. Agree how each agent enters the map and interacts with the player before integration. See the [shared story and encounter locations](../GV/Concept/GAME_STORY.md).
 
-| Member | Agent | Example distinctive decisions |
-| --- | --- | --- |
-| Student 1 | Striker | Choose flank/chase/retreat using sight, last-known position and safe routes |
-| Student 2 | Bastion | Select interception points, protect a lane, reposition when the player goes around it |
-| Student 3 | Gunner | Score firing positions and choose burst/reposition/cooldown actions based on distance, visibility and danger |
-| Student 4 | Disruptor | Pursue a safe approach, telegraph a direct-damage pulse, cancel/reposition if conditions change |
+The Striker, Bastion, Gunner and Disruptor folder names are earlier scaffolding, not mandatory designs or a final member allocation. Each member remains responsible for the assignment's individual agent requirements.
 
 Each member must explain why their architecture and heuristic/weights suit the agent. A name such as "utility AI" or "FSM" alone does not establish advanced behaviour. Show dynamic choices, memory, blocked-route handling and evidence. No particular algorithm is mandated in the supplied briefs.
 
