@@ -1,0 +1,12 @@
+{
+  "asset": "DiamondWallPanel",
+  "meshes": 7,
+  "triangles": 270,
+  "dimensions_blender_xyz": [
+    1.1200000047683716,
+    0.2799999974668026,
+    1.2000000476837158
+  ],
+  "authorship": "AI-assisted",
+  "uv": "Smart projected for colour/stone texture use"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": "AuroraTeleportGate",
+  "meshes": 31,
+  "evaluated_triangles": 2832,
+  "dimensions_xyz_metres": [
+    10.899999618530273,
+    2.050000011920929,
+    9.049999237060547
+  ],
+  "authorship": "AI-assisted",
+  "blender": "5.1.2"
+}

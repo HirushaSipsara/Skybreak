@@ -128,3 +128,7 @@ InitTestScene*.unity*
 !.env.example
 *.key
 *.pem
+
+# Local third-party asset downloads; keep imported Unity dependencies tracked.
+/resources/DungeonAssetLibrary/
+/resources/MapDecorationKit/

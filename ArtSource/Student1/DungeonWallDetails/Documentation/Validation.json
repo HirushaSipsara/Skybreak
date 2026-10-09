@@ -1,0 +1,50 @@
+[
+  {
+    "asset": "CarvedStoneTrim_1m",
+    "triangles": 308,
+    "source_and_fbx_meshes": 7,
+    "dimensions": [
+      1.0,
+      0.23000004328787327,
+      0.39000001549720764
+    ],
+    "uv_and_materials_present": true,
+    "preview_helpers_excluded": true
+  },
+  {
+    "asset": "DiamondWallPanel",
+    "triangles": 270,
+    "source_and_fbx_meshes": 7,
+    "dimensions": [
+      1.1200000047683716,
+      0.28000015392899513,
+      1.2000000476837158
+    ],
+    "uv_and_materials_present": true,
+    "preview_helpers_excluded": true
+  },
+  {
+    "asset": "CopperWallConduit_1m",
+    "triangles": 320,
+    "source_and_fbx_meshes": 8,
+    "dimensions": [
+      1.0,
+      0.233000036329031,
+      0.2800000235438347
+    ],
+    "uv_and_materials_present": true,
+    "preview_helpers_excluded": true
+  },
+  {
+    "asset": "WeatheredGuardianStatue",
+    "triangles": 1036,
+    "source_and_fbx_meshes": 33,
+    "dimensions": [
+      1.3313151597976685,
+      1.062499761581421,
+      2.800000028889002
+    ],
+    "uv_and_materials_present": true,
+    "preview_helpers_excluded": true
+  }
+]

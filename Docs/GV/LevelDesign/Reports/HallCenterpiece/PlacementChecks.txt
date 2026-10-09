@@ -1,0 +1,7 @@
+Six guardian statues scaled to 1.45: 45% larger, approximately 4.06m tall.
+Statue overlap checks: 0 unexpected overlaps.
+Larger statue route obstructions: 0
+Hall dais at (0,0,16): 5.5m diameter, 0.136m maximum height, 1380 triangles.
+Player step offset: 0.3m; actual crossing check follows separately.
+Existing stone columns retained at their original scale. No extra point lights.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_larger_statues_and_hall_dais_20261007_184756.unity

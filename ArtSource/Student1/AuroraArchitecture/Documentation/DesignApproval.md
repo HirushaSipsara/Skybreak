@@ -1,0 +1,13 @@
+# Design approval and reference
+
+Approval received 7 October 2026: **Approve both designs**, in response to the reactor-shrine and enclosed wall-lantern concept.
+
+The built-in image-generation tool produced the reference in `References/AuroraReactorShrine_Concept.png`. That image is a proposal; `Previews/` contains actual Blender renders and `Previews/Unity/` contains actual Editor camera captures. The concept image retains its original awaiting-approval label; this note records the subsequent approval.
+
+## Exact concept-generation prompt
+
+Use case: stylized-concept. Make a polished 3D game asset concept sheet for Skybreak, a low-poly cartoon underground stone dungeon repurposed as a hospital emergency-power facility, practical to model in Blender and run on Intel integrated graphics. Main subject: AURORA REACTOR SHRINE, a compact impressive focal structure for the back wall of the final chamber. Two heavy square dark blue-grey stone piers with pale stone caps support a segmented shallow stone arch; brass socket fittings and a vertical faceted glowing cyan crystal suspended over a simple stone/metal power console in the centre. The crystal is diamond shaped, stylized flat triangular facets. A few copper cables or bars and restrained cyan engraved energy strips connect the piers to the console; coherent blue-grey stone, charcoal metal, brass and cyan; no extra robots, no skull throne, no temple religion, no medieval banners, no elaborate tiny ornaments. Height about 4.5m and width about 5m, simple separable meshes. Warm amber wall lanterns beside it should be true compact enclosed lanterns with proper wall backplate, short metal bracket, square protective frame and visible warm core. Layout: large three-quarter hero view of the whole shrine in the same square textured stone floor and stone-brick walls; right column with a clean orthographic front view and a close-up of one well-mounted enclosed lantern. Simple labels only: 'AURORA REACTOR SHRINE', 'FRONT VIEW', 'WALL LANTERN', 'CONCEPT — AWAITING APPROVAL'. Present believable game-scale chunky shapes, attractive material separation and gentle lighting. This is a proposal image, not a screenshot of a implemented game. Do not include a giant circular teleportation gate: that is a separate existing asset being rebuilt. Clear professional concept art without clutter.
+
+## Gate reference
+
+Rebuilt from `Assets/Tools/Editor/Dungeon/DescentMapBuilder.cs`, `Reactor()` in the earlier Unity demo: thirteen stone arch blocks, a 3.6-metre violet containment ring, a 3.1-metre cyan ring and a 3.53-metre energy surface, all around a centre 4.8 metres above the floor. Added two simple foundation feet for a grounded export. Runtime teleportation remains separate.

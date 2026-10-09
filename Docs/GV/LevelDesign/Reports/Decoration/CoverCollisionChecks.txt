@@ -1,0 +1,26 @@
+Selected crate layout: front and side rays through cover at 0.8m; tall stacks additionally checked at 2m. Geometry check only; combat scripts must respect colliders.
+COVER S01 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER S02 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER A01 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER A02 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER A03 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER A04 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER A05 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER A06 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER T01 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER T02 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER B01 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER B02 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER B03 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER B04 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER B05 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER B06 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER B07 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER B08 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER C01 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER C02 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER C03 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER C04 / Mr Scientist wooden crates: front=True, side=True, tall=False, upper=True
+COVER C05 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+COVER C06 / Mr Scientist wooden crates: front=True, side=True, tall=True, upper=True
+Passed 24 / 24

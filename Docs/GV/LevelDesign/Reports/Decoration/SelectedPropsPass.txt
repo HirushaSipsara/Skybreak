@@ -1,0 +1,3 @@
+Selected props pass: preserved 12 stone columns; 55 Mr Scientist crates at 24 cover positions and storage edges; 18 wall lamps; 10 crystal pedestals; 12 skulls.
+Removed all other previous decoration, including barricades, factory cabinets, orange strips, signs, arches, pipes, reactor equipment and old wall lamps.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_selected_props_20261007_152648.unity

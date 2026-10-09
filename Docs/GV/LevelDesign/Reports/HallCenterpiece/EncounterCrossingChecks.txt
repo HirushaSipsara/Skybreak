@@ -1,0 +1,3 @@
+Circle at (42.00, 0.00, 50.00): actual player controller crossed north and south without jumping.
+Circle at (42.00, 0.00, 84.50): actual player controller crossed north and south without jumping.
+Scripted controller/collision checks and actual Unity renders. Full combat and hardware performance were not tested.

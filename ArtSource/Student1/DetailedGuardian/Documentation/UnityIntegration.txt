@@ -1,0 +1,4 @@
+Updated 6 existing guardian instances through their shared mesh and prefab. GUIDs preserved.
+4092 triangles per statue; original height 2.8m, scene height 4.06m at scale 1.45.
+Same existing BoxCollider; detailed mesh remains inside its envelope. No new lights or behaviours.
+Original Blender source retained. Pre-update mesh, prefab and scene saved at F:\UnityProjects\Skybreak\Tools/AssetSnapshots/GuardianBeforeDetail_20261007_204659

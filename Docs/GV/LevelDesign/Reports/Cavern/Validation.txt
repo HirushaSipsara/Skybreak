@@ -1,0 +1,5 @@
+Play Mode: entrance traversed from spawn without jumping; end (0.00, 0.04, 9.16).
+Background has no colliders or lights. All materials assigned.
+Saved five actual Unity camera renders. Player returned to spawn.
+Mesh renderer count: 107. Static-batched runtime triangle count is excluded; original source budget recorded separately.
+Existing player/door/prop systems retained. No NavMesh, lighting bake or hardware performance measurement performed by this check.

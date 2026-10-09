@@ -1,0 +1,19 @@
+{
+  "blend": {
+    "meshes": 4,
+    "uv_layers_present": true,
+    "materials_present": true,
+    "scale_applied": true
+  },
+  "fbx": {
+    "mesh_objects": 4,
+    "dimensions_metres": [
+      1.1799999475479126,
+      1.1799999475479126,
+      2.6299999534096585
+    ],
+    "triangles": 140,
+    "preview_objects_excluded": true
+  },
+  "unity_import": "Instructions provided; no Unity model import or scene replacement was performed."
+}

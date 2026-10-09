@@ -1,0 +1,12 @@
+{
+  "asset": "VaultWallLantern",
+  "meshes": 12,
+  "evaluated_triangles": 528,
+  "dimensions_xyz_metres": [
+    0.4399999976158142,
+    0.7759999874979258,
+    0.9849999994039536
+  ],
+  "authorship": "AI-assisted",
+  "blender": "5.1.2"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": "WeatheredGuardianStatue",
+  "meshes": 33,
+  "triangles": 1036,
+  "dimensions_blender_xyz": [
+    1.3313151597976685,
+    1.0625,
+    2.799999952316284
+  ],
+  "authorship": "AI-assisted",
+  "uv": "Smart projected for colour/stone texture use"
+}

@@ -1,0 +1,7 @@
+24 branching wall-pipe assemblies, 218 conduit modules.
+Regions: 8, 8, 8.
+Seed: 7142; growth is fixed when saved, not random during gameplay.
+All pipe segment endpoints and centres backed by the matching wall plane. Height 3.25m–6.08m, no colliders or additional lights.
+Existing relief panels/statues/conduits/decoration avoided by bounds checks.
+Combined per assembly, 69760 added triangles.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_branching_pipes_20261007_220600.unity

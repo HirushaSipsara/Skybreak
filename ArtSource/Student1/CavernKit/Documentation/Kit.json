@@ -1,0 +1,37 @@
+[
+  {
+    "asset": "CavernCliff_1",
+    "triangles": 116,
+    "pieces": 1
+  },
+  {
+    "asset": "CavernCliff_2",
+    "triangles": 116,
+    "pieces": 1
+  },
+  {
+    "asset": "CavernCliff_3",
+    "triangles": 116,
+    "pieces": 1
+  },
+  {
+    "asset": "CavernCliff_4",
+    "triangles": 116,
+    "pieces": 1
+  },
+  {
+    "asset": "CavernCrag_5",
+    "triangles": 76,
+    "pieces": 1
+  },
+  {
+    "asset": "CavernCrag_6",
+    "triangles": 76,
+    "pieces": 1
+  },
+  {
+    "asset": "CavernEntranceArch",
+    "triangles": 276,
+    "pieces": 23
+  }
+]

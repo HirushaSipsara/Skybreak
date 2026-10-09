@@ -1,0 +1,15 @@
+{
+  "asset": "CrystalPedestal",
+  "mesh_objects": 4,
+  "evaluated_triangles": 140,
+  "dimensions_metres": {
+    "width": 1.18,
+    "depth": 1.18,
+    "height": 2.63
+  },
+  "authorship": "AI-assisted generated model; personal manual edits must be documented separately.",
+  "exports": [
+    "CrystalPedestal.fbx"
+  ],
+  "blender_version": "5.1.2"
+}

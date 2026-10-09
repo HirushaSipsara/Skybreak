@@ -1,0 +1,5 @@
+Security circle: centre (42,0,50), diameter 7m, cyan and brass.
+Boss circle: centre (42,0,84.5), diameter 12m, dark stone, blue steel and Rift Warden violet.
+Both retain 0.136m maximum height and MeshColliders. 1380 triangles each; no additional lights.
+Footprint checks: no overlap with existing cover, walls or statues.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_encounter_circles_20261007_194409.unity

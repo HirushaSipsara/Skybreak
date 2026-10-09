@@ -1,0 +1,2 @@
+Decoration-only capsule sweeps for Arc-sized capsule. This is a geometric clearance check, not player-input or NavMesh validation.
+Decoration obstructions: 0

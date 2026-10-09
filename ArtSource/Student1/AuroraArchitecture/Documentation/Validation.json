@@ -1,0 +1,38 @@
+[
+  {
+    "asset": "VaultWallLantern",
+    "meshes": 12,
+    "triangles": 528,
+    "fbx_dimensions_metres": [
+      0.4399999976158142,
+      0.7760001439601183,
+      0.9849999397993088
+    ],
+    "source_scale_applied": true,
+    "preview_helpers_excluded": true
+  },
+  {
+    "asset": "AuroraReactorShrine",
+    "meshes": 41,
+    "triangles": 1352,
+    "fbx_dimensions_metres": [
+      5.349999904632568,
+      2.25,
+      4.695335571469343
+    ],
+    "source_scale_applied": true,
+    "preview_helpers_excluded": true
+  },
+  {
+    "asset": "AuroraTeleportGate",
+    "meshes": 31,
+    "triangles": 2832,
+    "fbx_dimensions_metres": [
+      10.899999618530273,
+      2.050000011920929,
+      9.050000417333194
+    ],
+    "source_scale_applied": true,
+    "preview_helpers_excluded": true
+  }
+]

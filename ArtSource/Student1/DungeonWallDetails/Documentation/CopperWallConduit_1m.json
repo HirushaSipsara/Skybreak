@@ -1,0 +1,12 @@
+{
+  "asset": "CopperWallConduit_1m",
+  "meshes": 8,
+  "triangles": 320,
+  "dimensions_blender_xyz": [
+    1.0,
+    0.23300000466406345,
+    0.2800000011920929
+  ],
+  "authorship": "AI-assisted",
+  "uv": "Smart projected for colour/stone texture use"
+}

@@ -1,0 +1,5 @@
+18 enclosed lantern instances with 18 enabled warm point lights; 0 old torches; 1 shrine at scale 1.35.
+Decoration point lights: 20
+Crystal pedestals: 8; two rear flanking pedestals removed.
+No teleport gate placed in main map.
+Camera captures are visual evidence, not a combat test or Intel-laptop performance measurement.

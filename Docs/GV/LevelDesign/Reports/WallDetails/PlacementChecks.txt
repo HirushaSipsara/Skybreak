@@ -1,0 +1,7 @@
+Stone trim: 592 one-metre equivalents / 142 reusable continuous runs or doorway pieces.
+Diamond panels: 13
+Conduit modules: 45 / 9 assemblies
+Statues: 6; each 2.8m high and 1036 exported triangles.
+New detail capsule route obstructions: 0
+No new realtime lights. Floor, walls, cover, reactor, lanterns and working gates retained.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_wall_details_20261007_180820.unity

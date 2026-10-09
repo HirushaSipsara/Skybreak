@@ -1,0 +1,11 @@
+Cliffs: 45; low ledges: 21; entry arch: 1; visual foundation: 1.
+Seed 3917. Reusable Blender rock meshes, 116 triangles per high cliff / 76 per low crag. Arch includes applied bevels.
+All rock footprints checked against floor collider bounds with >=1m clearance.
+Arch clear opening 10.4m; piers outside the 10m start strip; spring height 7.3m.
+No new lights or background colliders. Map, doors, props and player retained.
+No hall roof or tunnel ceilings yet; initial cavern backdrop pass.
+Backup: Tools/SceneSnapshots/SkybreakMain_before_cavern_20261009_205338.unity
+
+Added 39 broad shelves connecting the outer cliff faces, all footprints clear of floors by 1.2m.
+Total new cavern geometry: 12364 triangles, 107 mesh renderers.
+Foundation texture tiled at world scale. No extra lights or colliders.

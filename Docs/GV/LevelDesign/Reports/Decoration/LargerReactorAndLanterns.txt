@@ -1,0 +1,5 @@
+Reactor scale: 1.35 (35% larger); bounds metres: (7.22, 6.34, 3.04)
+Removed two separate rear crystal pedestals at (38.5,0,95) and (45.5,0,95); reactor's own piers retained.
+Lanterns: 18; enabled lantern point lights: 18; no realtime shadows.
+Remaining crystal pedestals: 8
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_larger_reactor_20261007_161539.unity

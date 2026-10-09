@@ -1,0 +1,4 @@
+Actual DescentCharacterController.MoveCharacter used with the scene CharacterController and colliders.
+Northbound and southbound walks across the centre of the dais: passed, without jumping.
+Peak player foot height: 0.176m.
+This is a scripted movement/collision check, not a manual input or complete gameplay test.

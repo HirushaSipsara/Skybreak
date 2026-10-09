@@ -1,0 +1,21 @@
+Approved architecture; original map and existing non-lamp props preserved.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_approved_architecture_20261007_160722.unity
+Vault wall lantern 01 wall=Wall [-5, -3] / (-1, 0) position=(-4.96, 3.70, -3.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 02 wall=Wall [4, -4] / (1, 0) position=(4.96, 3.70, -3.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 03 wall=Wall [-13, 19] / (-1, 0) position=(-12.96, 3.70, 19.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 04 wall=Wall [12, 24] / (1, 0) position=(12.96, 3.70, 25.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 05 wall=Wall [23, 25] / (1, 0) position=(23.96, 3.70, 26.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 06 wall=Wall [23, 32] / (1, 0) position=(23.96, 3.70, 33.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 07 wall=Wall [7, 41] / (-1, 0) position=(7.04, 3.70, 41.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 08 wall=Wall [7, 46] / (-1, 0) position=(7.04, 3.70, 46.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 09 wall=Wall [28, 42] / (-1, 0) position=(28.04, 3.70, 42.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 10 wall=Wall [55, 57] / (1, 0) position=(55.96, 3.70, 58.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 11 wall=Wall [14, 54] / (-1, 0) position=(14.04, 3.70, 54.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 12 wall=Wall [70, 45] / (1, 0) position=(70.96, 3.70, 46.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 13 wall=Wall [38, 66] / (-1, 0) position=(38.04, 3.70, 66.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 14 wall=Wall [45, 66] / (1, 0) position=(45.96, 3.70, 67.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 15 wall=Wall [27, 82] / (-1, 0) position=(27.04, 3.70, 83.00) facing=(1.00, 0.00, 0.00)
+Vault wall lantern 16 wall=Wall [56, 87] / (1, 0) position=(56.96, 3.70, 87.00) facing=(-1.00, 0.00, 0.00)
+Vault wall lantern 17 wall=Wall [36, 97] / (0, 1) position=(36.00, 3.70, 97.96) facing=(0.00, 0.00, -1.00)
+Vault wall lantern 18 wall=Wall [48, 97] / (0, 1) position=(48.00, 3.70, 97.96) facing=(0.00, 0.00, -1.00)
+Reactor shrine positioned at (42.00, 0.00, 95.40); gate prefab prepared but not placed in main map.
