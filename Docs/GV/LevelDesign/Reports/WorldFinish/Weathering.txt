@@ -1,0 +1,4 @@
+Weathered upper edges of 190 wall sections; 20 shallow fractures; 17 small fallen stones.
+Lower wall vertices, textures, doorframes, floor and existing cover retained. Changed walls use matching MeshColliders. Door/pipeline bounds protected. Rubble is visual-only and avoids existing obstacles.
+Seed 6219. AI-assisted procedural mesh variations, not independent Student 3 modelling.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_world_finish_20261009_211629.unity

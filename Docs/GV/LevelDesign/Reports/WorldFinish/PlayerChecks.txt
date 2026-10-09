@@ -1,0 +1,1 @@
+Baked scene loads 7 atlases and 506 probes in Play Mode. Player crossed entrance without jumping, two actual third-person camera renders saved, and player returned to spawn.

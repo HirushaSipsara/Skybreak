@@ -1,0 +1,9 @@
+Completed lighting bake: 7 lightmap atlases (colour + shadowmask where present), 506 baked light probes.
+Lighting data: Assets/Scenes/GameLevel/SkybreakMain/LightingData.asset.
+Lightmaps: Assets/Scenes/GameLevel/SkybreakMain/Lightmap-0_comp_light.exr, Assets/Scenes/GameLevel/SkybreakMain/Lightmap-1_comp_light.exr, Assets/Scenes/GameLevel/SkybreakMain/Lightmap-2_comp_light.exr, Assets/Scenes/GameLevel/SkybreakMain/Lightmap-3_comp_light.exr, Assets/Scenes/GameLevel/SkybreakMain/Lightmap-4_comp_light.exr, Assets/Scenes/GameLevel/SkybreakMain/Lightmap-5_comp_light.exr, Assets/Scenes/GameLevel/SkybreakMain/Lightmap-6_comp_light.exr.
+Mixed lights 1; baked lights 21; realtime-only lights 0.
+Mapped static renderers: 6880.
+Initial NavMesh data saved, with 743 triangles in Edit Mode. Missing scripts/materials: 0.
+Five actual Unity previews saved. Scene saved in Edit Mode.
+These checks do not establish final autonomous agent behavior or integrated-GPU frame rate.
+Final UV2 check: all 161 distinct contributing meshes have secondary UVs. Missing mesh references: 0. Scene saved, dirty=False.

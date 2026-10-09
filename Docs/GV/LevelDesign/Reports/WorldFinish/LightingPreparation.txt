@@ -1,0 +1,6 @@
+Prepared 6880 static mesh renderers for baked GI. Secondary UVs generated: 4 native mesh assets / 0 FBX importers; GUIDs retained.
+Lighting: 1 mixed directional light with dynamic shadows; 21 baked lights (20 points and cool directional fill).
+GPU progressive bake, 12 texels/metre, 1024 atlases, nondirectional compressed maps, 32 direct / 64 indirect samples, 2 bounces, automatic filtering, restrained indirect AO.
+Cavern and tiny details use lower lightmap density.
+Placed 506 light probes across floor areas at .65, 1.75 and 3m; points inside physical obstacles excluded. Moving player/doors use probes rather than static lightmaps.
+UV backup: F:\UnityProjects\Skybreak\Tools/AssetSnapshots/BeforeLightmapUVs_20261009_212655

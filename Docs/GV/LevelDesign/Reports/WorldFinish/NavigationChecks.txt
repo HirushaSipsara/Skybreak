@@ -1,0 +1,6 @@
+Closed gates: 2/2 reject complete paths from their holding room to the hall.
+Main route: 8/8 legs complete through court, winding passage, security hall and boss chamber; 18 total path corners.
+Solid ground-level cover centres excluded: 62.
+Open gates: 2/2 complete holding-room paths after the animated blocker lifts.
+Reclosed gates: 2/2 room paths blocked again.
+No permanent NavMeshAgents added; this validates route planning and live door carving, not final agent brains.

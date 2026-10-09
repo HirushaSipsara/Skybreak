@@ -1,0 +1,9 @@
+Saved SkybreakMain in Edit Mode.
+9 statues: 4 entrance/court, 3 security hall, 2 boss statues at unchanged positions/rotations.
+All 9 cyan crystal submeshes emissive with baked spill lights.
+Baked lightmaps: 7; probes: 506; no probes inside statue bodies.
+Baked lights: 52; mixed: 1; realtime-only: 0.
+Mapped renderers: 7075.
+Navigation rebaked: 765 triangles; eight main route legs checked separately.
+Missing scripts/meshes/materials: zero. Seven actual Unity previews saved; temporary blue markers removed before scene save.
+Not committed or pushed.

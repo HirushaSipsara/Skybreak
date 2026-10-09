@@ -1,0 +1,5 @@
+Baked main-scene NavMesh: 743 triangles.
+Agent type -1372625422 / Skybreak Medium Robot: radius .45m, height 2.44m, climb .30m, slope 45 degrees. Original Humanoid settings unchanged.
+Physics geometry, voxel .10m, tile 128, no automatic jump links. Floor/dais walkable; walls/cover/solid props not walkable. Player, visual layout guides, cavern background and small weathering props ignored.
+2 moving gates excluded from static bake and fitted with live carving box obstacles. Opening raises the blocker above agent height. Fixed rails remain solid.
+Data: Assets/Navigation/NavMesh/SkybreakMain_InitialNavMesh.asset. No permanent agents added.

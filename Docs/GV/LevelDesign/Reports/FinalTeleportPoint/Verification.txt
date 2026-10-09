@@ -1,0 +1,9 @@
+Final large crystal uses dedicated shiny cyan emission and baked light spill.
+Transparent rippling two-triangle field sits behind the crystal and inside the arch; no collider, GI contribution, shadows or depth writes.
+Field shader compiled without errors. Original shrine geometry/materials preserved except the large crystal's dedicated material.
+Bake: 5 atlases / 506 probes / 7097 mapped renderers.
+Lights: 87 Baked / 1 Mixed / 0 realtime-only.
+Existing 765-triangle navigation unchanged. Missing scripts, meshes and materials: zero.
+Actual Unity portal preview saved.
+Saved in Edit Mode; not committed or pushed.
+Visual only: game-end activation/teleport logic remains a later integration.

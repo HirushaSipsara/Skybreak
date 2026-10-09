@@ -1,0 +1,5 @@
+Closed: 2/2 gates block an Arc-sized capsule through the doorway.
+Open: 2/2 gates clear an Arc-sized capsule through the doorway.
+Occupied threshold: Close() rejected while a temporary CharacterController occupied the opening.
+Closing animation completed: 2/2 gates closed and block again.
+These are runtime door/collider checks, not encounter spawning or AI-navigation tests.

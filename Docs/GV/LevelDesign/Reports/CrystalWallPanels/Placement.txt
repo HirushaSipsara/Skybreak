@@ -1,0 +1,34 @@
+30 crystal wall panels: 3 entrance/court, 11 winding passage, 5 security/holding doorways, 11 boss chamber/entrance.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_crystal_wall_panels_20261009_223736.unity
+Only the six triangles of the centre diamond use cyan emission. Original frame, backing, recess, UVs and geometry retained.
+Baked cyan spill lights: intensity .65 / range 2.4m. No colliders; navigation is unchanged.
+Diamond relief panel 01 / Court west alcove | origin=(-17.89, 4.20, 12.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [-18, 12] / (-1, 0)
+Diamond relief panel 02 / Court east alcove | origin=(17.89, 4.20, 12.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [17, 12] / (1, 0)
+Diamond relief panel 03 / Entrance | origin=(0.50, 4.20, -8.89) | inward=(0.00, 0.00, 1.00) | wall=Wall [0, -9] / (0, -1)
+Diamond relief panel 04 / Passage | origin=(11.50, 4.20, 48.89) | inward=(0.00, 0.00, -1.00) | wall=Wall [11, 48] / (0, 1)
+Diamond relief panel 05 / Passage | origin=(22.50, 4.20, 48.89) | inward=(0.00, 0.00, -1.00) | wall=Wall [22, 48] / (0, 1)
+Diamond relief panel 06 / Passage | origin=(7.11, 4.20, 44.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [7, 44] / (-1, 0)
+Diamond relief panel 07 / Passage | origin=(23.50, 4.20, 44.11) | inward=(0.00, 0.00, 1.00) | wall=Wall [23, 44] / (0, -1)
+Diamond relief panel 08 / Passage | origin=(7.11, 4.20, 36.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [7, 36] / (-1, 0)
+Diamond relief panel 09 / Passage | origin=(19.50, 4.20, 37.89) | inward=(0.00, 0.00, -1.00) | wall=Wall [19, 37] / (0, 1)
+Diamond relief panel 10 / Passage | origin=(19.11, 4.20, 31.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [19, 31] / (-1, 0)
+Diamond relief panel 11 / Passage | origin=(23.89, 4.20, 29.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [23, 29] / (1, 0)
+Diamond relief panel 12 / Passage | origin=(18.50, 4.20, 24.11) | inward=(0.00, 0.00, 1.00) | wall=Wall [18, 24] / (0, -1)
+Diamond relief panel 13 / Passage | origin=(16.50, 4.20, 22.89) | inward=(0.00, 0.00, -1.00) | wall=Wall [16, 22] / (0, 1)
+Diamond relief panel 14 / Passage | origin=(23.89, 4.20, 21.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [23, 21] / (1, 0)
+Diamond relief panel 15 / West holding doorway | origin=(22.47, 4.55, 54.00) | inward=(1.00, 0.00, 0.00) | wall=securityWest / open doorway walls
+Diamond relief panel 16 / East holding doorway | origin=(62.53, 4.55, 46.00) | inward=(-1.00, 0.00, 0.00) | wall=securityEast / open doorway walls
+Diamond relief panel 17 / Security east upper | origin=(55.89, 4.20, 51.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [55, 51] / (1, 0)
+Diamond relief panel 18 / Security east lower | origin=(55.89, 4.20, 40.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [55, 40] / (1, 0)
+Diamond relief panel 19 / Security south | origin=(44.50, 4.20, 38.11) | inward=(0.00, 0.00, 1.00) | wall=Wall [44, 38] / (0, -1)
+Diamond relief panel 20 / Boss north | origin=(42.50, 5.10, 98.89) | inward=(0.00, 0.00, -1.00) | wall=Wall [42, 98] / (0, 1)
+Diamond relief panel 21 / Boss northwest | origin=(33.50, 4.20, 95.89) | inward=(0.00, 0.00, -1.00) | wall=Wall [33, 95] / (0, 1)
+Diamond relief panel 22 / Boss northeast | origin=(50.50, 4.20, 95.89) | inward=(0.00, 0.00, -1.00) | wall=Wall [50, 95] / (0, 1)
+Diamond relief panel 23 / Boss west upper | origin=(28.11, 4.20, 90.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [28, 90] / (-1, 0)
+Diamond relief panel 24 / Boss east upper | origin=(55.89, 4.20, 90.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [55, 90] / (1, 0)
+Diamond relief panel 25 / Boss west lower | origin=(27.11, 4.20, 80.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [27, 80] / (-1, 0)
+Diamond relief panel 26 / Boss east lower | origin=(56.89, 4.20, 80.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [56, 80] / (1, 0)
+Diamond relief panel 27 / Boss southwest | origin=(30.11, 4.20, 74.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [30, 74] / (-1, 0)
+Diamond relief panel 28 / Boss southeast | origin=(53.89, 4.20, 74.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [53, 74] / (1, 0)
+Diamond relief panel 29 / Boss entrance west | origin=(38.11, 4.20, 65.50) | inward=(1.00, 0.00, 0.00) | wall=Wall [38, 65] / (-1, 0)
+Diamond relief panel 30 / Boss entrance east | origin=(45.89, 4.20, 65.50) | inward=(-1.00, 0.00, 0.00) | wall=Wall [45, 65] / (1, 0)

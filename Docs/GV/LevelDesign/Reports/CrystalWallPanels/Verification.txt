@@ -1,0 +1,8 @@
+30 marked wall panels, with cyan emission restricted to their centre diamonds.
+Frame/backing/recess materials retained. All panels have valid baked lightmaps.
+Completed bake: 7 atlases, 506 probes, 7093 mapped renderers.
+Lights: 82 Baked, 1 Mixed, 0 realtime-only.
+Panel colliders: zero. Existing 765-triangle navigation retained.
+Missing scripts/mesh/material references: zero.
+Seven actual Unity previews captured; temporary cyan markers removed and scene saved.
+No commit or push performed.

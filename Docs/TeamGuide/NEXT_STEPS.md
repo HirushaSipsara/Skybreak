@@ -6,22 +6,21 @@ Reviewed 9 October 2026 against the current main scene and the brief requirement
 
 The main scene is `Assets/Scenes/GameLevel/SkybreakMain.unity`. The level layout, textured floors/walls, cover crates, environmental props, manual holding-room doors, floor circles and cavern backdrop provide the environment baseline. The player currently supports third-person exploration.
 
-Live Editor inspection found two real-time directional lights (one with soft shadows) and 20 real-time point lights without shadows, zero baked lightmaps, and no NavMeshSurface in the main scene. This is sufficient to preview the environment; the final lighting and initial navigation bake remain unfinished.
+The world-preparation passes completed chipped wall tops, shallow fractures, glowing crystals and a transparent final return-point effect. The latest lighting bake has five atlases and 506 probes, and the main-map NavMesh has 765 triangles. Live tests passed all eight main-route legs, cover exclusion, both gates' closed/open/reclosed navigation states, physical doorway clearance and occupied-threshold protection. The return-point proximity and power controls also passed Play Mode checks. See `../GV/LevelDesign/WORLD_PREPARATION.md` and its reports. Hardware performance remains unmeasured.
 
 ## 1. Finish the World Builder work
 
 Lighting, texturing and the initial NavMesh bake belong to Student 1's GV role. Student 4 consumes navigation/path data for movement; that does not replace Student 1's initial world preparation.
 
-Recommended small visual pass, not yet implemented:
+World pass status:
 
-- Chip selected upper wall edges with a few reusable broken-stone cap variants.
-- Add shallow cracks and occasional recessed/missing upper stones.
-- Blend selected wall tops/corners into the surrounding cavern rock.
-- Place limited rubble against the wall base outside movement lanes and cover positions.
-- Keep the main wall silhouette and lower collision surfaces dependable.
-- Reserve violet accents for the boss chamber; keep warm lantern light and cool stone elsewhere.
+- Completed: 190 chipped upper wall sections, 20 shallow cracks and 17 small fallen stones beside walls.
+- Completed: preserved doorframes, textures, lower wall geometry and existing cover.
+- Completed: baked static lantern/fill lighting, one Mixed directional light and probes for moving objects.
+- Completed: initial Medium Robot navigation with live holding-gate carving and route validation.
+- Future optional art: additional rock/wall blending or passage arches. These are not needed to begin the IS implementation.
 
-After geometry stabilizes, prepare lightmap UVs/static receivers, bake environment lighting, and provide lighting for moving characters. Check lantern appearance, dark corners, camera views, door animation and weakest-laptop performance. Bake initial navigation for the intended agent size; verify rooms, entrances, cover routes and closed/open doors. Door-triggered route updates are a shared integration task.
+Rebake lighting/navigation whenever relevant static geometry changes. Validate actual agent sizes against the initial .45m-radius, 2.44m-height navigation type; larger actors may need their own bake. Weakest-laptop profiling and gameplay-triggered door-release/replanning remain integration tasks.
 
 ## 2. Establish the playable game loop
 
@@ -47,4 +46,4 @@ Test all assigned agents operating together, closed/open doors, blocked/unreacha
 
 Student 3 creates her own two original models with sources and evidence; Student 1 can import/integrate them. Each member's GV duty remains separate from their distinct IS-agent responsibility.
 
-This file is a plan. Wall weathering, lighting/navigation baking and the AI behaviors above are not established as complete by this checkpoint.
+The environment preparation is now verified locally. The gameplay and AI behaviors above remain a plan; they are not established as complete by the world bakes.

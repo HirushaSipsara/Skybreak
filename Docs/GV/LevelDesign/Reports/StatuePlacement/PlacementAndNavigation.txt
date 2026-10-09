@@ -1,0 +1,17 @@
+9 guardians: four entrance/court positions, three security hall positions, and two existing boss statues retained.
+Scene backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_marked_statues_20261009_222054.unity
+Navigation backup: F:\UnityProjects\Skybreak\Tools/AssetSnapshots/NavMeshBeforeStatues_20261009_222054
+Original statue scale 1.45 retained (4.06m tall). Cyan emission only in crystal submesh; stone/brass materials unchanged.
+Guardian statue 01 / Entrance | position=(0.00, 0.00, -7.60) | yaw=0 | crystal=(0.00, 3.03, -7.01)
+Guardian statue 02 / Court north | position=(0.00, 0.00, 25.90) | yaw=180 | crystal=(0.00, 3.03, 25.31)
+Guardian statue 03 / Court southwest | position=(-6.80, 0.00, 6.10) | yaw=0 | crystal=(-6.80, 3.03, 6.69)
+Guardian statue 04 / Court southeast | position=(6.80, 0.00, 6.10) | yaw=0 | crystal=(6.80, 3.03, 6.69)
+Guardian statue 05 / Security northwest | position=(36.30, 0.00, 60.90) | yaw=180 | crystal=(36.30, 3.03, 60.31)
+Guardian statue 06 / Security northeast | position=(47.10, 0.00, 60.90) | yaw=180 | crystal=(47.10, 3.03, 60.31)
+Guardian statue 07 / Security south | position=(41.30, 0.00, 39.10) | yaw=0 | crystal=(41.30, 3.03, 39.69)
+Guardian statue 08 / Boss chamber | position=(31.50, 0.00, 90.50) | yaw=145 | crystal=(31.84, 3.03, 90.01)
+Guardian statue 09 / Boss chamber | position=(52.50, 0.00, 90.50) | yaw=215 | crystal=(52.16, 3.03, 90.01)
+9 statue collider centres excluded from walkable navigation; 7 moved/added statues are on the floor and do not intersect existing solid scenery. All eight main-route legs complete.
+Rebaked navigation triangles: 765. Existing agent settings, modifiers, gate carving and navigation asset GUID retained.
+
+Refreshed lighting probes using the existing 4m floor grid / .65, 1.75 and 3m heights: 506 eligible points, excluding current physical scenery. Six old probe positions were inside moved statues.

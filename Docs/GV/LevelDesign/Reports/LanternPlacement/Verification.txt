@@ -1,0 +1,10 @@
+Saved main scene in Edit Mode.
+34 marked lanterns: 8 court/entrance, 10 passage, 8 security/holding rooms, 8 boss/entrance.
+8 emissive crystal pedestals with baked cyan spill.
+Baked lightmaps: 7; baked probes: 506.
+Baked lights: 43; mixed: 1; realtime-only: 0.
+Mapped static renderers: 7072.
+Navigation: original 743 triangles retained; lanterns have no movement colliders.
+Missing scripts/mesh/material references: 0.
+Eight actual Unity previews saved, with temporary yellow position markers only in Positions_ images; markers removed before saving.
+No commit or push performed.

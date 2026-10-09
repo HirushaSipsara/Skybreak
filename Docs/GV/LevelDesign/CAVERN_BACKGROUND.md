@@ -42,6 +42,8 @@ The Blender library arranges the variants separately for inspection. Exports ret
 
 This environment checkpoint does not complete the lighting bake, initial NavMesh, combat, or final hardware optimization. Git history records the saved environment baseline; publishing it to the remote is a separate step.
 
+The subsequent world-preparation pass completed wall weathering, baked lighting and the initial main-map NavMesh. See [world preparation](WORLD_PREPARATION.md) for current settings, checks and rebake instructions. The checkpoint above describes the earlier cavern pass.
+
 ## Reproduction tools
 
 - `Tools/BuildCavernKit.py`: isolated background Blender mesh/texture creation, normal and closed-mesh checks, FBX export and editable source save.

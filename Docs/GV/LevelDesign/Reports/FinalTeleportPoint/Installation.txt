@@ -1,0 +1,8 @@
+Final return-point visual installed in the existing Aurora reactor shrine.
+Dedicated cyan shiny/emissive crystal material; original crystal geometry and pillar materials retained.
+Transparent cyan/violet ripples behind the crystal, within the stone arch: centre (42,3.35,95.8), width 4.35m / height 4.6m.
+Animated unlit two-triangle field, no collider/shadow/depth writing, excluded from baked GI.
+One additional baked cyan spill: intensity 1.5 / range 5.5m.
+FinalTeleportVisual gently pulses crystal emission; field brightens within 12m and reaches full proximity strength at 4m.
+SetPowered(bool) is provided for future encounter/quest logic. No player teleport or quest completion is implemented by this visual.
+Backup: F:\UnityProjects\Skybreak\Tools/SceneSnapshots/SkybreakMain_before_final_teleport_visual_20261009_225434.unity
