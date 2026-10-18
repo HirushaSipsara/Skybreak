@@ -107,8 +107,8 @@ namespace Skybreak
             fireCooldown = charged ? .65f : .18f;
             Ray ray = viewCamera.ViewportPointToRay(new Vector3(.5f, .5f));
             if (!Physics.Raycast(ray, out RaycastHit hit, 85f, ~0, QueryTriggerInteraction.Ignore)) return;
-            var target = hit.collider.GetComponentInParent<SecurityTarget>();
-            if (target != null && target.TakeDamage(charged ? chargeDamage : shotDamage)) DisabledTargets++;
+            var target = hit.collider.GetComponentInParent<IDamageable>();
+            if (target != null && target.ApplyDamage(charged ? chargeDamage : shotDamage, gameObject)) DisabledTargets++;
             hitFlash = .16f;
         }
 
