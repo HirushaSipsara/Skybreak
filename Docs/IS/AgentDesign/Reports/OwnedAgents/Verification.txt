@@ -1,0 +1,7 @@
+Main scene saved in Edit Mode.
+Two separate navigation surfaces: original Medium Robot and wider Rift Warden arena.
+20 boss clips / Generic avatar; independent arm/core hitboxes; 100x imported bone scale compensated.
+Missing scripts: zero. Main scene and both owned prefabs have no LocalCombatLab dependency.
+Existing environment lighting retained: 5 atlases / 506 probes.
+Temporary shooter/player health/double jump/restart/lab scene live under locally Git-excluded Assets/LocalCombatLab; local test tools likewise excluded.
+No commit or push performed. Final teammate integration, game build and weakest-machine profiling remain outstanding.

@@ -1,0 +1,26 @@
+Live Play Mode checks on local combat-lab scene.
+Both agents on matching NavMeshes; Generic avatar valid; shielded core rejected damage; actual local-shooter ray damaged left arm by 25.
+Left arm detaches, its hitbox disables, remaining arm stays intact and core remains shielded.
+Second arm detaches; CoreOpen unlocks core at 1.5-second marker; open-core locomotion follows.
+Core death finishes once and powers the final return-point field.
+Two valid boss-sized warps, warning/locked-slash damage marker and recovery executed; boss remains on NavMesh.
+Cannon burst executed exactly three shots at animation markers.
+Destroyed blade arm interrupts pending teleport/slash; no late damage applied.
+Relay chooses heal at 50% player health, restores 18 once, obeys five-second cooldown.
+Destroyed blade arm interrupts pending teleport/slash; no late damage applied.
+Relay chooses heal at 50% player health, restores 18 once, obeys five-second cooldown.
+Unreachable destination rejected, motor reports blockage instead of direct wall-crossing.
+Lethal damage disables Relay and stops movement.
+Unobstructed cannon applies exactly three 8%-max-health hits; own actor colliders do not block its shots.
+Unobstructed cannon applies exactly three 8%-max-health hits; own actor colliders do not block its shots.
+Grounded target takes one 30%-max-health slam hit at the impact marker.
+Destroyed blade arm interrupts pending teleport/slash; no late damage applied.
+Relay chooses heal at 50% player health, restores 18 once, obeys five-second cooldown.
+Relay selects a visible vulnerable boss part and applies a defensive shot.
+Relay retreats below 30% self health using recent threat memory.
+Unreachable destination rejected, motor reports blockage instead of direct wall-crossing.
+Lethal damage disables Relay and stops movement.
+Jump above 1.05m avoids low slam; warning and impact remain grounded even while target jumps.
+Teleport arrives at its warned point after target movement; an occupied warned point cancels the warp.
+Relay's normal Update loop autonomously follows a distant player on the baked route.
+Normal boss Update loop activates on arena entry and independently chooses and executes an available attack.

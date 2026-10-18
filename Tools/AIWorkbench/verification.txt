@@ -1,0 +1,6 @@
+PASS Unity: compiled shared tuning classes; both real brain properties use the loaded configuration.
+Boss rearDelay=1.25; Relay healAmount=18; revision=2; Play Mode=True.
+PASS: invalid numeric parameters rejected by C# validation.
+PASS Unity: compiled shared tuning classes; both real brain properties use the loaded configuration.
+Boss rearDelay=1; Relay healAmount=18; revision=1; Play Mode=True.
+PASS: invalid numeric parameters rejected by C# validation.

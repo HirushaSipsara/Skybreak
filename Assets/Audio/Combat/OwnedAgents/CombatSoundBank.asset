@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb3f403d91f1b1c4e8a4e5120168cd1c, type: 3}
+  m_Name: CombatSoundBank
+  m_EditorClassIdentifier: Assembly-CSharp::Skybreak.AI.CombatSoundBank
+  clips:
+  - {fileID: 8300000, guid: f2d900efde84ebc49822b86b65482863, type: 3}
+  - {fileID: 8300000, guid: 3e707632bd72a1b40b67cfab4df41396, type: 3}
+  - {fileID: 8300000, guid: c6196a265e7c93d47b301dd94bf7694a, type: 3}
+  - {fileID: 8300000, guid: a324e76f34e14a846899494ddb63bc6c, type: 3}
+  - {fileID: 8300000, guid: f66d33176038b37408c3156097ccc387, type: 3}
+  - {fileID: 8300000, guid: d3b9d8ea107c55749bc14943382c3315, type: 3}
+  - {fileID: 8300000, guid: e61a3def5fbdd9143bcadc64241391e2, type: 3}
+  - {fileID: 8300000, guid: 8d421bc99f978d44fad65a121135fa11, type: 3}
+  - {fileID: 8300000, guid: c7d65085cbd76e248b509b80461154b7, type: 3}
+  - {fileID: 8300000, guid: b5cf3273b2018f345b5dd078eda65ce2, type: 3}
+  - {fileID: 8300000, guid: de2524a415279be48913bf025ce16bc4, type: 3}
+  - {fileID: 8300000, guid: eed927fe4bf79584ea56496781281779, type: 3}

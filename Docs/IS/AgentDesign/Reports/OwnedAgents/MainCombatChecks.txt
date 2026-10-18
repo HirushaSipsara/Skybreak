@@ -1,0 +1,7 @@
+Main-map combat regression checks, 10 October 2026.
+PASS: main Play attaches one temporary shooter and health adapter; original movement controller disabled; one listener; boss and Relay bound to player health.
+PASS: all 12 redesigned audio clips have nonzero unclipped samples.
+PASS: 300 recoil updates at one animated frame produce no cumulative rotation or translation; animated shoulder pose restores exactly.
+PASS: 24 real cannon shots over eight bursts leave the shoulder anchored; each burst retains exactly three 8-point hits and plays audio.
+PASS: actual main-map player shots reject the protected core, destroy both arms, open/destroy the core and power the return field.
+PASS: F7 restores all health/arms and places player/Relay at valid boss-room starts. No permanent main-scene player dependency created.

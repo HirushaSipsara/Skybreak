@@ -1,5 +1,9 @@
 # External asset credits and provenance
 
+## 11 October 2026 size cleanup
+
+Unused imported assets, duplicate third-party archives/extracted packs and obsolete local editing snapshots were removed after checking the finished main map's dependencies. Current imported dependencies and editable Blender source models remain. The original Stone Floor source files remain because the floor authoring script uses them. Download metadata, hashes, source-page records and attribution are retained; licence files from deleted extracted packs are now in each library's `resources/.../Licences/` folder. References below to removed original archives/packs are historical provenance records. Removed tracked imports remain recoverable from Git history.
+
 ## Stone Floor — 4engine
 
 The downloaded Stone Floor kit is credited to **4engine**, as identified in the user's supplied download-page screenshot. Original supplied files are under `resources/Stone Floor/`; the prepared Blender source is in `ArtSource/FloorKit/`. Imported FBX assets are under `Assets/Models/Environment/StoneFloor/`, and the original floor textures are under `Assets/Textures/Environment/StoneKit/StoneFloor/`.

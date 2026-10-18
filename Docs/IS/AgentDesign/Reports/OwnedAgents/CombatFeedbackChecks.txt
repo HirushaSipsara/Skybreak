@@ -1,0 +1,6 @@
+Combat feedback live checks, 10 October 2026.
+PASS: 12 mono cues contain nonzero unclipped samples; one active listener; player and boss sound banks assigned.
+PASS: shot deals 25 damage and drives firing recoil/tracer/audio; damage drives head/body flinch, camera shake and a transient HUD cue.
+PASS: physical double jump gains over 2.2m, emits two bursts/distinct sounds, rejects a third jump, and resets on landing.
+PASS: stronger cannon recoil fires three times while three 8-point hits retain their original timing.
+PASS: both arm-break reactions/cues, core-open cue and defeat cue execute; defeat still powers the return field.

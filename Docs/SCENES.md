@@ -5,8 +5,8 @@
 | Scene | Purpose | Default build |
 | --- | --- | --- |
 | `Assets/Scenes/GameLevel/SkybreakMain.unity` | Current main game map; continue world building here | Enabled, first |
-| `Assets/Scenes/Demos/SkybreakLastLightDemo.unity` | Preserved earlier city/escort shooting prototype | Disabled |
-| `Assets/Scenes/Demos/SkybreakDescentDemo.unity` | Preserved earlier dungeon environment/explorer demo | Disabled |
+
+The two earlier demo scenes were removed on 11 October 2026 at the user's request to retain the finished map. They and their previous dependencies remain recoverable from Git history. Only `SkybreakMain` is in Build Settings. The locally excluded combat lab and its scripts remain available for current shooting and boss-phase tests.
 
 The main map retains the stone floor, walls, side rooms and current Arc explorer. Moving/renaming it does not implement the remaining combat, autonomous agents or progression systems.
 
@@ -39,6 +39,8 @@ Historical reports retain the filenames/path names that existed when those check
 ## Future authoring snapshots
 
 World Editing tools take local safety copies under **`Tools/SceneSnapshots/`**, which is outside Assets and ignored by Git. Unity therefore does not import each snapshot as another scene. Normal saved work should be committed incrementally to Git.
+
+Old local scene/asset snapshots were removed during the 11 October size cleanup. Historical references to those deleted paths below and in older reports describe prior evidence; Git history is the recovery source for committed work. New authoring operations can create fresh snapshots. See `Docs/Maintenance/2026-10-11-cleanup/` for the deletion inventory and verification.
 
 When restoring a local snapshot, stop Play Mode, preserve current work and replace the intended main-scene contents deliberately. Do not copy duplicate metadata into a second scene while the original is still present.
 

@@ -1,0 +1,4 @@
+PASS: Main scene opens; zero missing scripts, meshes, materials or shaders.
+PASS: Relay and Rift Warden retained; 20 boss animation clips.
+PASS: Both navigation surfaces retain NavMesh data.
+PASS: Five baked lightmap atlases and 506 light probes retained.
