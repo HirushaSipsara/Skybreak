@@ -287,6 +287,23 @@ The algorithms (`Assets/Scripts/AI/Algorithms`) are pure C# in their own assembl
 
 **Baseline comparison:** run the same five-minute scripted fight with the *current* `RelayBrain` and with the new one. Record heals applied while the player is below 40%, time the player spends below 30%, damage taken by Relay, time spent in the fire lane, and average decision time in ms. Report a table and a short discussion.
 
+**Results** (full report: `Docs/IS/Testing/Relay/EVALUATION.md`), mean of 8 scripted boss fights per version:
+
+| Metric | Baseline (step 2) | Layered |
+|---|---|---|
+| Player fell | 6 / 8 | 4 / 8 |
+| Player below 30% health, s per minute | 11.6 | 3.8 |
+| Damage taken by Relay, per minute | 61 | 34 |
+| Heals per minute | 6.0 | 7.5 |
+| In the player's line of fire, s per minute | 6.2 | 4.4 |
+| In the boss's line of sight, s per minute | 59.1 | 59.5 |
+| Mean distance to player | 5.8 m | 3.5 m |
+| Decision cycle | 0.005 ms | 1.1 ms |
+
+**Live visualisation:** `RelayDebugOverlay` (F9 in Play mode) shows every layer's values on screen and draws the A* closed set and route, annealing samples, chosen spot, remembered threats and the player's line of fire. It attaches itself at runtime, so no scene or prefab edits are needed.
+
+**Study guide:** `relay_study_guide.html` in this folder explains each layer's theory with worked numbers and viva questions, and includes interactive fuzzy and A* explorers.
+
 ## 9. Build plan (one commit per step)
 
 | Step | Work | Done when |
@@ -297,6 +314,8 @@ The algorithms (`Assets/Scripts/AI/Algorithms`) are pure C# in their own assembl
 | 4 | Generic A* + Relay tactical graph | A* tests pass; Relay takes covered routes |
 | 5 | Simulated-annealing position search | Annealing test passes; Relay finds cover and stays out of the fire lane |
 | 6 | Debug overlay + baseline evaluation | Results table in `Docs/IS/Testing/` |
+
+**Status:** steps 1–6 are complete. The commits are: design doc, layer split (no behaviour change), fuzzy inference with expected utility, tactical A*, simulated annealing with Reposition, and overlay with evaluation.
 
 **Stretch goals (only after step 6):**
 - **Bayes' rule (L09 Part 2):** a belief `P(PlayerInDanger | health drop, threat visible)` feeding the utility.
