@@ -12,30 +12,30 @@ Assessed IS agent: **Relay** (support companion). Additional work: Rift Warden b
 
 ### Relay intelligent-agent implementation (IS assessment)
 
-AI assistance: Claude (Anthropic), through Claude Code. Design, code, tests, evaluation and documentation were produced by the AI from the SE3062 lecture material and the student's requirements. The student set the goals, chose between options, reviewed each step and committed it, or asked for it to be committed under their account. Commits from step 3 on carry a `Co-Authored-By: Claude` line.
+AI assistance: Claude (Anthropic), through Claude Code. Design, code, tests, evaluation and documentation were produced by the AI from the SE3062 lecture material and the student's requirements. The student set the goals, chose between options, reviewed each step and committed it, or asked for it to be committed under their account. AI assistance is recorded here rather than in the commit messages.
 
 | Date | Work | How | Evidence |
 |---|---|---|---|
 | 2026-10-19 | Step 1: Relay design document (PEAS, 7 environment dimensions, layered architecture, lecture map, test plan) | AI-drafted from lectures 02–11; reviewed and committed by the student | `70e5f41`, `Docs/IS/AgentDesign/Relay/RELAY_DESIGN.md` |
 | 2026-10-19 | Step 2: `RelayBrain` split into reflex, perception and utility layers, with no behaviour change | AI-written; committed by the student | `9d21aff`, `Docs/IS/Testing/Relay/step2_*.txt` (identical before/after snapshots) |
-| 2026-10-19 | Step 3: Mamdani fuzzy inference library, Relay's 14-rule fuzzy model, expected-utility selection, 6 unit tests from Lecture 09 examples | AI-written; committed at the student's request | `69155d4`, `Docs/IS/Testing/Relay/step3_*` |
-| 2026-10-19 | Step 4: best-first search engine (A*, uniform-cost, greedy), tactical NavMesh grid with exposure costs, threat tracks, 9 unit tests (Lecture 05 Romania) | AI-written; committed at the student's request | `c6ef4b8`, `Docs/IS/Testing/Relay/step4_*` |
-| 2026-10-19 | Step 5: simulated annealing and hill climbing, position objective, Reposition action, 5 unit tests | AI-written; committed at the student's request | `7b2b12d`, `Docs/IS/Testing/Relay/step5_*` |
-| 2026-10-19 | Step 6: F9 debug overlay, 8-seed baseline-vs-layered evaluation, interactive study guide | AI-written; committed at the student's request | `062a46d`, `Docs/IS/Testing/Relay/EVALUATION.md`, `Docs/IS/AgentDesign/Relay/relay_study_guide.html` |
+| 2026-10-19 | Step 3: Mamdani fuzzy inference library, Relay's 14-rule fuzzy model, expected-utility selection, 6 unit tests from Lecture 09 examples | AI-written; committed at the student's request | `1965872`, `Docs/IS/Testing/Relay/step3_*` |
+| 2026-10-19 | Step 4: best-first search engine (A*, uniform-cost, greedy), tactical NavMesh grid with exposure costs, threat tracks, 9 unit tests (Lecture 05 Romania) | AI-written; committed at the student's request | `c300802`, `Docs/IS/Testing/Relay/step4_*` |
+| 2026-10-19 | Step 5: simulated annealing and hill climbing, position objective, Reposition action, 5 unit tests | AI-written; committed at the student's request | `2a2f76b`, `Docs/IS/Testing/Relay/step5_*` |
+| 2026-10-19 | Step 6: F9 debug overlay, 8-seed baseline-vs-layered evaluation, interactive study guide | AI-written; committed at the student's request | `efb8683`, `Docs/IS/Testing/Relay/EVALUATION.md`, `Docs/IS/AgentDesign/Relay/relay_study_guide.html` |
 | 2026-10-19 | Local lab test tools: `RelayRegressionCheck.cs`, `RelayEvaluation.cs` | AI-written; kept in the git-excluded `Assets/LocalCombatLab` folder because they depend on the local test lab | Their output files are committed under `Docs/IS/Testing/Relay/` |
 
 ### Rift Warden adaptive boss AI (additional agent)
 
-AI assistance: Claude (Anthropic), through Claude Code, at the student's request: "improve the boss's reading of the fight, with IS techniques and beyond". The student set the goal, approved the plan and asked for each step to be committed. The commits carry a `Co-Authored-By: Claude` line.
+AI assistance: Claude (Anthropic), through Claude Code, at the student's request: "improve the boss's reading of the fight, with IS techniques and beyond". The student set the goal, approved the plan and asked for each step to be committed. AI assistance is recorded here rather than in the commit messages.
 
 | Date | Work | How | Evidence |
 |---|---|---|---|
-| 2026-10-20 | Step 1: adaptive boss design; brain split into perception and attack scoring with no behaviour change | AI-written | `bfa5ffa`, `Docs/IS/AgentDesign/RiftWarden/RIFT_WARDEN_AI_DESIGN.md`, `Docs/IS/Testing/RiftWarden/step1_*` |
-| 2026-10-20 | Step 2: player model (velocity, range, strafe habit, Dirichlet answer beliefs) and predictive aim | AI-written | `58e3d77`, `step2_*` |
-| 2026-10-20 | Step 3: Bayesian Beta attack learner with Thompson sampling | AI-written | `25b601f`, `step3_*` |
-| 2026-10-20 | Step 4: depth-2 expectimax combo planner | AI-written | `0d4a6cc`, `step4_*` |
-| 2026-10-20 | Step 5: phases, tactics (shield weak arm, punish healer, cut off), fairness director | AI-written | `dee9b30`, `step5_*` |
-| 2026-10-20 | Step 6: F10 overlay; original vs adaptive evaluation against 4 scripted player styles | AI-written | `3d39d3e`, `Docs/IS/Testing/RiftWarden/EVALUATION.md` |
+| 2026-10-20 | Step 1: adaptive boss design; brain split into perception and attack scoring with no behaviour change | AI-written | `24524b6`, `Docs/IS/AgentDesign/RiftWarden/RIFT_WARDEN_AI_DESIGN.md`, `Docs/IS/Testing/RiftWarden/step1_*` |
+| 2026-10-20 | Step 2: player model (velocity, range, strafe habit, Dirichlet answer beliefs) and predictive aim | AI-written | `5b7ee38`, `step2_*` |
+| 2026-10-20 | Step 3: Bayesian Beta attack learner with Thompson sampling | AI-written | `70deb29`, `step3_*` |
+| 2026-10-20 | Step 4: depth-2 expectimax combo planner | AI-written | `e89f56a`, `step4_*` |
+| 2026-10-20 | Step 5: phases, tactics (shield weak arm, punish healer, cut off), fairness director | AI-written | `4a5b90f`, `step5_*` |
+| 2026-10-20 | Step 6: F10 overlay; original vs adaptive evaluation against 4 scripted player styles | AI-written | `97079ec`, `Docs/IS/Testing/RiftWarden/EVALUATION.md` |
 | 2026-10-20 | Step 7: boss section and Thompson-sampling explorer in the study guide | AI-written | this commit, `Docs/IS/AgentDesign/Relay/relay_study_guide.html` |
 | 2026-10-20 | Local lab tools `RiftRegressionCheck.cs` and `RiftEvaluation.cs` | AI-written; kept in the git-excluded `Assets/LocalCombatLab` | Outputs under `Docs/IS/Testing/RiftWarden/` |
 

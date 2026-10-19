@@ -10,7 +10,7 @@ Raw results: `step6_evaluation_original.txt` and `step6_evaluation_adaptive.txt`
 | Fight | 75 s of game time per run, 3 runs per player style. Relay is parked out of range: boss against player only. |
 | Player shooting | Scripted 6 damage/s at the cannon arm, then the blade, then the core (so every fight passes through all three phases) |
 | Player styles | **Strafer**: circles the arena at 3.4 m/s, always counter-clockwise. **Jumper**: stands at mid range and times a jump so its peak lands on each melee/slam impact. **Kiter**: backs away at 3.4 m/s and slides along the arena edge. **Camper**: stands still at 9 m. |
-| Original boss | Decision logic from commit `bfa5ffa` (proved identical to the pre-upgrade boss) |
+| Original boss | Decision logic from commit `24524b6` (proved identical to the pre-upgrade boss) |
 | Adaptive boss | Current code: player model, predictive aim, Bayesian learner, expectimax planner, phases, tactics, director |
 | Measurement | By the harness (`Assets/LocalCombatLab/Editor/RiftEvaluation.cs`, local lab tool), using only API both versions have |
 
