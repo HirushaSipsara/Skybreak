@@ -1,0 +1,33 @@
+[heal at 50%] action=Heal decision="Player health need exceeds threshold / healing available"
+  scores follow=0.261 heal=0.725 defend=0.445 retreat=-1.000
+  heals=1 attacks=0 playerHealth=68.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[heal on cooldown] action=Reposition decision="Firing position blocked / follow player"
+  scores follow=0.261 heal=-1.000 defend=0.445 retreat=-1.000
+  heals=1 attacks=0 playerHealth=68.000 relayHealth=90.000
+  motor status="Following complete path" blocked=False stopped=False destination=(42.000,0.050,77.000)
+[defend visible boss] action=Defend decision="Visible threat near player / defensive burst available"
+  scores follow=0.261 heal=-1.000 defend=0.558 retreat=-1.000
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[retreat at low own health] action=Retreat decision="Own health below retreat threshold + recent threat"
+  scores follow=0.261 heal=-1.000 defend=-1.000 retreat=1.000
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=20.000
+  motor status="Following complete path" blocked=False stopped=False destination=(44.535,0.050,78.036)
+[follow distant player] action=Follow decision="Follow / no visible threat"
+  scores follow=0.650 heal=-1.000 defend=-1.000 retreat=-1.000
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  motor status="Following complete path" blocked=False stopped=False destination=(43.500,0.050,75.000)
+[follow close to player] action=Follow decision="Follow / no visible threat"
+  scores follow=0.265 heal=-1.000 defend=-1.000 retreat=-1.000
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[player down] action=Follow decision="Player down / waiting for restart"
+  scores follow=0.265 heal=-1.000 defend=-1.000 retreat=-1.000
+  heals=1 attacks=1 playerHealth=0.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[unreachable destination] accepted=False blocked=True
+[lethal damage] action=Disabled decision="Relay disabled"
+  scores follow=0.265 heal=-1.000 defend=-1.000 retreat=-1.000
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=0.000
+  motor status="Stopped" blocked=True stopped=False destination=none

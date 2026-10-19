@@ -1,0 +1,50 @@
+using Skybreak.AI.RiftWarden;
+using Skybreak.Combat;
+using UnityEngine;
+
+namespace Skybreak.AI.Relay
+{
+    // What Relay knows at one decision cycle: this cycle's sensor readings plus remembered state.
+    public struct RelayPercept
+    {
+        public DamageSink threat;       // most dangerous visible hostile this cycle, or null
+        public float threatDanger;      // 0..1, how close that threat is to the player; -1 when there is none
+        public bool remembersThreat;    // a threat was seen within the memory window
+        public Vector3 threatMemory;    // last known aim point of a threat
+        public float playerNeed;        // 1 - player health fraction (0 without a health source)
+        public float distanceToPlayer;
+        public float ownHealth01;
+    }
+
+    // Layer 1 (model-based, Lecture 03): reads the sensors and keeps the internal state that covers what
+    // Relay can no longer see. The world is partially observable, so a threat behind a wall is remembered
+    // for a short time instead of being forgotten the moment line of sight breaks.
+    public sealed class RelayPerception
+    {
+        float lastSeenAt = -100;
+        public Vector3 ThreatMemory { get; private set; }
+
+        public void Forget() { lastSeenAt = -100; }
+
+        public RelayPercept Sense(RelayBrain self, Transform player, DamageSink playerVitals, RelayTuning tuning, float now)
+        {
+            var percept = new RelayPercept { threatDanger = -1 };
+            foreach (var candidate in DamageSink.Active)
+            {
+                if (candidate == null || !candidate.Alive || candidate.Team != Allegiance.Hostile) continue;
+                var part = candidate as RiftDamagePart; if (part != null && !part.Vulnerable) continue;
+                float range = Vector3.Distance(self.AimPoint, candidate.AimPoint);
+                if (range > tuning.senseRange || !DamageSink.Visible(self.AimPoint, candidate, self.transform)) continue;
+                float danger = 1 - Mathf.Clamp01(Vector3.Distance(player.position, candidate.transform.position) / 18);
+                if (danger > percept.threatDanger) { percept.threatDanger = danger; percept.threat = candidate; }
+            }
+            if (percept.threat != null) { ThreatMemory = percept.threat.AimPoint; lastSeenAt = now; }
+            percept.threatMemory = ThreatMemory;
+            percept.remembersThreat = now - lastSeenAt < tuning.memorySeconds;
+            percept.playerNeed = playerVitals != null ? 1 - playerVitals.Health / playerVitals.MaximumHealth : 0;
+            percept.distanceToPlayer = Vector3.Distance(self.transform.position, player.position);
+            percept.ownHealth01 = self.Health / self.MaximumHealth;
+            return percept;
+        }
+    }
+}
