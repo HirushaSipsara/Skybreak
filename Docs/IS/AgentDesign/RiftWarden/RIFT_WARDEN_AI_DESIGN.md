@@ -184,6 +184,21 @@ Hard limits never change: telegraph times, damage values and the jump rule for l
 - **Regression snapshots:** fixed lab scenarios. Step 1 must reproduce the old behaviour exactly.
 - **Evaluation (step 6):** scripted player archetypes (strafer, jumper, kiter, camper) fight the old boss and the new one. Measures: hit rate in the first and last 30 s (does it learn?), damage to the player, attack-choice entropy (predictability), time the player is below 30%, mercy activations, and the minimum reaction time per attack (fairness).
 
+### Results (step 6)
+
+Full report: `Docs/IS/Testing/RiftWarden/EVALUATION.md`. Mean of 3 scripted 75 s fights per player style:
+
+| Style | Hit rate, original → adaptive | Damage dealt |
+|---|---|---|
+| Strafer | 38% → 51% | 190 → 270 |
+| Jumper | 71% → 83% | 320 → 490 |
+| Kiter | 16% → 37% | 74 → 97 |
+| Camper | 100% → 90% | 530 → 530 |
+
+The adaptive boss reads moving players much better. Against fixed-habit players it trades some variety for effectiveness: attack-mix entropy against the Strafer falls from 1.95 to 1.74 bits.
+
+**Live view:** `RiftDebugOverlay` (F10 in Play mode) shows the phase and mood, the player model and its learned answers, the learner's hit-chance table, and the planner's value per move with its planned line. In the world it draws the player's velocity, the predicted lead point and the cut-off point.
+
 ## 8. AI assistance
 
 This design and its implementation are developed with AI assistance (Claude). Record each step in `Docs/CONTRIBUTION_LOG.md`.
