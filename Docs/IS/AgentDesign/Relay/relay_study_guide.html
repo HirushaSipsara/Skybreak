@@ -123,6 +123,7 @@ pre.mermaid { background: var(--panel); border: 1px solid var(--line); text-alig
     <li><a href="#astar">L4 Tactical A*</a></li>
     <li><a href="#annealing">L5 Simulated annealing</a></li>
     <li><a href="#evidence">Testing and evaluation</a></li>
+    <li><a href="#boss">Rift Warden boss</a></li>
     <li><a href="#other">Other lectures</a></li>
     <li><a href="#viva">Viva questions</a></li>
     <li><a href="#demo">Demo script</a></li>
@@ -134,7 +135,7 @@ pre.mermaid { background: var(--panel); border: 1px solid var(--line); text-alig
 <header class="intro">
   <div class="eyebrow">SE3062 Intelligent Systems · Skybreak · Relay support companion</div>
   <h1>How Relay thinks, and the theory behind each part</h1>
-  <p class="lede">Relay is the hovering support robot that follows Arc, heals him, shoots at threats and keeps itself out of trouble. This guide walks through every decision layer, the lecture theory it uses, the real numbers from the tests, and the questions an examiner is likely to ask.</p>
+  <p class="lede">Relay is the hovering support robot that follows Arc, heals him, shoots at threats and keeps itself out of trouble. This guide walks through every decision layer, the lecture theory it uses, the real numbers from the tests, and the questions an examiner is likely to ask. A second part covers the Rift Warden boss, which learns your habits during the fight.</p>
 </header>
 
 <section id="overview">
@@ -410,6 +411,106 @@ flowchart TD
   <p><b>Why 8 seeds?</b> Fixed seeds don't make the fights perfectly repeatable, because frame timing varies. Averaging several runs is the honest way to compare.</p>
 </section>
 
+<section id="boss">
+  <span class="layer-tag">Extra agent · Assets/Scripts/AI/RiftWarden</span> <span class="lecture">Lectures 03, 09, 10 + beyond</span>
+  <h2>Rift Warden: the boss that learns your habits</h2>
+  <p>Relay is cooperative; the Rift Warden is <b>competitive</b>, and that changes the theory. The original boss checked distance, intact arms and cooldowns, then picked from a fixed order (blade, then teleport, then cannon), so it was predictable and never noticed how you play. The upgrade keeps every attack, timing, telegraph, effect and sound, and replaces how it <b>reads the fight</b>.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Layer</th><th>What it does</th><th>Theory</th></tr>
+    <tr><td>1 Player model</td><td>Your smoothed velocity, preferred range, strafe habit, and what you did after each attack</td><td>Model-based state (L03); Dirichlet counts, i.e. probability from data (L09)</td></tr>
+    <tr><td>2 Predictive aim</td><td>Cannon shots and the slam circle lead you to where you'll be</td><td>Constant-velocity intercept, capped for fairness (beyond)</td></tr>
+    <tr><td>3 Attack learner</td><td>A belief per attack and range about "this hits <i>you</i>"</td><td>Bayes with Beta–Bernoulli (L09); exploration vs exploitation (L03); multi-armed bandit with Thompson sampling (beyond)</td></tr>
+    <tr><td>4 Combo planner</td><td>Looks two moves ahead over your likely dodge</td><td>Expectimax (L10)</td></tr>
+    <tr><td>5 Phases, tactics, director</td><td>Measured → Enraged → Desperate; shields its weak arm; punishes Relay's heals; cuts off your escape; mercy and pressure</td><td>Hierarchical state machine (L03); dynamic difficulty adjustment (beyond)</td></tr>
+  </table></div>
+
+  <h3>Layer 1: player model</h3>
+  <p>For each attack the boss records what you did between its start and its impact: <b>Stay, Strafe left, Strafe right, Back off, Close in, Jump</b>. Each is classified from your displacement relative to the boss, and counted with a Dirichlet(1,…,1) prior:</p>
+  <div class="formula">P(response r | attack) = (n<sub>r</sub> + 1) / (N + 6)        (uniform 1/6 before any data)<br>velocity v̂ ← v̂ + α(Δp/Δt − v̂),  α = 1 − e<sup>−Δt/0.25 s</sup>   (frame-rate independent)</div>
+  <p>Old answers fade (×0.9 per new one), so recent habits count more.</p>
+
+  <h3>Layer 2: predictive aim</h3>
+  <div class="formula">aim = p + v̂ · t · κ,   |v̂ · t · κ| ≤ 2.5 m,   κ = 0.4 (mercy) / 0.65 (normal) / 0.85 (pressure)</div>
+  <p>The cannon locks at 0.4 s, and its three shots aim 0.17, 0.47 and 0.77 s ahead, so the burst walks along your path. κ &lt; 1 and the cap mean a change of direction always escapes. In the lab, a strafing target took 1 of 3 shots, against 0 with the old aim.</p>
+
+  <h3>Layer 3: Bayesian attack learner (Thompson sampling)</h3>
+  <p>Each (attack, range band) keeps <b>Beta(α, β)</b>, a belief about its hit chance θ against you. Beta is the <i>conjugate prior</i> of a hit/miss outcome, so Bayes' rule is just counting:</p>
+  <div class="formula">hit: α ← α + 1     miss: β ← β + 1     mean = α / (α + β)     prior Beta(2, 2)<br>forgetting: evidence × 0.97 before each update (the bandit follows a player who changes)</div>
+  <p><b>Thompson sampling</b> draws one θ from each available attack's belief and multiplies it by the attack's damage. An attack the boss is unsure about has a wide belief, so it sometimes draws high and gets tried (exploration). A proven attack usually wins (exploitation). This is Lecture 03's exploration-against-exploitation problem, solved the Bayesian way.</p>
+
+  <div class="tool" id="ts-tool">
+    <h3>Try it: Beta beliefs and Thompson sampling</h3>
+    <p>Add hits and misses for each attack, then draw. The curve is the belief about that attack's hit chance; the draw is what the boss would act on this time.</p>
+    <div id="ts-arms" class="split"></div>
+    <div class="controls">
+      <button type="button" class="plain" id="ts-draw">Draw once (Thompson)</button>
+      <button type="button" class="plain" id="ts-many">Draw 1000 times</button>
+      <button type="button" class="plain" id="ts-reset">Reset to Beta(2, 2)</button>
+    </div>
+    <p class="readout" id="ts-out">Damage per trial: cannon shot 8%, slash 30%, rear strike 30%. Value of a draw = θ × damage (a cannon burst is 3 shots).</p>
+  </div>
+
+  <h3>Layer 4: expectimax combo planner</h3>
+  <p>An abstract fight state (range band, cooldown timers, which arms are intact) feeds a depth-2 expectimax search:</p>
+<pre><code>MAX     boss move: Cannon | Slash | DoubleTeleport | Approach | Hold
+CHANCE  your answer r ~ P(r | attack)   (layer 1), hit with P = learner mean (layer 3)
+        reward = P(hit) × damage − riskWeight × extra damage taken vs standing still
+        next state: range band after r (BackOff = one band out, CloseIn = one band in,
+                    rear teleport ends close), cooldowns advanced by the move's duration
+MAX     the best follow-up in that state
+leaf    ½ × the best attack that is (or soon will be) ready, discounted 0.85 per second</code></pre>
+  <p><b>Why expectimax and not minimax?</b> Minimax assumes you always answer perfectly, which makes the boss timid. Expectimax uses the answers you have actually shown, so it exploits habits. The unit test shows the difference: a gamble worth 10 or 0 (expected 5) beats a safe 4 under expectimax, and loses under minimax.</p>
+  <p><b>Relative risk.</b> The boss is shot whatever it does, so a move is only charged for the <i>extra</i> damage it invites: <code>rate × duration × (exposure − 1)</code>. The rear teleport has exposure 0.5, because you must turn around. A first version charged absolute risk and froze the boss while it was being shot; a regression scenario caught it.</p>
+
+  <h3>Layer 5: phases, tactics, director</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Phase</th><th>Trigger</th><th>Temperament</th></tr>
+    <tr><td>Measured</td><td>Both arms</td><td>Normal cooldowns, risk weight 1.0</td></tr>
+    <tr><td>Enraged</td><td>One arm lost</td><td>Cooldowns × 0.8, recovery 0.85 s, risk weight 0.6</td></tr>
+    <tr><td>Desperate</td><td>Core open</td><td>Slam every 5.5 s instead of 7, risk weight 0.3</td></tr>
+  </table></div>
+  <ul>
+    <li><b>Tactics:</b>
+      <ul>
+        <li>While recovering, it turns a damaged arm 25° away from you.</li>
+        <li>After Relay heals you, it fires a cannon burst at Relay, at most once every 12 s. In the lab, Relay went from 90 to 68.4 health.</li>
+        <li>It approaches toward the side you usually strafe to, cutting off your escape.</li>
+      </ul>
+    </li>
+    <li><b>Director (fairness):</b>
+      <ul>
+        <li>Below 25% health you get 6 s of mercy: lead 0.4, no combos, +0.5 s recovery.</li>
+        <li>If you're above 80% health while the boss is losing an arm fast, pressure applies: lead 0.85, cooldowns × 0.9.</li>
+        <li>Telegraphs and damage values never change.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Evaluation: original boss against adaptive boss</h3>
+  <p>Four scripted player styles each fought 3 × 75 s fights, shooting the boss at 6 damage per second.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Style</th><th class="num">Hit rate, original</th><th class="num">Hit rate, adaptive</th><th class="num">Damage dealt</th><th class="num">Attack-mix entropy</th></tr>
+    <tr><td>Strafer (always circles one way)</td><td class="num">38%</td><td class="num better">51%</td><td class="num">190 → 270</td><td class="num">1.95 → 1.74</td></tr>
+    <tr><td>Jumper (jumps every impact)</td><td class="num">71%</td><td class="num better">83%</td><td class="num">320 → 490</td><td class="num">1.34 → 1.39</td></tr>
+    <tr><td>Kiter (backs away along the wall)</td><td class="num">16%</td><td class="num better">37%</td><td class="num">74 → 97</td><td class="num">1.25 → 0.96</td></tr>
+    <tr><td>Camper (stands still)</td><td class="num">100%</td><td class="num worse">90%</td><td class="num">530 → 530</td><td class="num">1.34 → 1.39</td></tr>
+  </table></div>
+  <ul>
+    <li><b>Moving players:</b> the adaptive boss reads them far better.</li>
+    <li><b>The still player:</b> it's hit slightly less, because a few attacks are spent exploring.</li>
+    <li><b>Variety:</b> against a fixed habit the boss gets <i>less</i> varied (entropy 1.95 → 1.74 against the Strafer), because it exploits what works. Say that openly; it's the exploitation side of the bandit. Variety returns against a player who changes, through forgetting and Thompson sampling. Scripted players never change, so this test can't show it.</li>
+  </ul>
+
+  <h3>Boss viva questions</h3>
+  <details class="qa"><summary>What does the Beta distribution represent, and why use it?</summary><div class="a"><p>A belief about an unknown probability, here "this attack hits this player". It's the conjugate prior for hit/miss outcomes, so the Bayes update is exact and just counts: a hit adds 1 to α, a miss adds 1 to β. The mean α/(α+β) is the estimate, and the width shows how unsure the boss still is.</p></div></details>
+  <details class="qa"><summary>Why Thompson sampling instead of always using the best mean?</summary><div class="a"><p>Always taking the best mean never tries anything else, so one early lucky hit could lock the boss in forever. Sampling from each belief gives an uncertain attack a real chance to show it's better, while proven attacks still win most of the time. The test shows it finding the best of three arms within 1500 pulls, while still exploring the others.</p></div></details>
+  <details class="qa"><summary>Why does forgetting matter?</summary><div class="a"><p>A player who adapts makes old evidence wrong. Multiplying the evidence by 0.97 before each update caps it near 33 observations, so the beliefs follow a change. The test switches the best arm halfway, and the bandit follows.</p></div></details>
+  <details class="qa"><summary>Explain expectimax against minimax using your boss.</summary><div class="a"><p>Chance nodes average over your observed answers instead of assuming the worst. If you dodge the cannon sideways 70% of the time, a line that punishes the sideways dodge scores highly, even though a perfect player could avoid it. Minimax would assume the perfect dodge and never take that line.</p></div></details>
+  <details class="qa"><summary>Is the boss fair?</summary><div class="a"><ul><li>Telegraph timings, damage values and the jump rule are unchanged.</li><li>Aim lead is capped (κ ≤ 0.85, at most 2.5 m), so changing direction escapes.</li><li>A mercy window triggers below 25% health.</li><li>Healer punishment is rate-limited.</li><li>In the evaluation it never exceeded the original boss's damage against the still player.</li></ul></div></details>
+  <details class="qa"><summary>How do you know the upgrade didn't break the boss?</summary><div class="a"><ul><li>Step 1 split the brain with no behaviour change: its 14-scenario snapshot matches the original. The only difference, 0.1 m of frame-timing noise, also appears between two runs of the original.</li><li>Each later step re-ran the scenarios.</li><li>The new algorithms have 18 unit tests.</li></ul></div></details>
+  <p><b>Demo:</b> in Play mode press <b>F10</b> to show the boss's reasoning on the left: phase and mood, what it learned about your dodges, its hit-chance table and the expectimax values. In the world: yellow is your velocity, magenta is the predicted lead point, and orange is the cut-off point. F9 still shows Relay on the right.</p>
+</section>
+
 <section id="other">
   <span class="layer-tag">Scope</span>
   <h2>The other lectures, and why they aren't in Relay</h2>
@@ -635,5 +736,67 @@ flowchart TD
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
   new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   draw();
+
+  // ---------------------------------------------------------------- Thompson sampling explorer (mirrors BetaBelief.cs)
+  const ARMS = [
+    { name: "Cannon burst", damage: 24, a: 2, b: 2 },
+    { name: "Blade slash", damage: 30, a: 2, b: 2 },
+    { name: "Rear teleport", damage: 30, a: 2, b: 2 },
+  ];
+  const lgamma = z => {   // Lanczos approximation
+    const g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < .5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lgamma(1 - z);
+    z -= 1; let x = c[0]; for (let i = 1; i < g + 2; i++) x += c[i] / (z + i);
+    const t = z + g + .5; return .5 * Math.log(2 * Math.PI) + (z + .5) * Math.log(t) - t + Math.log(x);
+  };
+  const betaPdf = (x, a, b) => x <= 0 || x >= 1 ? 0 : Math.exp((a - 1) * Math.log(x) + (b - 1) * Math.log(1 - x) + lgamma(a + b) - lgamma(a) - lgamma(b));
+  const normal = () => { const u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  const gamma = k => {   // Marsaglia-Tsang
+    if (k < 1) return gamma(k + 1) * Math.pow(Math.random(), 1 / k);
+    const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
+    for (;;) { let x, v; do { x = normal(); v = 1 + c * x; } while (v <= 0); v = v * v * v; const u = Math.random();
+      if (u < 1 - .0331 * x ** 4 || Math.log(u) < .5 * x * x + d * (1 - v + Math.log(v))) return d * v; }
+  };
+  const sampleBeta = (a, b) => { const x = gamma(a), y = gamma(b); return x / (x + y); };
+  const armsBox = document.getElementById("ts-arms");
+  armsBox.innerHTML = ARMS.map((arm, i) => `
+    <div class="box"><h4>${arm.name}</h4>
+      <canvas id="ts-c${i}" width="300" height="110" aria-label="Belief curve for ${arm.name}"></canvas>
+      <div class="controls" style="margin:8px 0 0"><button type="button" class="plain" data-arm="${i}" data-hit="1">+ hit</button><button type="button" class="plain" data-arm="${i}" data-hit="0">+ miss</button></div>
+      <div class="readout" id="ts-r${i}"></div></div>`).join("");
+  let lastDraw = null;
+  function drawArms() {
+    ARMS.forEach((arm, i) => {
+      const cv = document.getElementById("ts-c" + i), g = cv.getContext("2d"), W = cv.width, H = cv.height;
+      g.clearRect(0, 0, W, H);
+      let max = 0; const ys = []; for (let k = 0; k <= 100; k++) { const y = betaPdf(k / 100, arm.a, arm.b); ys.push(y); max = Math.max(max, y); }
+      g.strokeStyle = css("--teal"); g.lineWidth = 2; g.beginPath();
+      ys.forEach((y, k) => { const px = k / 100 * W, py = H - 8 - y / max * (H - 16); k ? g.lineTo(px, py) : g.moveTo(px, py); }); g.stroke();
+      const mean = arm.a / (arm.a + arm.b);
+      g.strokeStyle = css("--muted"); g.setLineDash([4, 3]); g.beginPath(); g.moveTo(mean * W, 4); g.lineTo(mean * W, H - 4); g.stroke(); g.setLineDash([]);
+      if (lastDraw) { g.fillStyle = css("--orange"); g.beginPath(); g.arc(lastDraw[i] * W, H - 8, 5, 0, Math.PI * 2); g.fill(); }
+      document.getElementById("ts-r" + i).textContent = `Beta(${arm.a}, ${arm.b}) · mean ${mean.toFixed(2)}${lastDraw ? ` · draw ${lastDraw[i].toFixed(2)} → ${(lastDraw[i] * arm.damage).toFixed(1)}%` : ""}`;
+    });
+  }
+  armsBox.addEventListener("click", e => {
+    const b = e.target.closest("button[data-arm]"); if (!b) return;
+    const arm = ARMS[+b.dataset.arm]; if (b.dataset.hit === "1") arm.a++; else arm.b++;
+    lastDraw = null; drawArms();
+  });
+  document.getElementById("ts-draw").addEventListener("click", () => {
+    lastDraw = ARMS.map(a => sampleBeta(a.a, a.b));
+    const best = lastDraw.map((t, i) => t * ARMS[i].damage).reduce((bi, v, i, arr) => v > arr[bi] ? i : bi, 0);
+    document.getElementById("ts-out").textContent = `This time the boss chooses: ${ARMS[best].name} (sampled value ${(lastDraw[best] * ARMS[best].damage).toFixed(1)}%).`;
+    drawArms();
+  });
+  document.getElementById("ts-many").addEventListener("click", () => {
+    const counts = [0, 0, 0];
+    for (let n = 0; n < 1000; n++) { const v = ARMS.map(a => sampleBeta(a.a, a.b) * a.damage); counts[v.indexOf(Math.max(...v))]++; }
+    document.getElementById("ts-out").textContent = "Over 1000 draws the boss would choose: " + ARMS.map((a, i) => `${a.name} ${(counts[i] / 10).toFixed(1)}%`).join(" · ") + ". Uncertain attacks still get picked sometimes: that is exploration.";
+  });
+  document.getElementById("ts-reset").addEventListener("click", () => { ARMS.forEach(a => { a.a = 2; a.b = 2; }); lastDraw = null; document.getElementById("ts-out").textContent = "Reset. Every attack starts at a weak 50/50 belief."; drawArms(); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawArms);
+  new MutationObserver(drawArms).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  drawArms();
 })();
 </script>

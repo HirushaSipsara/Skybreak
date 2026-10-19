@@ -24,6 +24,21 @@ AI assistance: Claude (Anthropic), through Claude Code. Design, code, tests, eva
 | 2026-10-19 | Step 6: F9 debug overlay, 8-seed baseline-vs-layered evaluation, interactive study guide | AI-written; committed at the student's request | `062a46d`, `Docs/IS/Testing/Relay/EVALUATION.md`, `Docs/IS/AgentDesign/Relay/relay_study_guide.html` |
 | 2026-10-19 | Local lab test tools: `RelayRegressionCheck.cs`, `RelayEvaluation.cs` | AI-written; kept in the git-excluded `Assets/LocalCombatLab` folder because they depend on the local test lab | Their output files are committed under `Docs/IS/Testing/Relay/` |
 
+### Rift Warden adaptive boss AI (additional agent)
+
+AI assistance: Claude (Anthropic), through Claude Code, at the student's request: "improve the boss's reading of the fight, with IS techniques and beyond". The student set the goal, approved the plan and asked for each step to be committed. The commits carry a `Co-Authored-By: Claude` line.
+
+| Date | Work | How | Evidence |
+|---|---|---|---|
+| 2026-10-20 | Step 1: adaptive boss design; brain split into perception and attack scoring with no behaviour change | AI-written | `bfa5ffa`, `Docs/IS/AgentDesign/RiftWarden/RIFT_WARDEN_AI_DESIGN.md`, `Docs/IS/Testing/RiftWarden/step1_*` |
+| 2026-10-20 | Step 2: player model (velocity, range, strafe habit, Dirichlet answer beliefs) and predictive aim | AI-written | `58e3d77`, `step2_*` |
+| 2026-10-20 | Step 3: Bayesian Beta attack learner with Thompson sampling | AI-written | `25b601f`, `step3_*` |
+| 2026-10-20 | Step 4: depth-2 expectimax combo planner | AI-written | `0d4a6cc`, `step4_*` |
+| 2026-10-20 | Step 5: phases, tactics (shield weak arm, punish healer, cut off), fairness director | AI-written | `dee9b30`, `step5_*` |
+| 2026-10-20 | Step 6: F10 overlay; original vs adaptive evaluation against 4 scripted player styles | AI-written | `3d39d3e`, `Docs/IS/Testing/RiftWarden/EVALUATION.md` |
+| 2026-10-20 | Step 7: boss section and Thompson-sampling explorer in the study guide | AI-written | this commit, `Docs/IS/AgentDesign/Relay/relay_study_guide.html` |
+| 2026-10-20 | Local lab tools `RiftRegressionCheck.cs` and `RiftEvaluation.cs` | AI-written; kept in the git-excluded `Assets/LocalCombatLab` | Outputs under `Docs/IS/Testing/RiftWarden/` |
+
 ### Other AI-assisted work (not the assessed agent)
 
 | Date | Work | How | Evidence |
