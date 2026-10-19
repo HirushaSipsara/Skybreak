@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 namespace Skybreak.PhysicsInteraction
 {
     /// <summary>Animated portcullis. Encounter logic calls Open once agents should be released.</summary>
-    public sealed class DungeonHoldingDoor : MonoBehaviour
+    public sealed class DungeonHoldingDoor : MonoBehaviour, IInteractable
     {
         [SerializeField] Transform gate;
         [SerializeField] BoxCollider gateCollider;
@@ -27,6 +27,10 @@ namespace Skybreak.PhysicsInteraction
         public bool IsMoving=>amount!=(wantsOpen?1f:0f);
         public UnityEvent FullyOpened=>fullyOpened;
         public UnityEvent FullyClosed=>fullyClosed;
+
+        public string Prompt => "F  /  " + (wantsOpen ? "Close holding gate" : "Open holding gate");
+        public bool CanInteract(GameObject actor) => allowManualPreview && !(wantsOpen && ThresholdOccupied());
+        public void Interact(GameObject actor) => Toggle();
 
         void Awake(){
             if(gate==null||gateCollider==null){Debug.LogError("Assign a gate and gate collider.",this);enabled=false;return;}

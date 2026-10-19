@@ -1036,6 +1036,7 @@ GameObject:
   - component: {fileID: 6583749344479459547}
   - component: {fileID: 5033438376844355941}
   - component: {fileID: 4088521970471211197}
+  - component: {fileID: 1140000000000009}
   m_Layer: 8
   m_Name: ArcExplorer
   m_TagString: Untagged
@@ -1111,6 +1112,24 @@ MonoBehaviour:
   environmentMask:
     serializedVersion: 2
     m_Bits: 4294967039
+--- !u!114 &1140000000000009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2908575124832067910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d11e10548140b3bb3e58bfc4d1ba2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Skybreak.Player::PlayerInteractor
+  viewCamera: {fileID: 0}
+  maxInteractionDistance: 3.5
+  interactionMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  showPrompt: 1
 --- !u!1 &3116276244440915212
 GameObject:
   m_ObjectHideFlags: 0
