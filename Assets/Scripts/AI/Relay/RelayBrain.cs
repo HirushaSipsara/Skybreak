@@ -14,6 +14,7 @@ namespace Skybreak.AI.Relay
     //   Layer 2  RelayFuzzyModel - fuzzy inference: how urgent healing, defending and self-preservation are
     //   Layer 3  RelayUtility    - expected utility per action and the selection rule
     //   Layer 4  RelayTacticalGraph - A* over a NavMesh grid, step cost = length + lambda x exposure to threats
+    //   Layer 5  RelayPositionSearch - simulated annealing for where to stand (cover, range, out of the line of fire)
     // This class runs the decision cycle and owns the actuators (movement, heal beam, defensive shot).
     public sealed class RelayBrain : DamageSink
     {
@@ -30,6 +31,7 @@ namespace Skybreak.AI.Relay
         public float HealScore { get; private set; }
         public float DefendScore { get; private set; }
         public float RetreatScore { get; private set; }
+        public float RepositionScore { get; private set; }
         // Layer 2 outputs (0..1) and the full inference trace of the last cycle, for the debug overlay
         public float HealUrgency { get; private set; }
         public float DefendUrgency { get; private set; }
@@ -41,6 +43,9 @@ namespace Skybreak.AI.Relay
         public RelayTacticalPlan LastPlan { get; private set; }
         public string PlannerStatus { get; private set; } = "No route needed";
         public IReadOnlyList<RelayThreatTrack> ThreatTracks => perception.Tracks;
+        // Layer 5: position search and the spot it chose last
+        public readonly RelayPositionSearch positions = new RelayPositionSearch();
+        public Vector3? TargetSpot { get; private set; }
         public int HealsApplied { get; private set; }
         public int AttacksApplied { get; private set; }
         public override Allegiance Team => Allegiance.Friendly;
@@ -55,6 +60,9 @@ namespace Skybreak.AI.Relay
         RelayAction lastChoice = RelayAction.Follow;   // what layer 3 chose last cycle (before any Reposition fallback)
         const float ReplanInterval = 1, GoalMovedReplan = 1.5f, DirectApproach = 3, Lookahead = 3;
         int waypointIndex, plannedThreats;
+        const float SpotRefresh = .6f, RepositionGain = .1f;
+        readonly System.Random rng = new System.Random(3062);    // seeded: the same situation gives the same search
+        readonly Dictionary<RelayPositionGoal, (Vector3 spot, float at)> spots = new Dictionary<RelayPositionGoal, (Vector3, float)>();
 
         void Start()
         {
@@ -74,7 +82,7 @@ namespace Skybreak.AI.Relay
             if (!Alive || amount <= 0) return 0;
             float before = health; health = Mathf.Min(maximumHealth, health + amount); return health - before;
         }
-        public void ResetSupport() { ApplyTuning(true); health = maximumHealth; nextSense = healReady = attackReady = 0; perception.Forget(); lastChoice = Action = RelayAction.Follow; LastPlan = null; PlannerStatus = "No route needed"; signals.Clear(); }
+        public void ResetSupport() { ApplyTuning(true); health = maximumHealth; nextSense = healReady = attackReady = 0; perception.Forget(); lastChoice = Action = RelayAction.Follow; LastPlan = null; PlannerStatus = "No route needed"; spots.Clear(); TargetSpot = null; signals.Clear(); }
 
         void Update()
         {
@@ -98,14 +106,15 @@ namespace Skybreak.AI.Relay
             HealUrgency = (float)urgency[RelayFuzzyModel.HealUrgency];
             DefendUrgency = (float)urgency[RelayFuzzyModel.DefendUrgency];
             SelfPreservation = (float)urgency[RelayFuzzyModel.SelfPreservation];
-            var scores = RelayUtility.Score(percept, urgency, playerVitals != null && playerVitals.Alive, Time.time >= healReady, Time.time >= attackReady, lastChoice);
-            FollowScore = scores.follow; HealScore = scores.heal; DefendScore = scores.defend; RetreatScore = scores.retreat;
+            var scores = RelayUtility.Score(percept, urgency, playerVitals != null && playerVitals.Alive, Time.time >= healReady, Time.time >= attackReady, lastChoice, RepositionValue());
+            FollowScore = scores.follow; HealScore = scores.heal; DefendScore = scores.defend; RetreatScore = scores.retreat; RepositionScore = scores.reposition;
             lastChoice = RelayUtility.Select(scores, percept.threat != null);
             switch (lastChoice)
             {
                 case RelayAction.Retreat: Retreat(percept); break;
                 case RelayAction.Heal: Heal(percept); break;
                 case RelayAction.Defend: Defend(percept); break;
+                case RelayAction.Reposition: Reposition(percept); break;
                 default: Follow(percept); break;
             }
         }
@@ -149,13 +158,49 @@ namespace Skybreak.AI.Relay
             return motor.MoveTo(last ? destination : w[target], last ? stopDistance : .3f);
         }
 
+        // ---------------------------------------------------------------- layer 5: where to stand
+        Vector3 Formation() => player.position + (-player.forward * 2 + player.right * 1.5f) * Mathf.Min(1, T.followDistance / 3.3f);
+
+        // Best spot for a goal by simulated annealing, refreshed every 0.6 s and warm-started from the previous best.
+        Vector3 BestSpot(RelayPositionGoal goal, Vector3 anchor, DamageSink threat)
+        {
+            float now = Time.time;
+            positions.Prepare(goal, transform.position, player, playerVitals, threat, anchor, perception.Tracks, T.healRange, T.attackRange, Filter, now);
+            bool known = spots.TryGetValue(goal, out var previous);
+            if (known && now - previous.at < SpotRefresh) return previous.spot;
+            Vector3 start = known && Flat(previous.spot, anchor) < 6 ? previous.spot : anchor;
+            var best = positions.Search(start, rng).Best;
+            spots[goal] = (best, now); TargetSpot = best;
+            return best;
+        }
+
+        // Value of moving = how much exposure and line-of-fire blocking the move removes (not merely how bad the
+        // current spot is: in open ground every spot is equally exposed and moving gains nothing).
+        // Only counted when the search found a spot clearly better overall (by more than 0.1).
+        float RepositionValue()
+        {
+            Vector3 here = transform.position;
+            Vector3 spot = BestSpot(RelayPositionGoal.Support, Formation(), null);
+            float gain = (float)(positions.Score(spot) - positions.Score(here));
+            if (gain <= RepositionGain) return 0;
+            float lessExposure = positions.Exposure(here) - positions.Exposure(spot);
+            float outOfLane = (positions.InFireLane(here) ? 1 : 0) - (positions.InFireLane(spot) ? 1 : 0);
+            return Mathf.Max(0, .3f * lessExposure + .5f * outOfLane);
+        }
+
         // ---------------------------------------------------------------- actuators
+        void Reposition(in RelayPercept p)
+        {
+            Action = RelayAction.Reposition; Decision = "Reposition / current spot is exposed or in the player's line of fire";
+            if (!NavigateTo(BestSpot(RelayPositionGoal.Support, Formation(), null), .3f)) Follow(p);
+        }
+
         void Retreat(in RelayPercept p)
         {
             Action = RelayAction.Retreat; Decision = "Retreat / self-preservation has the highest expected utility (recent threat)";
             Vector3 away = transform.position - p.threatMemory; away.y = 0;
             if (away.sqrMagnitude < .1f) away = -player.forward;
-            if (!NavigateTo(transform.position + away.normalized * 4, .5f)) { Action = RelayAction.Reposition; Decision = "Retreat blocked / seek player-side safe position"; motor.MoveTo(player.position - player.forward * 2, 1); }
+            if (!NavigateTo(BestSpot(RelayPositionGoal.Retreat, transform.position + away.normalized * 4, null), .5f)) { Action = RelayAction.Reposition; Decision = "Retreat blocked / seek player-side safe position"; motor.MoveTo(player.position - player.forward * 2, 1); }
         }
 
         void Heal(in RelayPercept p)
@@ -163,7 +208,7 @@ namespace Skybreak.AI.Relay
             Action = RelayAction.Heal; Decision = "Heal / player's fuzzy heal urgency has the highest expected utility";
             if (p.canHealNow)
             { motor.Stop(); if (playerVitals.RestoreHealth(healAmount) > 0) { HealsApplied++; healReady = Time.time + healCooldown; signals.Beam(AimPoint, playerVitals.AimPoint, Color.cyan); signalOff = Time.time + .45f; if (audioCues != null) audioCues.Play(CombatSound.Heal, .6f); } }
-            else if (!NavigateTo(player.position, Mathf.Min(2.2f, T.healRange * .75f))) { Action = RelayAction.Reposition; Decision = "Heal target unreachable / retry safely"; }
+            else if (!NavigateTo(BestSpot(RelayPositionGoal.Heal, player.position, null), .3f)) { Action = RelayAction.Reposition; Decision = "Heal target unreachable / retry safely"; }
         }
 
         void Defend(in RelayPercept p)
@@ -172,14 +217,14 @@ namespace Skybreak.AI.Relay
             Action = RelayAction.Defend; Decision = "Defend / visible threat endangers the player most";
             if (Vector3.Distance(AimPoint, threat.AimPoint) <= T.attackRange)
             { motor.Stop(); signals.Beam(AimPoint, threat.AimPoint, Color.cyan); signalOff = Time.time + .2f; threat.ReceiveDamage(T.attackDamage, transform); AttacksApplied++; attackReady = Time.time + attackCooldown; }
-            else if (!NavigateTo(threat.transform.position, Mathf.Min(8, T.attackRange * .75f))) { Action = RelayAction.Reposition; Decision = "Firing position blocked / follow player"; motor.MoveTo(player.position, 3); }
+            else if (!NavigateTo(BestSpot(RelayPositionGoal.Defend, threat.transform.position, threat), .3f)) { Action = RelayAction.Reposition; Decision = "Firing position blocked / follow player"; motor.MoveTo(player.position, 3); }
         }
 
         void Follow(in RelayPercept p)
         {
             Action = RelayAction.Follow;
             Decision = playerVitals == null ? "Follow / waiting for player health adapter" : p.remembersThreat ? "Follow / recent threat remembered, actions cooling down" : "Follow / no visible threat";
-            if (p.distanceToPlayer > T.followDistance) { Vector3 formation = (-player.forward * 2 + player.right * 1.5f) * Mathf.Min(1, T.followDistance / 3.3f); if (!NavigateTo(player.position + formation, .8f)) { Action = RelayAction.Reposition; Decision = "Follow position blocked / waiting to replan"; } }
+            if (p.distanceToPlayer > T.followDistance) { if (!NavigateTo(BestSpot(RelayPositionGoal.Support, Formation(), null), .8f)) { Action = RelayAction.Reposition; Decision = "Follow position blocked / waiting to replan"; } }
             else motor.Stop();
             if (visual != null)
             {

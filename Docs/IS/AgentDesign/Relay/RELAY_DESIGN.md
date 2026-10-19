@@ -82,21 +82,23 @@ function RELAY-AGENT(percept) returns action
     action ← argmax over a in Actions of EU(a | model, urgency) // layer 3
     if action needs a position then
         goal ← ANNEAL-POSITION(action, model)                   // layer 5
-        if plan is empty or goal moved > 1.5 m or plan exposed then
+        if plan is empty or goal moved > 1.5 m or plan older than 1 s or threats changed then
             plan ← TACTICAL-A*(relayPos, goal, model)           // layer 4
     return EXECUTE(action, plan)
+
+(Reposition's expected utility needs layer 5's answer, so the support-spot search runs before layer 3 each cycle; it is cached for 0.6 s.)
 ```
 
 ### 4.2 Layer 0 — Reflex safety layer (Lecture 03)
 
 These are condition-action rules checked in priority order (the "drone obstacle" activity's question of rule priority). The first one that matches wins and skips all deliberation that cycle: subsumption.
 
-| Priority | Condition | Action |
-|---|---|---|
-| 1 | Relay health = 0 | `Disabled`: stop and clear signals |
-| 2 | Relay is inside a hazard zone with time-to-impact < 1.2 s | `Evade`: move to the nearest NavMesh point outside the zone (radius + 1 m), away from its centre |
-| 3 | Relay is within 0.6 m of the player's aim ray, between Arc and the aim point | `Evade` sideways 1.5 m (do not block the player's shots) |
-| 4 | Player is down | Stop and wait (existing behaviour) |
+| Priority | Condition | Action | Status |
+|---|---|---|---|
+| 1 | Relay health = 0 | `Disabled`: stop and clear signals | Implemented (`RelayReflexes`) |
+| 2 | Player is down | Stop and wait | Implemented (`RelayReflexes`) |
+| 3 | Relay is inside a boss hazard zone with time-to-impact < 1.2 s | `Evade` to the nearest NavMesh point outside the zone | **Not implemented**: needs the boss to publish its slam/landing zones (a read-only hazard registry); left as future work so `RiftWardenBrain` is not changed |
+| 4 | Relay is within the player's line of fire | Side-step | **Handled deliberatively instead**: layer 5 detects the fire lane and layer 3 selects `Reposition` (EU 0.5) |
 
 Why reflexes: they are cheap and immediate, which matters in a dynamic world. Lecture 03's self-driving example uses the same split: a utility engine plans the route, and a reflex layer works the brakes.
 
@@ -166,9 +168,9 @@ Why fuzzy: "low health" and "near" are vague concepts with no correct crisp thre
 | Defend | `DefendUrgency` (only a currently visible, vulnerable target, so threat confidence = 1) | 0 without a target or on cooldown; 1 if the target is within attack range; 0.6 if Relay must reposition first |
 | Retreat | `SelfPreservation` | 1 if a threat was seen within the memory window, else 0 (step 5 adds "a reachable safe spot exists") |
 | Follow | `0.2 + 0.4 × clamp(distanceToPlayer / 9)` | 1 (always possible; the fallback action) |
-| Reposition | added in step 5: `0.3 × exposure` of the current spot | a better spot exists (layer 5 improvement > 0.1) |
+| Reposition | `0.3 × (exposure here − exposure at the new spot) + 0.5 × (in fire lane here − in fire lane there)` | 1 when layer 5 found a spot better overall by > 0.1, else 0 |
 
-An action with EU 0 is never chosen over Follow. Ties go to Retreat, then Heal, Defend, Follow. The old linear-score fields in `RelayTuning` (`healThreshold`, `followBase`, `retreatUtility`, …) are no longer read by Relay.
+An action with EU 0 is never chosen over Follow. Ties go to Retreat, then Heal, Defend, Reposition, Follow. Reposition values the *improvement* a move brings, not how bad the current spot is: in open ground every spot is equally exposed, so moving gains nothing and Relay keeps following. The old linear-score fields in `RelayTuning` (`healThreshold`, `followBase`, `retreatUtility`, …) are no longer read by Relay.
 
 Outcomes are uncertain because the boss and player act unpredictably, and threats come from a memory with confidence below 1. That is why utilities are weighted by probability instead of used directly: this is the lecture's expected-utility formulation.
 
@@ -209,7 +211,26 @@ Where Relay *should* stand is an optimisation problem: only the final state matt
 - **Neighbour:** move `x` by a random offset of up to `r = 2 m` (shrinking with temperature), snapped to the NavMesh.
 - **Acceptance:** always accept improvements; accept a worse move with probability `P = e^(ΔE / T)`.
 - **Schedule:** T₀ = 1.0, geometric cooling `T ← 0.85·T`, 60 iterations per decision (a fixed budget, because the world is dynamic), and a warm start from the previous best spot.
-- **Why not hill climbing:** hill climbing gets stuck on local maxima. Behind a crate the score is good, but behind a pillar 3 m away it is better, and the scores dip between the two. Annealing's occasional downhill moves escape local maxima (lecture slide "Overcoming Local Minima"). Hill climbing with random restarts is kept as the comparison baseline.
+- **Why not hill climbing:** hill climbing gets stuck on local maxima. Behind a crate the score is good, but behind a pillar 3 m away it is better, and the scores dip between the two. Annealing's occasional downhill moves escape local maxima (lecture slide "Overcoming Local Minima"). Hill climbing is implemented as the comparison baseline (`HillClimbing`).
+
+**As implemented** (`RelayPositionSearch.cs`, `SimulatedAnnealing.cs`):
+
+| Goal (used by) | E(x) |
+|---|---|
+| Support (Follow, Reposition) | `1.0·band(d_player, 1.8–3.5 m) + 0.6·sees(player) + 1.0·(1 − exposure) − 1.5·inFireLane − 0.15·dist(formation) − 0.05·travel` |
+| Heal | `2.0·within(d_player, 0.85·healRange) + 1.0·sees(player) + 0.8·(1 − exposure) − 1.5·inFireLane − 0.08·travel` |
+| Defend | `2.0·within(d_target, 0.9·attackRange) + 1.5·sees(target) + 0.3·(1 − exposure) − 1.5·inFireLane − 0.08·travel` |
+| Retreat | `1.5·(1 − exposure) + 0.15·min(distance from threats, 12) + 0.5·within(d_player, 8 m) − 0.1·travel` |
+
+- The fire lane is the strip 1.1 m either side of the player's facing direction, from 0.5 m to 15 m in front.
+- Points beyond 12 m from Relay are penalised.
+- Scores are cached on a 0.25 m grid during one search.
+- 60 iterations, T₀ = 1, α = 0.85; the neighbour radius shrinks from 3 m to 0.5 m as T falls. Searches refresh every 0.6 s, warm-started from the previous best, with a seeded random generator so the same situation gives the same result.
+
+**Measured** (`Docs/IS/Testing/Relay/step5_*`):
+- **Two-peak landscape, 100 seeded runs (EditMode test):** annealing reached the global peak 38 times, hill climbing 0 times. It always stops on the first peak.
+- **Acceptance probability:** `P(ΔE = −1, T = 1) = e⁻¹ ≈ 0.37`, and `P(ΔE = −1, T = 0.1) = e⁻¹⁰`. The test checks both.
+- **Lab, Relay 3 m in front of the player:** Reposition chosen (EU 0.50 vs Follow 0.38). Annealing accepted 9 worse moves, and the chosen spot is out of the fire lane.
 
 ---
 
