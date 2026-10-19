@@ -9,7 +9,7 @@ Raw results: `step6_evaluation_baseline.txt` and `step6_evaluation_layered.txt` 
 | Scene | `OwnedAgentsLab` (Rift Warden arena), batch Play Mode, audio muted, `Time.timeScale = 2` |
 | Player | Scripted: walks a 7 m circle around the arena centre at 0.3 rad/s, always facing the boss (so the line of fire sweeps the arena). Does not dodge or shoot. |
 | Boss | Fully autonomous (`RiftWardenBrain`, unchanged) |
-| Relay | Fully autonomous. **Baseline** = the step-2 code (commit `d610100`, linear utility, NavMesh movement). **Layered** = the current code (fuzzy inference, expected utility, tactical A*, simulated annealing). |
+| Relay | Fully autonomous. **Baseline** = the step-2 code (commit `9d21aff`, linear utility, NavMesh movement). **Layered** = the current code (fuzzy inference, expected utility, tactical A*, simulated annealing). |
 | Runs | 8 seeds per version (11, 22, …, 88), 90 s of game time or until the player falls |
 | Measurement | By the harness (`Assets/LocalCombatLab/Editor/RelayEvaluation.cs`, local lab tool), independent of Relay's code. It uses only API both versions share, so the same file measures both. |
 
