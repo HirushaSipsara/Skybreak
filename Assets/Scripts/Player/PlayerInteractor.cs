@@ -20,6 +20,16 @@ namespace Skybreak.Player
         [Tooltip("Collision layers considered during raycast. Must include environment geometry to prevent interacting through walls. Excludes player (layer 8).")]
         [SerializeField] LayerMask interactionMask = ~(1 << 8);
 
+        [Header("Physics Push")]
+        [Tooltip("Enables horizontal physics pushing when walking into dynamic Rigidbodies.")]
+        [SerializeField] bool enablePhysicsPush = true;
+
+        [Tooltip("Horizontal push force applied to dynamic objects.")]
+        [SerializeField, Min(1f)] float pushForce = 60f;
+
+        [Tooltip("Maximum mass in kg that Arc can push without an exoskeleton.")]
+        [SerializeField, Min(10f)] float maxPushMass = 250f;
+
         [Header("Prompt Display")]
         [SerializeField] bool showPrompt = true;
 
@@ -124,6 +134,27 @@ namespace Skybreak.Player
             GUI.color = Color.white;
 
             GUI.Label(new Rect(posX, posY, boxWidth, boxHeight), currentPrompt, promptStyle);
+        }
+
+        void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            if (!enablePhysicsPush) return;
+
+            Rigidbody body = hit.collider.attachedRigidbody;
+            if (body == null || body.isKinematic) return;
+
+            // Reject downward contact: standing on an object must not push it through the floor
+            if (hit.moveDirection.y < -0.3f) return;
+
+            // Prevent pushing objects that are too massive for the player
+            if (body.mass > maxPushMass) return;
+
+            // Compute purely horizontal push direction
+            Vector3 pushDir = new Vector3(hit.moveDirection.x, 0f, hit.moveDirection.z);
+            if (pushDir.sqrMagnitude < 0.001f) return;
+
+            // Apply continuous physical force during contact
+            body.AddForce(pushDir * pushForce, ForceMode.Force);
         }
 
         void OnDrawGizmosSelected()
