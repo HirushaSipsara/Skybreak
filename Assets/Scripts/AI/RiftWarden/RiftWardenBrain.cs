@@ -1,4 +1,5 @@
 using System;
+using Skybreak.AI.Algorithms.Bandit;
 using Skybreak.AI.Algorithms.Prediction;
 using Skybreak.Combat;
 using Skybreak.Movement;
@@ -14,6 +15,7 @@ namespace Skybreak.AI.RiftWarden
     //   RiftPerception - sight and memory of the player (layer 1)
     //   RiftPlayerModel - this player's velocity, range, strafe habit and answers to each attack (layer 1)
     //   predictive aim  - cannon and slam lead the target by its smoothed velocity, capped for fairness (layer 2)
+    //   RiftAttackLearner - Beta belief per attack and range band about hitting this player; Thompson sampling (layer 3)
     //   RiftUtility    - attack scores and the selection rule (decision layer)
     //   this class     - orchestration and execution: the attack state machine with its animation-timed markers
     public sealed class RiftWardenBrain : MonoBehaviour
@@ -51,6 +53,14 @@ namespace Skybreak.AI.RiftWarden
         [Range(0, 1)] public float leadFactor = .65f;
         public const float MaxLead = 2.5f, SlamLeadSeconds = .6f;
         Vector3 lockPosition, lockVelocity;
+        readonly RiftAttackLearner learner = new RiftAttackLearner();
+        public RiftAttackLearner Learner => learner;
+        System.Random rng = new System.Random(3062);   // reseeded on reset: the same fight state gives the same draws
+        RiftRangeBand attackBand;                      // range band when the current attack started
+        // Damage of one successful trial, as a percentage of the player's health (from the tuning): one cannon shot, or one melee hit.
+        float TrialDamage(RiftAttackKind kind) => (kind == RiftAttackKind.Cannon ? T.cannonDamageFraction : T.meleeDamageFraction) * 100;
+        // Trials per attack: a cannon burst is three shots.
+        static int Trials(RiftAttackKind kind) => kind == RiftAttackKind.Cannon ? 3 : 1;
         void ApplyHealthTuning() { armMaximum = T.armHealth; coreMaximum = T.coreHealth; }
         float clock, previous, nextDecision, cannonReady, bladeReady, teleportReady, slamReady, secondRearAt;
         Vector3 lockedAim, warnedLanding;
@@ -91,7 +101,7 @@ namespace Skybreak.AI.RiftWarden
             active = leftDetached = rightDetached = notified = CoreExposed = false;
             ApplyHealthTuning(); LeftHealth = armMaximum; RightHealth = armMaximum; CoreHealth = coreMaximum;
             leftArm.enabled = rightArm.enabled = true; leftTarget.GetComponent<Collider>().enabled = rightTarget.GetComponent<Collider>().enabled = coreTarget.GetComponent<Collider>().enabled = true;
-            cannonReady = bladeReady = teleportReady = slamReady = 0; Action = RiftAction.Dormant; clock = 0; perception.Reset(); model.Reset();
+            cannonReady = bladeReady = teleportReady = slamReady = 0; Action = RiftAction.Dormant; clock = 0; perception.Reset(); model.Reset(); learner.Reset(); rng = new System.Random(3062);
             signals.Clear(); motor.Stop(); presenter.Play("RW_Idle", true); if (returnPoint != null) returnPoint.SetPowered(false);
         }
         void Update()
@@ -126,7 +136,7 @@ namespace Skybreak.AI.RiftWarden
                     if (clock >= 1.8f) Enter(RiftAction.Recover);
                     break;
                 case RiftAction.Slash:
-                    if (Mark(20f / 30)) { model.EndResponse(RiftAttackKind.Slash, player.position); SlashDamage(2.7f); }
+                    if (Mark(20f / 30)) { model.EndResponse(RiftAttackKind.Slash, player.position); if (RightHealth > 0) learner.Record(RiftAttackKind.Slash, attackBand, SlashDamage(2.7f)); }
                     if (clock >= 1.767f) Enter(RiftAction.Recover);
                     break;
                 case RiftAction.DoubleTeleport:
@@ -141,7 +151,7 @@ namespace Skybreak.AI.RiftWarden
                     if (Mark(secondRearAt))
                     {
                         if (!TeleportBehind()) { Enter(RiftAction.Recover); Decision = "New rear landing blocked / no strike"; break; }
-                        presenter.Seek(56f / 30); model.EndResponse(RiftAttackKind.DoubleTeleport, player.position); SlashDamage(2.15f);
+                        presenter.Seek(56f / 30); model.EndResponse(RiftAttackKind.DoubleTeleport, player.position); if (RightHealth > 0) learner.Record(RiftAttackKind.DoubleTeleport, attackBand, SlashDamage(2.15f));
                         Decision = "Second close rear arrival / single immediate strike";
                     }
                     if (clock >= secondRearAt + 1.14f) Enter(RiftAction.Recover);
@@ -164,7 +174,7 @@ namespace Skybreak.AI.RiftWarden
                     if (clock < 38f / 30) lockedAim = GroundPoint(Lead(player.position, model.Velocity, Mathf.Min(1.5f - clock, SlamLeadSeconds)));
                     signals.Circle(lockedAim, T.slamRadius, clock < 1.5f ? new Color(1, .25f, .08f) : Color.magenta);
                     if (Mark(38f / 30)) Decision = "Slam location locked; move out or jump";
-                    if (Mark(1.5f)) { model.EndResponse(RiftAttackKind.Slam, player.position); AreaDamage(lockedAim, T.slamRadius, T.meleeDamageFraction, false); }
+                    if (Mark(1.5f)) { model.EndResponse(RiftAttackKind.Slam, player.position); learner.Record(RiftAttackKind.Slam, attackBand, AreaDamage(lockedAim, T.slamRadius, T.meleeDamageFraction, false)); }
                     if (clock >= 3) Enter(RiftAction.Recover);
                     break;
                 case RiftAction.Recover: if (clock >= T.recoverSeconds) Enter(RiftAction.Pursue); break;
@@ -187,18 +197,28 @@ namespace Skybreak.AI.RiftWarden
                 if (remembers) motor.MoveTo(perception.LastSeen, 2); else motor.Stop(); return;
             }
             var scores = RiftUtility.Score(range, LeftHealth, RightHealth, Time.time >= cannonReady, Time.time >= bladeReady, Time.time >= teleportReady, T);
-            switch (RiftUtility.Select(scores, CoreExposed, Time.time >= slamReady))
+            if (CoreExposed && Time.time >= slamReady) { Enter(RiftAction.CoreTeleport); Decision = "Exposed-core pressure / teleport then warned slam"; return; }
+            // Which available attack is expected to do the most damage to THIS player from here? Thompson sampling draws a
+            // plausible hit chance from each attack's belief, so attacks the boss is unsure about still get tried sometimes.
+            var band = RiftAttackLearner.Band(range);
+            var arms = new BetaBelief[3]; var payoff = new double[3];
+            if (scores.cannon >= 0) { arms[0] = learner.Belief(RiftAttackKind.Cannon, band); payoff[0] = TrialDamage(RiftAttackKind.Cannon) * Trials(RiftAttackKind.Cannon); }
+            if (scores.blade >= 0) { arms[1] = learner.Belief(RiftAttackKind.Slash, band); payoff[1] = TrialDamage(RiftAttackKind.Slash); }
+            if (scores.teleport >= 0) { arms[2] = learner.Belief(RiftAttackKind.DoubleTeleport, band); payoff[2] = TrialDamage(RiftAttackKind.DoubleTeleport); }
+            int pick = ThompsonSampling.Choose(arms, payoff, rng, out double value);
+            string why = pick >= 0 ? $" / {band} range, learned hit chance {arms[pick].Mean:P0}, sampled expected damage {value:F1}%" : "";
+            switch (pick)
             {
-                case RiftChoice.CoreTeleport: Enter(RiftAction.CoreTeleport); Decision = "Exposed-core pressure / teleport then warned slam"; break;
-                case RiftChoice.Slash: Enter(RiftAction.Slash); Decision = "Close target / blade has highest utility"; break;
-                case RiftChoice.DoubleTeleport: Enter(RiftAction.DoubleTeleport); Decision = "Target beyond blade reach / teleport available"; break;
-                case RiftChoice.Cannon: Enter(RiftAction.Cannon); Decision = "Visible target at cannon range"; break;
+                case 0: Enter(RiftAction.Cannon); Decision = "Cannon" + why; break;
+                case 1: Enter(RiftAction.Slash); Decision = "Blade slash" + why; break;
+                case 2: Enter(RiftAction.DoubleTeleport); Decision = "Double rear teleport" + why; break;
                 default: { bool ok = motor.MoveTo(player.position, CoreExposed ? 4 : 2.5f); Decision = ok ? "Attacks cooling down / approach" : "Route blocked / retry without walking through cover"; break; }
             }
         }
         void Enter(RiftAction action)
         {
             Action = action; clock = previous = 0; damagedCount = 0; landingWarned = false; motor.Stop(); signals.Clear();
+            if (player != null) attackBand = RiftAttackLearner.Band(Planar(transform.position, player.position));
             string clip = CoreExposed ? "RW_CoreIdle" : "RW_Idle"; bool loop = true;
             switch (action)
             {
@@ -254,10 +274,13 @@ namespace Skybreak.AI.RiftWarden
             signals.Shot(from, float.IsInfinity(closest) ? from + direction * 24 : from + direction * closest, new Color(2.2f, .25f, 3));
             signals.FollowMuzzle=leftTarget.transform;
             if (target != null && target.Team != Allegiance.Hostile) target.ReceiveDamage(target.MaximumHealth * T.cannonDamageFraction, transform);
+            learner.Record(RiftAttackKind.Cannon, attackBand, target != null && target == playerVitals);
         }
-        void SlashDamage(float radius) { if (RightHealth > 0) { if (audioCues != null) audioCues.Play(CombatSound.Slash); AreaDamage(transform.position, radius, T.meleeDamageFraction, true); } }
-        void AreaDamage(Vector3 centre, float radius, float fraction, bool directional)
+        bool SlashDamage(float radius) { if (RightHealth > 0) { if (audioCues != null) audioCues.Play(CombatSound.Slash); return AreaDamage(transform.position, radius, T.meleeDamageFraction, true); } return false; }
+        // Returns true when the player was among those hit.
+        bool AreaDamage(Vector3 centre, float radius, float fraction, bool directional)
         {
+            bool hitPlayer = false;
             DamageWindows++; int n = Physics.OverlapSphereNonAlloc(centre + Vector3.up * .65f, radius, overlaps, 1 << 8, QueryTriggerInteraction.Ignore);
             if (!directional && audioCues != null) audioCues.Play(CombatSound.Hit, 1.1f);
             for (int i = 0; i < n; i++)
@@ -271,7 +294,9 @@ namespace Skybreak.AI.RiftWarden
                 if (already || !DamageSink.Visible(centre + Vector3.up * .8f, receiver, transform)) continue;
                 if (damagedCount < damaged.Length) damaged[damagedCount++] = receiver;
                 receiver.ReceiveDamage(receiver.MaximumHealth * fraction, transform);
+                if (receiver == playerVitals) hitPlayer = true;
             }
+            return hitPlayer;
         }
         bool Landing(float side, out Vector3 point)
         {

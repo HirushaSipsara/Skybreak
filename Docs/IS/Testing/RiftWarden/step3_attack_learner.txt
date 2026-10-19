@@ -1,0 +1,108 @@
+[close target: slash] action=Cannon decision="Cannon / Close range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=7.6 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[mid range: double teleport] action=Cannon decision="Cannon / Mid range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[mid range, teleport cooling: cannon] action=Cannon decision="Cannon / Mid range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[mid range, all cooling: approach] action=Pursue decision="Attacks cooling down / approach"
+  boss at (42.0,0.3,86.6) yaw=180 motor="Following complete path" destination=(42.0,0.2,79.0)
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[far range: double teleport] action=Cannon decision="Cannon / Far range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.4 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[player outside arena: wait] action=Pursue decision="Player outside arena / waiting"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.6 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[sight lost, recent memory: investigate] action=Pursue decision="Investigating last seen position"
+  boss at (41.9,0.3,86.6) yaw=188 motor="Following complete path" destination=(40.0,0.2,80.0)
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[sight lost, memory expired: hold] action=Pursue decision="No sight or recent memory / holding"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[core exposed: teleport then slam] action=CoreTeleport decision="Exposed-core pressure / teleport then warned slam"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=True
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[cannon arm destroyed, teleport cooling: approach] action=Pursue decision="Attacks cooling down / approach"
+  boss at (42.0,0.3,85.0) yaw=180 motor="Following complete path" destination=(42.0,0.2,79.0)
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=0.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=7.7 strafeBias=0.00 responses=0 last=Stay
+  learner updates=0 (all at prior 0.50)
+[cannon burst lands on a still target] action=Recover decision="Cannon / Mid range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=76.0 shots=3 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=1 last=Stay
+  learner updates=3 changed: Cannon/Mid=0.71
+[slash lands on a close target] action=Cannon decision="Cannon / Close range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=84.0 shots=5 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=5.7 strafeBias=0.00 responses=1 last=Stay
+  learner updates=2 changed: Cannon/Close=0.66
+[double teleport rear strike] action=Recover decision="Cannon / Mid range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=76.0 shots=8 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(0.0,0.0,0.0) range=8.0 strafeBias=0.00 responses=1 last=Stay
+  learner updates=3 changed: Cannon/Mid=0.71
+[core teleport and slam] action=Slam decision="Slam location locked; move out or jump"
+  boss at (42.0,0.3,83.1) yaw=180 motor="Stopped" destination=none
+  player health=70.0 shots=8 damageWindows=1 teleports=1
+  parts left=180.0 right=180.0 core=260.0 coreExposed=True
+  model velocity=(0.0,0.0,0.0) range=5.0 strafeBias=0.00 responses=1 last=Stay
+  learner updates=1 changed: Slam/Mid=0.60
+[cannon vs target strafing at 3 m/s, lead 0] action=Recover decision="Cannon / Mid range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=193 motor="Stopped" destination=none
+  player health=100.0 shots=11 damageWindows=1 teleports=1
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(3.0,0.0,0.0) range=8.3 strafeBias=-0.53 responses=1 last=StrafeLeft
+  learner updates=3 changed: Cannon/Mid=0.29
+[slam vs target running at 3.5 m/s, lead 0] action=Slam decision="Slam location locked; move out or jump"
+  boss at (37.8,0.2,84.1) yaw=160 motor="Stopped" destination=none
+  player health=70.0 shots=11 damageWindows=2 teleports=2
+  parts left=180.0 right=180.0 core=260.0 coreExposed=True
+  model velocity=(3.0,0.0,0.4) range=8.7 strafeBias=-0.66 responses=1 last=StrafeLeft
+  learner updates=1 changed: Slam/Mid=0.60
+[cannon vs target strafing at 3 m/s, lead 0.65] action=Recover decision="Cannon / Mid range, learned hit chance 50 %, sampled expected damage 12.9%"
+  boss at (42.0,0.3,87.0) yaw=193 motor="Stopped" destination=none
+  player health=92.0 shots=14 damageWindows=2 teleports=2
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+  model velocity=(3.0,0.0,0.0) range=8.3 strafeBias=-0.53 responses=1 last=StrafeLeft
+  learner updates=3 changed: Cannon/Mid=0.43
+[slam vs target running at 3.5 m/s, lead 0.65] action=Slam decision="Slam location locked; move out or jump"
+  boss at (37.8,0.2,84.1) yaw=160 motor="Stopped" destination=none
+  player health=70.0 shots=14 damageWindows=3 teleports=3
+  parts left=180.0 right=180.0 core=260.0 coreExposed=True
+  model velocity=(3.0,0.0,0.4) range=8.7 strafeBias=-0.66 responses=1 last=StrafeLeft
+  learner updates=1 changed: Slam/Mid=0.60
