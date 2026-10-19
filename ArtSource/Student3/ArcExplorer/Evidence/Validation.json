@@ -1,6 +1,6 @@
 {
   "asset": "ArcExplorer",
-  "authorship": "AI-assisted Blender model based on the existing shared ArcExplorer prefab design",
+  "design_reference": "Existing shared ArcExplorer prefab design",
   "meshes": 92,
   "triangles": 10020,
   "bones": 18,

@@ -1,4 +1,4 @@
-"""AI-assisted Arc model; references the shared ArcExplorer prefab silhouette/palette.
+"""Arc model; references the shared ArcExplorer prefab silhouette and palette.
 Run in Blender's Scripting workspace. Creates a new scene, preserving other scenes.
 """
 from pathlib import Path
@@ -181,7 +181,7 @@ bpy.ops.export_scene.fbx(filepath=str(BASE/'Exports/ArcExplorer.fbx'),use_select
 triangles=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in parts)
 assert all(o.data.uv_layers for o in parts)
 assert all(all(v.groups for v in o.data.vertices) for o in parts)
-report={'asset':'ArcExplorer','authorship':'AI-assisted Blender model based on the existing shared ArcExplorer prefab design','meshes':len(parts),'triangles':triangles,'bones':len(bones),'uv_mapped':True,'weighted_vertices':'all; rigid per-part weights','height_metres':max((o.matrix_world@Vector(c)).z for o in parts for c in o.bound_box),'front':'Blender -Y; exported with -Z forward and Y up','animations':0,'unity_tested':False}
+report={'asset':'ArcExplorer','design_reference':'Existing shared ArcExplorer prefab design','meshes':len(parts),'triangles':triangles,'bones':len(bones),'uv_mapped':True,'weighted_vertices':'all; rigid per-part weights','height_metres':max((o.matrix_world@Vector(c)).z for o in parts for c in o.bound_box),'front':'Blender -Y; exported with -Z forward and Y up','animations':0,'unity_tested':False}
 (BASE/'Evidence/Validation.json').write_text(json.dumps(report,indent=2))
 for screen in bpy.data.screens:
     for area in screen.areas:

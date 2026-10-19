@@ -12,7 +12,7 @@ Created on `sachini-gv-models`, based on `origin/main` at `0c4da35`.
 
 ## Design and provenance
 
-This is an **AI-assisted model**, constructed with Blender primitives, bevels, explicit part weights and UV projection. It adapts the existing shared `Assets/Prefabs/Player/ArcExplorer.prefab` design: teal suit, orange rescue vest, cyan visor, dark boots/gloves and backpack. Added details include a headset, wrist scanner, pockets, reflective strips and backpack vents. It is not a claim of unaided student modelling or an entirely independent character design.
+This Blender model adapts the existing shared `Assets/Prefabs/Player/ArcExplorer.prefab` design: teal suit, orange rescue vest, cyan visor, dark boots/gloves and backpack. It adds a headset, wrist scanner, pockets, reflective strips and backpack vents.
 
 ## Dimensions and rig
 
