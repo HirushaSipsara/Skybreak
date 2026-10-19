@@ -37,6 +37,7 @@ AI assistance: Claude (Anthropic), through Claude Code, at the student's request
 | 2026-10-20 | Step 5: phases, tactics (shield weak arm, punish healer, cut off), fairness director | AI-written | `4a5b90f`, `step5_*` |
 | 2026-10-20 | Step 6: F10 overlay; original vs adaptive evaluation against 4 scripted player styles | AI-written | `97079ec`, `Docs/IS/Testing/RiftWarden/EVALUATION.md` |
 | 2026-10-20 | Step 7: boss section and Thompson-sampling explorer in the study guide | AI-written | this commit, `Docs/IS/AgentDesign/Relay/relay_study_guide.html` |
+| 2026-10-20 | Standalone Rift Warden guide page: fight sheet, AI layers (IS and beyond), interactive explainers, instructions | AI-written | `Docs/IS/AgentDesign/RiftWarden/rift_warden_guide.html` |
 | 2026-10-20 | Local lab tools `RiftRegressionCheck.cs` and `RiftEvaluation.cs` | AI-written; kept in the git-excluded `Assets/LocalCombatLab` | Outputs under `Docs/IS/Testing/RiftWarden/` |
 
 ### Other AI-assisted work (not the assessed agent)
