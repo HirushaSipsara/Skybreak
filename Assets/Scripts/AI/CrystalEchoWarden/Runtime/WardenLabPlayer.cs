@@ -22,7 +22,7 @@ namespace Skybreak.Warden
         public void ResetPlayer(Vector3 position)
         {
             var body=GetComponent<CharacterController>();body.enabled=false;transform.position=position;body.enabled=true;
-            health=100;vertical=0;yaw=0;pitch=0;
+            health=100;vertical=0;yaw=0;pitch=0;fireAt=0;decoyAt=0;
         }
         void Start(){Cursor.lockState=CursorLockMode.Locked;Cursor.visible=false;}
         void Update()

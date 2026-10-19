@@ -13,8 +13,81 @@ static class Program
         Check(new WorldGraph().Nearest(new Point())==-1,"empty graph is safe");
         SearchAndBeliefs();
         DecisionsAndTactics();
+        RegressionAndStress();
         SyntaxChecks.Run();
         Console.WriteLine("TOTAL "+passed);
+    }
+    static void RegressionAndStress()
+    {
+        var random=new Random(87);
+        for(int trial=0;trial<150;trial++)
+        {
+            var graph=new WorldGraph();
+            for(int i=0;i<24;i++)graph.Add(new Point(i%6,0,i/6));
+            for(int i=0;i<24;i++)
+            {
+                if(i%6<5)graph.Connect(i,i+1,random.NextDouble()*3,1);
+                if(i<18)graph.Connect(i,i+6,random.NextDouble()*3,1);
+            }
+            for(int i=0;i<20;i++)
+            {
+                int a=random.Next(23),neighbour=a%6<5?a+1:a+6;
+                if(graph.Valid(neighbour))graph.SetLink(a,neighbour,random.NextDouble()>.4,2);
+            }
+            int start=random.Next(24),goal=random.Next(24);
+            double expected=TacticalSearch.TravelCosts(graph,start)[goal];
+            var found=Search.AStar(graph,start,goal);
+            if(double.IsInfinity(expected))
+            {if(found.Status!=RouteStatus.Unreachable)throw new Exception("A* unreachable mismatch");}
+            else if(found.Status!=RouteStatus.Found||Math.Abs(expected-found.Cost)>1e-8)
+                throw new Exception("A* and uniform-cost disagree");
+            if(found.Status==RouteStatus.Found)
+                for(int k=1;k<found.Nodes.Length;k++)
+                {
+                    bool legal=false;
+                    foreach(var e in graph.Neighbours(found.Nodes[k-1]))if(e.To==found.Nodes[k]&&e.Open)legal=true;
+                    if(!legal)throw new Exception("Invalid route edge");
+                }
+        }
+        Check(true,"150 weighted dynamic graphs: A* equals uniform-cost optimum and uses valid edges");
+        var d=new Decision();
+        var s=new Situation{Alive=true,Health=1,HasIntercept=true,ObjectiveDanger=1,Confidence=1};
+        d.Choose(s,0);
+        s.Visible=true;s.InRange=true;
+        Check(d.Choose(s,.01)==Intent.Attack,"in-range defence interrupts interception even during commitment");
+        s.Health=.1;s.HasRetreat=true;s.RetreatQuality=1;
+        Check(d.Choose(s,.01)==Intent.Retreat,"critical retreat still overrides objective combat");
+        var b=new BeliefMap(3);
+        for(int i=0;i<1000;i++){b.Observe(new[]{1e-30,1.0,1e-30},i);b.ClearVisible(1);}
+        double sum=b[0]+b[1]+b[2];
+        Check(Math.Abs(sum-1)<1e-8&&!double.IsNaN(sum),"extreme repeated evidence remains finite");
+        bool rejected=false;
+        try{b.Observe(new[]{1.0,double.NaN,0},1);}catch(ArgumentException){rejected=true;}
+        Check(rejected,"invalid sensor likelihood is rejected");
+        var hysteresis=new Decision();
+        var hs=new Situation{Alive=true,Health=1,CanPatrol=true};
+        hysteresis.Choose(hs,0);hs.ObjectiveDanger=.45;
+        Check(hysteresis.Choose(hs,.01)==Intent.Patrol,"small utility change respects commitment");
+        hs.HasIntercept=true;hs.ObjectiveDanger=1;
+        Check(hysteresis.Choose(hs,.02)==Intent.Intercept,"urgent alarm interrupts commitment");
+        var g=new WorldGraph();
+        for(int z=0;z<12;z++)for(int x=0;x<12;x++)g.Add(new Point(x*2,0,z*2));
+        for(int i=0;i<144;i++){if(i%12<11)g.Connect(i,i+1);if(i<132)g.Connect(i,i+12);}
+        var minds=new[]{new Decision(),new Decision(),new Decision(),new Decision()};
+        var beliefs=new[]{new BeliefMap(144),new BeliefMap(144),new BeliefMap(144),new BeliefMap(144)};
+        var watch=System.Diagnostics.Stopwatch.StartNew();
+        for(int tick=0;tick<300;tick++)for(int a=0;a<4;a++)
+        {
+            var loss=Search.AcousticLoss(g,a);
+            beliefs[a].Predict(g,.25);
+            beliefs[a].Observe(BeliefMap.SoundLikelihood(loss,30,10),tick*.25);
+            var route=Search.AStar(g,a,beliefs[a].MostLikely,256);
+            if(route.Status!=RouteStatus.Found)throw new Exception("Stress route failed");
+            minds[a].Choose(new Situation{Alive=true,Health=1,Confidence=1,HasInvestigation=true},tick*.25);
+        }
+        watch.Stop();
+        Check(true,"four independent cores complete 1200 combined hearing/decision/path cycles");
+        Console.WriteLine("CORE TIMING: "+watch.Elapsed.TotalMilliseconds.ToString("0.0")+" ms / 1200 cycles; excludes Unity physics, rendering and other agents.");
     }
     static void DecisionsAndTactics()
     {

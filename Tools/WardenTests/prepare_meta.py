@@ -3,6 +3,11 @@ from pathlib import Path
 import uuid
 root=Path(__file__).resolve().parents[2]
 paths=[root/'Assets/Scripts/AI/CrystalEchoWarden',root/'Assets/Editor/CrystalEchoWarden',root/'Assets/Resources/CrystalEchoWarden',root/'Assets/Scenes/Tests/CrystalEchoWarden']
+# The editor folder is new on the base branch. Do not recursively touch other teams' assets.
+editor=root/'Assets/Editor'
+if editor.exists() and not Path(str(editor)+'.meta').exists():
+    guid=uuid.uuid5(uuid.NAMESPACE_URL,'skybreak/sachini/Assets/Editor').hex
+    Path(str(editor)+'.meta').write_text('fileFormatVersion: 2\nguid: '+guid+'\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n',encoding='utf-8')
 for base in paths:
     if not base.exists(): continue
     for p in [base,*sorted(base.rglob('*'))]:

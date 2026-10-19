@@ -1,0 +1,40 @@
+PASS edge cost respects Euclidean lower bound
+PASS door change updates both directions
+PASS unchanged door does not invalidate routes
+PASS empty graph is safe
+PASS A* shortest route
+PASS A* replans around closed door
+PASS budget exhaustion is distinct from no path
+PASS sealed goal returns unreachable
+PASS start equals goal
+PASS invalid endpoints
+PASS sound takes least attenuated route through closed door
+PASS Bayesian update matches hand calculation
+PASS conflicting new evidence can overturn prior
+PASS visible empty region reduces belief
+PASS probabilities stay normalized after diffusion
+PASS stale evidence expires
+PASS equal acoustic paths stay ambiguous
+PASS single-zone belief is safe
+PASS quiet patrol
+PASS visible in-range target permits attack
+PASS lost target cancels attack despite commitment
+PASS critical health interrupts commitment
+PASS death overrides every utility
+PASS objective alarm selects interception
+PASS expired evidence returns to patrol
+PASS random restarts escape inferior local peak
+PASS no feasible cover returns no target
+PASS tactics deterministic with seeded randomness
+PASS unreachable tactical points excluded by travel cost
+PASS 150 weighted dynamic graphs: A* equals uniform-cost optimum and uses valid edges
+PASS in-range defence interrupts interception even during commitment
+PASS critical retreat still overrides objective combat
+PASS extreme repeated evidence remains finite
+PASS invalid sensor likelihood is rejected
+PASS small utility change respects commitment
+PASS urgent alarm interrupts commitment
+PASS four independent cores complete 1200 combined hearing/decision/path cycles
+CORE TIMING: 196.8 ms / 1200 cycles; excludes Unity physics, rendering and other agents.
+SYNTAX PASS: 16 C# files. Unity API type checking and Play Mode remain pending.
+TOTAL 37

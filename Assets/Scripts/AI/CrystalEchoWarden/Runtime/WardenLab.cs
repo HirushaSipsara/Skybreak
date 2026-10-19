@@ -17,10 +17,8 @@ namespace Skybreak.Warden
         readonly List<Material> ownedMaterials=new List<Material>();
         Material metal,energy,ground,wall,warning;
         GUIStyle textStyle;
-        float started;
         public void Start()
         {
-            started=Time.time;
             metal=Mat("Lab blue",new Color(.06f,.16f,.25f));
             energy=Mat("Lab cyan",Color.cyan,true);
             ground=Mat("Lab floor",new Color(.035f,.06f,.08f));
@@ -82,9 +80,9 @@ namespace Skybreak.Warden
         }
         public void ResetRound()
         {
-            foreach(var w in Wardens)if(w!=null)Destroy(w.gameObject);
+            foreach(var w in Wardens)if(w!=null){w.gameObject.SetActive(false);Destroy(w.gameObject);}
             Wardens.Clear();noise.Clear();
-            Player.ResetPlayer(new Vector3(-8,0,-8));objective.integrity=100;objective.crystalVisual.gameObject.SetActive(true);
+            Player.ResetPlayer(new Vector3(-8,0,-8));objective.ResetState();
             foreach(var p in fourWardens?new[]{new Vector3(8,1,0),new Vector3(8,1,-8),new Vector3(4,1,8),new Vector3(12,1,4)}:new[]{new Vector3(8,1,0)})SpawnWarden(p);
         }
         public WardenBrain SpawnWarden(Vector3 position)

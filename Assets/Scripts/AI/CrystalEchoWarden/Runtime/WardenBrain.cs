@@ -41,6 +41,8 @@ namespace Skybreak.Warden
             if(!Alive)
             {
                 Motor.Stop();windupAt=-1;
+                var body=GetComponent<CharacterController>();
+                if(body!=null)body.enabled=false;
                 Mind.Choose(new Situation{Alive=false},Time.time);
                 Status="Defeated";
             }
@@ -165,7 +167,7 @@ namespace Skybreak.Warden
         }
         void ResolveAttack()
         {
-            bool valid=Mind.Current==Intent.Attack&&Senses.CanSeeNow()&&
+            bool valid=map!=null&&map.Graph!=null&&Mind.Current==Intent.Attack&&Senses.CanSeeNow()&&
                 Vector3.Distance(Senses.Eye,Senses.target.AimPoint)<=attackRange;
             if(!valid){windupAt=-1;return;}
             Motor.Face(Senses.target.AimPoint-transform.position);

@@ -48,7 +48,8 @@ namespace Skybreak.Warden.Core
             int best=0;
             for(int i=1;i<(int)Intent.Disabled;i++)if(Scores[i]>Scores[best])best=i;
             bool feasible=!double.IsNegativeInfinity(Scores[(int)Current]);
-            bool urgent=(Intent)best==Intent.Retreat || ((Intent)best==Intent.Intercept&&danger>.8);
+            // A valid firing opportunity must not be held behind an old travel action.
+            bool urgent=(Intent)best==Intent.Attack || (Intent)best==Intent.Retreat || ((Intent)best==Intent.Intercept&&danger>.8);
             // Invalid actions are never retained for hysteresis. Urgent changes bypass commitment.
             if(feasible&&!urgent&&best!=(int)Current&&
                (now-ChangedAt<w.CommitmentSeconds||Scores[best]<Scores[(int)Current]+w.SwitchMargin))best=(int)Current;
