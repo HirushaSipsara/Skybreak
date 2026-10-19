@@ -132,3 +132,8 @@ InitTestScene*.unity*
 # Local third-party asset downloads; keep imported Unity dependencies tracked.
 /resources/DungeonAssetLibrary/
 /resources/MapDecorationKit/
+
+# Crystal Echo Warden local test build output
+/Tools/WardenTests/bin/
+/Tools/WardenTests/obj/
+!/Tools/WardenTests/WardenTests.csproj

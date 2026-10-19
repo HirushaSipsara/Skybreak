@@ -1,0 +1,7 @@
+{
+  "mesh_parts": 30,
+  "triangles": 3140,
+  "front": "-Y in Blender; verify +Z in Unity",
+  "standalone_source": "CrystalEchoWarden_Standalone.blend",
+  "unity_import_tested": false
+}
