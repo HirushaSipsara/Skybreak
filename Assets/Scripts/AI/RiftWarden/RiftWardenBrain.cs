@@ -9,6 +9,10 @@ using UnityEngine.AI;
 namespace Skybreak.AI.RiftWarden
 {
     public enum RiftAction { Dormant, Pursue, Cannon, Slash, DoubleTeleport, BreakLeft, BreakRight, CoreOpen, CoreTeleport, Slam, Recover, Dying, Defeated }
+    // The Rift Warden's agent program (Docs/IS/AgentDesign/RiftWarden/RIFT_WARDEN_AI_DESIGN.md).
+    //   RiftPerception - sight and memory of the player (layer 1)
+    //   RiftUtility    - attack scores and the selection rule (decision layer)
+    //   this class     - orchestration and execution: the attack state machine with its animation-timed markers
     public sealed class RiftWardenBrain : MonoBehaviour
     {
         public Transform player;
@@ -37,12 +41,11 @@ namespace Skybreak.AI.RiftWarden
         public float LastRearArrivalTime { get; private set; }
         public event Action BossDefeated;
         WardenTuning T => AgentTuning.Current.warden;
-        float nextSight; bool cachedVisible;
+        readonly RiftPerception perception = new RiftPerception();
         void ApplyHealthTuning() { armMaximum = T.armHealth; coreMaximum = T.coreHealth; }
         float clock, previous, nextDecision, cannonReady, bladeReady, teleportReady, slamReady, secondRearAt;
-        Vector3 lockedAim, lastSeen, warnedLanding;
+        Vector3 lockedAim, warnedLanding;
         bool landingWarned;
-        float seenAt = -100;
         bool active, leftDetached, rightDetached, notified;
         readonly Collider[] overlaps = new Collider[24];
         readonly RaycastHit[] shotHits = new RaycastHit[24];
@@ -78,7 +81,7 @@ namespace Skybreak.AI.RiftWarden
             active = leftDetached = rightDetached = notified = CoreExposed = false;
             ApplyHealthTuning(); LeftHealth = armMaximum; RightHealth = armMaximum; CoreHealth = coreMaximum;
             leftArm.enabled = rightArm.enabled = true; leftTarget.GetComponent<Collider>().enabled = rightTarget.GetComponent<Collider>().enabled = coreTarget.GetComponent<Collider>().enabled = true;
-            cannonReady = bladeReady = teleportReady = slamReady = 0; Action = RiftAction.Dormant; clock = 0; nextSight = 0; seenAt = -100;
+            cannonReady = bladeReady = teleportReady = slamReady = 0; Action = RiftAction.Dormant; clock = 0; perception.Reset();
             signals.Clear(); motor.Stop(); presenter.Play("RW_Idle", true); if (returnPoint != null) returnPoint.SetPowered(false);
         }
         void Update()
@@ -90,9 +93,7 @@ namespace Skybreak.AI.RiftWarden
             if (!active) { presenter.Advance(dt); return; }
             if (playerVitals != null && !playerVitals.Alive && Action != RiftAction.Dying && !Defeated)
             { motor.Stop(); signals.Clear(); return; }
-            if (Time.time >= nextSight) { nextSight = Time.time + T.perceptionInterval; cachedVisible = !Physics.Linecast(transform.position + Vector3.up * 2.6f, player.position + Vector3.up * 1.2f, ~(1 << 8), QueryTriggerInteraction.Ignore); }
-            bool visible = cachedVisible;
-            if (visible) { lastSeen = player.position; seenAt = Time.time; }
+            bool visible = perception.Sense(transform, player, Time.time, T.perceptionInterval);
             previous = clock; clock += dt; presenter.Advance(dt);
             switch (Action)
             {
@@ -169,17 +170,19 @@ namespace Skybreak.AI.RiftWarden
             if (Planar(player.position, arenaCentre) > arenaRadius + 2) { motor.Stop(); Decision = "Player outside arena / waiting"; return; }
             if (!visible)
             {
-                Decision = Time.time - seenAt < T.memorySeconds ? "Investigating last seen position" : "No sight or recent memory / holding";
-                if (Time.time - seenAt < T.memorySeconds) motor.MoveTo(lastSeen, 2); else motor.Stop(); return;
+                bool remembers = perception.Remembers(Time.time, T.memorySeconds);
+                Decision = remembers ? "Investigating last seen position" : "No sight or recent memory / holding";
+                if (remembers) motor.MoveTo(perception.LastSeen, 2); else motor.Stop(); return;
             }
-            float cannon = LeftHealth > 0 && Time.time >= cannonReady && range < T.cannonRange ? T.cannonBase + Mathf.Clamp01(range / 12) * T.cannonWeight : -1;
-            float blade = RightHealth > 0 && Time.time >= bladeReady && range < T.bladeRange ? T.bladeUtility : -1;
-            float teleport = RightHealth > 0 && Time.time >= teleportReady && range > T.teleportMinRange && range < T.teleportMaxRange ? T.teleportUtility : -1;
-            if (CoreExposed && Time.time >= slamReady) { Enter(RiftAction.CoreTeleport); Decision = "Exposed-core pressure / teleport then warned slam"; return; }
-            if (blade > cannon && blade > teleport) { Enter(RiftAction.Slash); Decision = "Close target / blade has highest utility"; }
-            else if (teleport > cannon) { Enter(RiftAction.DoubleTeleport); Decision = "Target beyond blade reach / teleport available"; }
-            else if (cannon >= 0) { Enter(RiftAction.Cannon); Decision = "Visible target at cannon range"; }
-            else { bool ok = motor.MoveTo(player.position, CoreExposed ? 4 : 2.5f); Decision = ok ? "Attacks cooling down / approach" : "Route blocked / retry without walking through cover"; }
+            var scores = RiftUtility.Score(range, LeftHealth, RightHealth, Time.time >= cannonReady, Time.time >= bladeReady, Time.time >= teleportReady, T);
+            switch (RiftUtility.Select(scores, CoreExposed, Time.time >= slamReady))
+            {
+                case RiftChoice.CoreTeleport: Enter(RiftAction.CoreTeleport); Decision = "Exposed-core pressure / teleport then warned slam"; break;
+                case RiftChoice.Slash: Enter(RiftAction.Slash); Decision = "Close target / blade has highest utility"; break;
+                case RiftChoice.DoubleTeleport: Enter(RiftAction.DoubleTeleport); Decision = "Target beyond blade reach / teleport available"; break;
+                case RiftChoice.Cannon: Enter(RiftAction.Cannon); Decision = "Visible target at cannon range"; break;
+                default: { bool ok = motor.MoveTo(player.position, CoreExposed ? 4 : 2.5f); Decision = ok ? "Attacks cooling down / approach" : "Route blocked / retry without walking through cover"; break; }
+            }
         }
         void Enter(RiftAction action)
         {

@@ -1,0 +1,56 @@
+[close target: slash] action=Slash decision="Close target / blade has highest utility"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[mid range: double teleport] action=DoubleTeleport decision="Target beyond blade reach / teleport available"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[mid range, teleport cooling: cannon] action=Cannon decision="Visible target at cannon range"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[mid range, all cooling: approach] action=Pursue decision="Attacks cooling down / approach"
+  boss at (42.0,0.3,86.5) yaw=180 motor="Following complete path" destination=(42.0,0.2,79.0)
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[far range: double teleport] action=DoubleTeleport decision="Target beyond blade reach / teleport available"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[player outside arena: wait] action=Pursue decision="Player outside arena / waiting"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[sight lost, recent memory: investigate] action=Pursue decision="Investigating last seen position"
+  boss at (41.9,0.3,86.6) yaw=188 motor="Following complete path" destination=(40.0,0.2,80.0)
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[sight lost, memory expired: hold] action=Pursue decision="No sight or recent memory / holding"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[core exposed: teleport then slam] action=CoreTeleport decision="Exposed-core pressure / teleport then warned slam"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=True
+[cannon arm destroyed, teleport cooling: approach] action=Pursue decision="Attacks cooling down / approach"
+  boss at (42.0,0.3,85.0) yaw=180 motor="Following complete path" destination=(42.0,0.2,79.0)
+  player health=100.0 shots=0 damageWindows=0 teleports=0
+  parts left=0.0 right=180.0 core=260.0 coreExposed=False
+[cannon burst lands on a still target] action=Recover decision="Visible target at cannon range"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=76.0 shots=3 damageWindows=0 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[slash lands on a close target] action=Slash decision="Close target / blade has highest utility"
+  boss at (42.0,0.3,87.0) yaw=180 motor="Stopped" destination=none
+  player health=70.0 shots=3 damageWindows=1 teleports=0
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[double teleport rear strike] action=Recover decision="Second close rear arrival / single immediate strike"
+  boss at (42.0,0.0,77.4) yaw=0 motor="Stopped" destination=none
+  player health=70.0 shots=3 damageWindows=2 teleports=2
+  parts left=180.0 right=180.0 core=260.0 coreExposed=False
+[core teleport and slam] action=Slam decision="Slam location locked; move out or jump"
+  boss at (42.0,0.3,83.1) yaw=180 motor="Stopped" destination=none
+  player health=70.0 shots=3 damageWindows=3 teleports=3
+  parts left=180.0 right=180.0 core=260.0 coreExposed=True
