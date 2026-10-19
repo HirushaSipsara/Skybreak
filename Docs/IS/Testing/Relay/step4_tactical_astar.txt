@@ -1,0 +1,55 @@
+[heal at 50%] action=Heal decision="Heal / player's fuzzy heal urgency has the highest expected utility"
+  scores follow=0.339 heal=0.500 defend=0.109 retreat=0.156
+  fuzzy heal=0.500 defend=0.182 self=0.156
+  heals=1 attacks=0 playerHealth=68.000 relayHealth=90.000
+  planner "No route needed"
+  motor status="Stopped" blocked=False stopped=False destination=none
+[heal on cooldown] action=Follow decision="Follow / recent threat remembered, actions cooling down"
+  scores follow=0.289 heal=0.050 defend=0.199 retreat=0.156
+  fuzzy heal=0.218 defend=0.331 self=0.156
+  heals=1 attacks=0 playerHealth=68.000 relayHealth=90.000
+  planner "No route needed"
+  motor status="Stopped" blocked=False stopped=False destination=none
+[defend visible boss] action=Defend decision="Defend / visible threat endangers the player most"
+  scores follow=0.339 heal=0.000 defend=0.593 retreat=0.156
+  fuzzy heal=0.156 defend=0.593 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  planner "No route needed"
+  motor status="Stopped" blocked=False stopped=False destination=none
+[planner comparison] from (44.000,0.200,82.000) to (36.000,0.040,74.000) with 3 known threat(s)
+  A* tactical (lambda 3)         found=True expanded=136 cost=35.315 length=11.315 exposure=9.000 waypoints=9
+  A* shortest (lambda 0)         found=True expanded=8 cost=11.315 length=11.315 exposure=9.000 waypoints=9
+  Uniform-cost (lambda 3)        found=True expanded=279 cost=35.315 length=11.315 exposure=9.000 waypoints=9
+  Greedy best-first (lambda 3)   found=True expanded=8 cost=35.315 length=11.315 exposure=9.000 waypoints=9
+  best detour: goal (55.087,0.200,77.408): shortest length=11.660 exposure=11.000 | tactical length=13.074 exposure=9.000 (expanded 162)
+[retreat at low own health] action=Retreat decision="Retreat / self-preservation has the highest expected utility (recent threat)"
+  scores follow=0.289 heal=0.000 defend=0.050 retreat=0.593
+  fuzzy heal=0.156 defend=0.593 self=0.593
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=20.000
+  planner "A* route: waypoint 4/5, 33 nodes expanded, exposure 5.0"
+  motor status="Following complete path" blocked=False stopped=False destination=(44.000,0.070,79.000)
+[follow distant player] action=Follow decision="Follow / no visible threat"
+  scores follow=0.650 heal=0.109 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  planner "A* route: waypoint 4/9, 20 nodes expanded, exposure 0.0"
+  motor status="Following complete path" blocked=False stopped=False destination=(42.000,0.050,70.000)
+[follow close to player] action=Follow decision="Follow / no visible threat"
+  scores follow=0.342 heal=0.156 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  planner "A* route: waypoint 4/9, 20 nodes expanded, exposure 0.0"
+  motor status="Stopped" blocked=False stopped=False destination=none
+[player down] action=Follow decision="Player down / waiting for restart"
+  scores follow=0.342 heal=0.156 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=0.000 relayHealth=90.000
+  planner "A* route: waypoint 4/9, 20 nodes expanded, exposure 0.0"
+  motor status="Stopped" blocked=False stopped=False destination=none
+[unreachable destination] accepted=False blocked=True
+[lethal damage] action=Disabled decision="Relay disabled"
+  scores follow=0.342 heal=0.156 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=0.000
+  planner "A* route: waypoint 4/9, 20 nodes expanded, exposure 0.0"
+  motor status="Stopped" blocked=True stopped=False destination=none

@@ -182,9 +182,21 @@ Relay finds routes with **its own A*** instead of handing the destination straig
   - **Admissible:** every step costs at least its length (exposure ≥ 0), so the true remaining cost ≥ straight-line distance.
   - **Consistent:** `h(n) ≤ |n − n'| + h(n') ≤ c(n, n') + h(n')` by the triangle inequality. So A* with graph search returns the cheapest (safest-and-shortest) path (Lecture 05 theorem).
 - **Frontier:** a binary-heap priority queue on `f = g + h`, with a closed set. The node limit is 2,500 per search; past that the search returns the best partial path (closest by `h`) and logs it.
-- **Execution:** Relay steers along the waypoint list using `NavMeshMotor` for the low-level movement between consecutive waypoints. The choice of route is Relay's own.
-- **Replanning triggers:** the goal moves more than 1.5 m, a threat sighting makes the next three nodes exposed, or the motor reports `Blocked`.
-- **Comparison for the defence:** the same search with λ = 0 behaves as plain shortest-path A*, and with `h = 0` it becomes uniform-cost search (Lecture 04). The debug overlay can switch between them to show the expanded node counts.
+- **Execution:** `RelayBrain.NavigateTo` follows the route: it skips reached waypoints and steers towards the farthest waypoint within 3 m that is in straight NavMesh reach, using `NavMeshMotor` only for the short hop. Within the stop distance + 3 m of the goal it approaches directly. The choice of route is Relay's own.
+- **Replanning triggers:** the goal moved more than 1.5 m, the plan is older than 1 s, or the number of known threats changed (a new threat appeared or one was forgotten).
+- **Fallback:** if the local grid has no route (for example a door narrower than the 1 m cells) or the search hits its 2,500-node budget, Relay says so in `PlannerStatus` and falls back to Unity's NavMesh path for that move. The overlay shows which one is in use.
+- **Comparison for the defence:** the same engine (`BestFirstSearch`) runs A* (`f = g + h`), uniform-cost search (`f = g`, Lecture 04) and greedy best-first (`f = h`).
+
+**Measured results** (`Docs/IS/Testing/Relay/step4_*`):
+
+| Check | Result |
+|---|---|
+| Lecture 05 Romania, Arad → Bucharest | A* 418 km via Rimnicu Vilcea and Pitesti (optimal), expanding 5 nodes; uniform-cost 418 km, expanding 12; greedy 450 km via Fagaras (not optimal) |
+| 60 random danger-weighted grids | A* cost = uniform-cost cost every time, with ≤ the nodes expanded |
+| Real arena, boss in view, 11.3 m route | Tactical A* expanded 136 nodes vs uniform-cost 279 for the same optimal route; λ = 0 A* expanded only 8 |
+| Real arena, best detour in a 48-goal sweep | Shortest route 11.7 m through 11 watched cells; tactical route 13.1 m through 9 |
+
+The λ = 0 / λ = 3 difference in expanded nodes is a useful defence point: the straight-line heuristic is admissible in both cases, but it is far more *informed* when cost ≈ distance. When exposure dominates the cost, h underestimates more, so A* explores more (still far less than uniform-cost search).
 
 ### 4.7 Layer 5 — Support position by simulated annealing (Lecture 05, Local Search)
 
