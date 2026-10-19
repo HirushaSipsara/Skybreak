@@ -105,6 +105,9 @@ namespace Skybreak.AI.RiftWarden
             partDamage[(int)part] += amount;
         }
 
+        // Damage the player deals per second, from the decayed per-part totals (steady state: total = rate x window).
+        public float DamageRate(float now) { DecayParts(now); return (partDamage[0] + partDamage[1] + partDamage[2]) / PressureWindow; }
+
         // Damage per part over roughly the last ten seconds (exponentially decayed).
         public float PartPressure(RiftPart part, float now) { DecayParts(now); return partDamage[(int)part]; }
 

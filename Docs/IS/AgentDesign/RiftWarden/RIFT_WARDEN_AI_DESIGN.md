@@ -109,8 +109,14 @@ CHANCE : player response r ~ P(r | action)                 (layer 1)
          hit ~ θ(action, band) from the learner             (layer 3)
          next state: range band after r, cooldowns advanced by the action's duration
 MAX    : boss's best follow-up in that state
-value  = expected damage dealt − w_risk · expected damage taken during the action's recovery
+value  = expected damage dealt (hit chance × payoff, % of player health)
+         − w_risk · extra damage taken compared with standing still (% of an arm's health)
+leaf   = ½ × the best attack that is, or soon will be, ready, discounted 0.85 per second of wait
 ```
+
+**Risk is relative.** The boss is being shot whatever it does, so a move is only charged for the *extra* damage it invites: `rate × duration × (exposure − 1)`. Exposure is 1.0 for the cannon and for holding, 0.9 for the slash, 0.8 for approaching, and **0.5 for the rear teleport**, because the player has to turn around. Under heavy fire the teleport earns a bonus, and holding still is never "safe". (A first version charged absolute risk, which made the boss freeze while being shot; the step 4 regression scenario "cannon arm destroyed" caught it.)
+
+**Root exploration:** the learner (layer 3) enters at the root. Each attack's value is shifted by `(Thompson draw − posterior mean) × payoff`, so uncertain attacks still get tried. Moves the real range rules forbid at the moment (for example a slash beyond 3 m) are excluded at the root.
 
 The planner returns the first action of the best line. Examples of lines it can find:
 - "Cannon → they usually strafe left → they end up close → slash."

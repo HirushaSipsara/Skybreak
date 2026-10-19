@@ -16,6 +16,7 @@ namespace Skybreak.AI.RiftWarden
     //   RiftPlayerModel - this player's velocity, range, strafe habit and answers to each attack (layer 1)
     //   predictive aim  - cannon and slam lead the target by its smoothed velocity, capped for fairness (layer 2)
     //   RiftAttackLearner - Beta belief per attack and range band about hitting this player; Thompson sampling (layer 3)
+    //   RiftComboPlanner - depth-2 expectimax over the player's learned answers: picks the move with the best line (layer 4)
     //   RiftUtility    - attack scores and the selection rule (decision layer)
     //   this class     - orchestration and execution: the attack state machine with its animation-timed markers
     public sealed class RiftWardenBrain : MonoBehaviour
@@ -57,6 +58,8 @@ namespace Skybreak.AI.RiftWarden
         public RiftAttackLearner Learner => learner;
         System.Random rng = new System.Random(3062);   // reseeded on reset: the same fight state gives the same draws
         RiftRangeBand attackBand;                      // range band when the current attack started
+        readonly RiftComboPlanner planner = new RiftComboPlanner();
+        public RiftComboPlanner Planner => planner;
         // Damage of one successful trial, as a percentage of the player's health (from the tuning): one cannon shot, or one melee hit.
         float TrialDamage(RiftAttackKind kind) => (kind == RiftAttackKind.Cannon ? T.cannonDamageFraction : T.meleeDamageFraction) * 100;
         // Trials per attack: a cannon burst is three shots.
@@ -85,7 +88,7 @@ namespace Skybreak.AI.RiftWarden
         public void DamagePart(RiftPart part, float amount)
         {
             if (!CanDamage(part) || amount <= 0 || float.IsNaN(amount) || float.IsInfinity(amount)) return;
-            model.ObservePartDamage(part, amount, Time.time);
+            model.ObservePartDamage(part, Mathf.Min(amount, PartHealth(part)), Time.time);   // damage actually taken, not overkill
             if (part == RiftPart.LeftArm) LeftHealth = Mathf.Max(0, LeftHealth - amount);
             if (part == RiftPart.RightArm) RightHealth = Mathf.Max(0, RightHealth - amount);
             if (part == RiftPart.Core) CoreHealth = Mathf.Max(0, CoreHealth - amount);
@@ -198,21 +201,33 @@ namespace Skybreak.AI.RiftWarden
             }
             var scores = RiftUtility.Score(range, LeftHealth, RightHealth, Time.time >= cannonReady, Time.time >= bladeReady, Time.time >= teleportReady, T);
             if (CoreExposed && Time.time >= slamReady) { Enter(RiftAction.CoreTeleport); Decision = "Exposed-core pressure / teleport then warned slam"; return; }
-            // Which available attack is expected to do the most damage to THIS player from here? Thompson sampling draws a
-            // plausible hit chance from each attack's belief, so attacks the boss is unsure about still get tried sometimes.
+            // Layer 4: plan two moves ahead against this player's learned answers (expectimax). Layer 3 enters at the root:
+            // each attack's value is shifted by (Thompson draw - mean) x payoff, so uncertain attacks still get explored.
+            // Moves the real range rules forbid right now (e.g. slash beyond 3 m) are excluded at the root.
             var band = RiftAttackLearner.Band(range);
-            var arms = new BetaBelief[3]; var payoff = new double[3];
-            if (scores.cannon >= 0) { arms[0] = learner.Belief(RiftAttackKind.Cannon, band); payoff[0] = TrialDamage(RiftAttackKind.Cannon) * Trials(RiftAttackKind.Cannon); }
-            if (scores.blade >= 0) { arms[1] = learner.Belief(RiftAttackKind.Slash, band); payoff[1] = TrialDamage(RiftAttackKind.Slash); }
-            if (scores.teleport >= 0) { arms[2] = learner.Belief(RiftAttackKind.DoubleTeleport, band); payoff[2] = TrialDamage(RiftAttackKind.DoubleTeleport); }
-            int pick = ThompsonSampling.Choose(arms, payoff, rng, out double value);
-            string why = pick >= 0 ? $" / {band} range, learned hit chance {arms[pick].Mean:P0}, sampled expected damage {value:F1}%" : "";
-            switch (pick)
+            var state = new RiftFightState
             {
-                case 0: Enter(RiftAction.Cannon); Decision = "Cannon" + why; break;
-                case 1: Enter(RiftAction.Slash); Decision = "Blade slash" + why; break;
-                case 2: Enter(RiftAction.DoubleTeleport); Decision = "Double rear teleport" + why; break;
-                default: { bool ok = motor.MoveTo(player.position, CoreExposed ? 4 : 2.5f); Decision = ok ? "Attacks cooling down / approach" : "Route blocked / retry without walking through cover"; break; }
+                band = band, cannonArm = LeftHealth > 0, bladeArm = RightHealth > 0,
+                cannonIn = Mathf.Max(0, cannonReady - Time.time), bladeIn = Mathf.Max(0, bladeReady - Time.time), teleportIn = Mathf.Max(0, teleportReady - Time.time),
+            };
+            double RootBonus(RiftMove m)
+            {
+                if (m == RiftMove.Cannon && scores.cannon < 0) return double.NegativeInfinity;
+                if (m == RiftMove.Slash && scores.blade < 0) return double.NegativeInfinity;
+                if (m == RiftMove.DoubleTeleport && scores.teleport < 0) return double.NegativeInfinity;
+                if (m == RiftMove.Approach || m == RiftMove.Hold) return 0;
+                var kind = RiftComboPlanner.Kind(m); var belief = learner.Belief(kind, band);
+                return (belief.Sample(rng) - belief.Mean) * planner.Payoff(kind);
+            }
+            var plan = planner.Plan(state, model, learner, T, model.DamageRate(Time.time), armMaximum, RootBonus);
+            string why = $" / plan: {planner.PlannedLine} (value {plan.Value:F1}, {plan.NodesVisited} nodes)";
+            switch (plan.HasAction ? plan.Best : RiftMove.Approach)
+            {
+                case RiftMove.Cannon: Enter(RiftAction.Cannon); Decision = "Cannon" + why; break;
+                case RiftMove.Slash: Enter(RiftAction.Slash); Decision = "Blade slash" + why; break;
+                case RiftMove.DoubleTeleport: Enter(RiftAction.DoubleTeleport); Decision = "Double rear teleport" + why; break;
+                case RiftMove.Hold: motor.Stop(); Face(player.position, Time.deltaTime); Decision = "Holding for a better opening" + why; break;
+                default: { bool ok = motor.MoveTo(player.position, CoreExposed ? 4 : 2.5f); Decision = (ok ? "Approach" : "Route blocked / retry without walking through cover") + why; break; }
             }
         }
         void Enter(RiftAction action)
