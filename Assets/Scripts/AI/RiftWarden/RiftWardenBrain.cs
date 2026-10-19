@@ -17,6 +17,8 @@ namespace Skybreak.AI.RiftWarden
     //   predictive aim  - cannon and slam lead the target by its smoothed velocity, capped for fairness (layer 2)
     //   RiftAttackLearner - Beta belief per attack and range band about hitting this player; Thompson sampling (layer 3)
     //   RiftComboPlanner - depth-2 expectimax over the player's learned answers: picks the move with the best line (layer 4)
+    //   RiftDirector     - phase temperament and fairness (mercy / pressure); tactics: shield the weak arm, punish the
+    //                      healer, cut off the player's escape (layer 5)
     //   RiftUtility    - attack scores and the selection rule (decision layer)
     //   this class     - orchestration and execution: the attack state machine with its animation-timed markers
     public sealed class RiftWardenBrain : MonoBehaviour
@@ -54,12 +56,22 @@ namespace Skybreak.AI.RiftWarden
         [Range(0, 1)] public float leadFactor = .65f;
         public const float MaxLead = 2.5f, SlamLeadSeconds = .6f;
         Vector3 lockPosition, lockVelocity;
+        float lockHeight = 1.2f;                       // aim height above the target's feet (player chest, or Relay's hover body)
         readonly RiftAttackLearner learner = new RiftAttackLearner();
         public RiftAttackLearner Learner => learner;
         System.Random rng = new System.Random(3062);   // reseeded on reset: the same fight state gives the same draws
         RiftRangeBand attackBand;                      // range band when the current attack started
         readonly RiftComboPlanner planner = new RiftComboPlanner();
         public RiftComboPlanner Planner => planner;
+        readonly RiftDirector director = new RiftDirector();
+        public RiftDirector Director => director;
+        [Tooltip("Let the director set the lead factor, cooldowns, recovery and planning depth. Off = fixed values (tests).")]
+        public bool directorEnabled = true;
+        public const float HealerWindow = 6, HealerRearm = 12, ShieldBelow = .5f, ShieldAngle = 25, CutOffDistance = 2;
+        Skybreak.AI.Relay.RelayBrain healer;
+        float healerPunishReady;
+        Transform cannonTarget;                        // the player, or Relay when the boss punishes the healer
+        public int HealerPunishments { get; private set; }
         // Damage of one successful trial, as a percentage of the player's health (from the tuning): one cannon shot, or one melee hit.
         float TrialDamage(RiftAttackKind kind) => (kind == RiftAttackKind.Cannon ? T.cannonDamageFraction : T.meleeDamageFraction) * 100;
         // Trials per attack: a cannon burst is three shots.
@@ -82,6 +94,7 @@ namespace Skybreak.AI.RiftWarden
             ApplyHealthTuning(); LeftHealth = armMaximum; RightHealth = armMaximum; CoreHealth = coreMaximum;
             if (player == null) { var arc = FindAnyObjectByType<Skybreak.Descent.DescentCharacterController>(); if (arc != null) player = arc.transform; }
             if (player != null && playerVitals == null) playerVitals = player.GetComponent<DamageSink>();
+            healer = FindAnyObjectByType<Skybreak.AI.Relay.RelayBrain>();
             presenter.Play("RW_Idle", true); motor.Stop(); if (returnPoint != null) returnPoint.SetPowered(false);
         }
         public void Activate() { if (active || Defeated) return; active = true; Enter(RiftAction.Pursue); }
@@ -105,6 +118,7 @@ namespace Skybreak.AI.RiftWarden
             ApplyHealthTuning(); LeftHealth = armMaximum; RightHealth = armMaximum; CoreHealth = coreMaximum;
             leftArm.enabled = rightArm.enabled = true; leftTarget.GetComponent<Collider>().enabled = rightTarget.GetComponent<Collider>().enabled = coreTarget.GetComponent<Collider>().enabled = true;
             cannonReady = bladeReady = teleportReady = slamReady = 0; Action = RiftAction.Dormant; clock = 0; perception.Reset(); model.Reset(); learner.Reset(); rng = new System.Random(3062);
+            director.Reset(); healerPunishReady = 0; HealerPunishments = 0; cannonTarget = null;
             signals.Clear(); motor.Stop(); presenter.Play("RW_Idle", true); if (returnPoint != null) returnPoint.SetPowered(false);
         }
         void Update()
@@ -119,6 +133,13 @@ namespace Skybreak.AI.RiftWarden
             bool visible = perception.Sense(transform, player, Time.time, T.perceptionInterval);
             if (visible) model.Observe(player.position, transform.position, dt, Time.time);
             if (playerVitals != null) model.ObserveHealth(playerVitals.Health, Time.time);
+            if (directorEnabled)
+            {
+                float playerHealth01 = playerVitals != null ? playerVitals.Health / Mathf.Max(1, playerVitals.MaximumHealth) : 1;
+                float armLoss = Mathf.Max(model.PartPressure(RiftPart.LeftArm, Time.time), model.PartPressure(RiftPart.RightArm, Time.time)) / Mathf.Max(1, armMaximum);
+                director.Update(LeftHealth > 0, RightHealth > 0, CoreExposed, playerHealth01, armLoss, Time.time, dt);
+                leadFactor = director.LeadFactor; planner.riskWeight = director.RiskWeight; planner.depth = director.PlanDepth;
+            }
             previous = clock; clock += dt; presenter.Advance(dt);
             switch (Action)
             {
@@ -131,9 +152,14 @@ namespace Skybreak.AI.RiftWarden
                     }
                     break;
                 case RiftAction.Cannon:
-                    if (clock < .4f) Face(player.position, dt);
-                    if (Mark(.4f)) { lockedAim = player.position + Vector3.up * 1.2f; lockPosition = player.position; lockVelocity = model.Velocity; }
-                    if (Mark(17f / 30)) { model.EndResponse(RiftAttackKind.Cannon, player.position); FireCannon(17f / 30 - .4f); }
+                    var aimAt = cannonTarget != null ? cannonTarget : player;
+                    if (clock < .4f) Face(aimAt.position, dt);
+                    if (Mark(.4f))
+                    {
+                        lockHeight = aimAt == player ? 1.2f : (healer != null && aimAt == healer.transform ? healer.AimPoint.y - aimAt.position.y : 1.2f);
+                        lockedAim = aimAt.position + Vector3.up * lockHeight; lockPosition = aimAt.position; lockVelocity = aimAt == player ? model.Velocity : Vector3.zero;
+                    }
+                    if (Mark(17f / 30)) { if (aimAt == player) model.EndResponse(RiftAttackKind.Cannon, player.position); FireCannon(17f / 30 - .4f); }
                     if (Mark(26f / 30)) FireCannon(26f / 30 - .4f);
                     if (Mark(35f / 30)) FireCannon(35f / 30 - .4f);
                     if (clock >= 1.8f) Enter(RiftAction.Recover);
@@ -180,7 +206,10 @@ namespace Skybreak.AI.RiftWarden
                     if (Mark(1.5f)) { model.EndResponse(RiftAttackKind.Slam, player.position); learner.Record(RiftAttackKind.Slam, attackBand, AreaDamage(lockedAim, T.slamRadius, T.meleeDamageFraction, false)); }
                     if (clock >= 3) Enter(RiftAction.Recover);
                     break;
-                case RiftAction.Recover: if (clock >= T.recoverSeconds) Enter(RiftAction.Pursue); break;
+                case RiftAction.Recover:
+                    FaceShielded(dt);
+                    if (clock >= (directorEnabled ? director.RecoverSeconds(T.recoverSeconds) : T.recoverSeconds)) Enter(RiftAction.Pursue);
+                    break;
                 case RiftAction.Dying:
                     if (Mark(79f / 30) && !notified) { notified = true; if (returnPoint != null) returnPoint.SetPowered(true); if (audioCues != null) audioCues.Play(CombatSound.Defeat); BossDefeated?.Invoke(); }
                     if (clock >= 3) { Action = RiftAction.Defeated; Decision = "Core destroyed / return point powered"; }
@@ -201,6 +230,7 @@ namespace Skybreak.AI.RiftWarden
             }
             var scores = RiftUtility.Score(range, LeftHealth, RightHealth, Time.time >= cannonReady, Time.time >= bladeReady, Time.time >= teleportReady, T);
             if (CoreExposed && Time.time >= slamReady) { Enter(RiftAction.CoreTeleport); Decision = "Exposed-core pressure / teleport then warned slam"; return; }
+            if (TryPunishHealer(scores.cannon >= 0)) return;
             // Layer 4: plan two moves ahead against this player's learned answers (expectimax). Layer 3 enters at the root:
             // each attack's value is shifted by (Thompson draw - mean) x payoff, so uncertain attacks still get explored.
             // Moves the real range rules forbid right now (e.g. slash beyond 3 m) are excluded at the root.
@@ -226,31 +256,76 @@ namespace Skybreak.AI.RiftWarden
                 case RiftMove.Cannon: Enter(RiftAction.Cannon); Decision = "Cannon" + why; break;
                 case RiftMove.Slash: Enter(RiftAction.Slash); Decision = "Blade slash" + why; break;
                 case RiftMove.DoubleTeleport: Enter(RiftAction.DoubleTeleport); Decision = "Double rear teleport" + why; break;
-                case RiftMove.Hold: motor.Stop(); Face(player.position, Time.deltaTime); Decision = "Holding for a better opening" + why; break;
-                default: { bool ok = motor.MoveTo(player.position, CoreExposed ? 4 : 2.5f); Decision = (ok ? "Approach" : "Route blocked / retry without walking through cover") + why; break; }
+                case RiftMove.Hold: motor.Stop(); FaceShielded(Time.deltaTime); Decision = "Holding for a better opening" + why; break;
+                default: { bool ok = motor.MoveTo(CutOffPoint(), CoreExposed ? 4 : 2.5f); Decision = (ok ? "Approach, cutting off the usual escape side" : "Route blocked / retry without walking through cover") + why; break; }
             }
         }
         void Enter(RiftAction action)
         {
+            if (action != RiftAction.Cannon) cannonTarget = null;
             Action = action; clock = previous = 0; damagedCount = 0; landingWarned = false; motor.Stop(); signals.Clear();
             if (player != null) attackBand = RiftAttackLearner.Band(Planar(transform.position, player.position));
             string clip = CoreExposed ? "RW_CoreIdle" : "RW_Idle"; bool loop = true;
             switch (action)
             {
                 case RiftAction.Pursue: clip = CoreExposed ? "RW_CoreWalk" : "RW_Walk"; nextDecision = Time.time; break;
-                case RiftAction.Cannon: clip = "RW_CannonBurst"; cannonReady = Time.time + T.cannonCooldown; model.BeginResponse(RiftAttackKind.Cannon, player.position, transform.position); break;
-                case RiftAction.Slash: clip = "RW_BladeSlash"; bladeReady = Time.time + T.bladeCooldown; lockedAim = player.position; Face(lockedAim, 1); signals.Circle(transform.position, 2.7f, Color.red); model.BeginResponse(RiftAttackKind.Slash, player.position, transform.position); break;
-                case RiftAction.DoubleTeleport: clip = "RW_DoubleTeleportSlash"; teleportReady = Time.time + T.teleportCooldown; secondRearAt = .18f + T.rearDelay; model.BeginResponse(RiftAttackKind.DoubleTeleport, player.position, transform.position); break;
+                case RiftAction.Cannon: clip = "RW_CannonBurst"; cannonReady = Time.time + T.cannonCooldown * Scale; if (cannonTarget == null) cannonTarget = player; if (cannonTarget == player) model.BeginResponse(RiftAttackKind.Cannon, player.position, transform.position); break;
+                case RiftAction.Slash: clip = "RW_BladeSlash"; bladeReady = Time.time + T.bladeCooldown * Scale; lockedAim = player.position; Face(lockedAim, 1); signals.Circle(transform.position, 2.7f, Color.red); model.BeginResponse(RiftAttackKind.Slash, player.position, transform.position); break;
+                case RiftAction.DoubleTeleport: clip = "RW_DoubleTeleportSlash"; teleportReady = Time.time + T.teleportCooldown * Scale; secondRearAt = .18f + T.rearDelay; model.BeginResponse(RiftAttackKind.DoubleTeleport, player.position, transform.position); break;
                 case RiftAction.BreakLeft: clip = "RW_ArmBreakLeft"; break;
                 case RiftAction.BreakRight: clip = "RW_ArmBreakRight"; break;
                 case RiftAction.CoreOpen: clip = "RW_CoreOpen"; break;
-                case RiftAction.CoreTeleport: clip = "RW_CoreTeleportOut"; slamReady = Time.time + T.slamCooldown; model.BeginResponse(RiftAttackKind.Slam, player.position, transform.position); break;
+                case RiftAction.CoreTeleport: clip = "RW_CoreTeleportOut"; slamReady = Time.time + (directorEnabled ? director.SlamCooldown(T.slamCooldown) : T.slamCooldown); model.BeginResponse(RiftAttackKind.Slam, player.position, transform.position); break;
                 case RiftAction.Slam: clip = "RW_CoreSlam"; lockedAim = GroundPoint(player.position); break;
                 case RiftAction.Dying: clip = "RW_Death"; coreTarget.GetComponent<Collider>().enabled = false; break;
             }
             if (action != RiftAction.Pursue && action != RiftAction.Recover) loop = false;
             presenter.Play(clip, loop);
         }
+        float Scale => directorEnabled ? director.CooldownScale : 1;
+
+        // Tactic: shield the weak arm. When an arm is below half health and the player has been shooting it most,
+        // the boss angles its body up to 25 degrees so that arm turns away from the player.
+        void FaceShielded(float dt)
+        {
+            float offset = 0;
+            if (directorEnabled)
+            {
+                float left = model.PartPressure(RiftPart.LeftArm, Time.time), right = model.PartPressure(RiftPart.RightArm, Time.time);
+                if (LeftHealth > 0 && LeftHealth < armMaximum * ShieldBelow && left > right) offset = -ShieldAngle;      // turn left: left arm swings back
+                else if (RightHealth > 0 && RightHealth < armMaximum * ShieldBelow && right > left) offset = ShieldAngle;
+            }
+            Vector3 to = player.position - transform.position; to.y = 0;
+            if (to.sqrMagnitude < .01f) return;
+            Vector3 dir = Quaternion.Euler(0, offset, 0) * to.normalized;
+            Face(transform.position + dir * 5, dt);
+            ShieldOffset = offset;
+        }
+        public float ShieldOffset { get; private set; }
+
+        // Tactic: cut off. Approach the side the player usually strafes to instead of where they are now.
+        Vector3 CutOffPoint()
+        {
+            if (!directorEnabled) return player.position;
+            Vector3 to = player.position - transform.position; to.y = 0;
+            if (to.sqrMagnitude < .01f) return player.position;
+            Vector3 right = Vector3.Cross(Vector3.up, to.normalized);
+            return player.position + right * model.StrafeBias * CutOffDistance;
+        }
+
+        // Tactic: punish the healer. If Relay healed the player in the last 6 s, can be seen and is in cannon range, the
+        // cannon burst goes at Relay instead (at most once every 12 s; not in the desperate core phase).
+        bool TryPunishHealer(bool cannonAvailable)
+        {
+            if (!directorEnabled || !cannonAvailable || healer == null || !healer.Alive || director.Phase == RiftPhase.Desperate) return false;
+            if (Time.time - model.LastHealAt > HealerWindow || Time.time < healerPunishReady) return false;
+            float range = Planar(transform.position, healer.transform.position);
+            if (range > T.cannonRange || Physics.Linecast(transform.position + Vector3.up * 2.6f, healer.AimPoint, ~(1 << 8), QueryTriggerInteraction.Ignore)) return false;
+            cannonTarget = healer.transform; healerPunishReady = Time.time + HealerRearm; HealerPunishments++;
+            Enter(RiftAction.Cannon); Decision = $"Cannon at Relay / punish the healer (healed {Time.time - model.LastHealAt:F1} s ago)";
+            return true;
+        }
+
         void Face(Vector3 point, float dt)
         {
             Vector3 direction = point - transform.position; direction.y = 0;
@@ -275,7 +350,7 @@ namespace Skybreak.AI.RiftWarden
         void FireCannon(float secondsAfterLock)
         {
             if (LeftHealth <= 0) return;
-            Vector3 aim = Lead(lockPosition, lockVelocity, secondsAfterLock) + Vector3.up * 1.2f;
+            Vector3 aim = Lead(lockPosition, lockVelocity, secondsAfterLock) + Vector3.up * lockHeight;
             ShotsFired++; Vector3 from = leftTarget.AimPoint; Vector3 direction = (aim - from).normalized;
             if (audioCues != null) audioCues.Play(CombatSound.CannonShot);
             if (weaponFeedback != null) weaponFeedback.Fire();
@@ -289,7 +364,7 @@ namespace Skybreak.AI.RiftWarden
             signals.Shot(from, float.IsInfinity(closest) ? from + direction * 24 : from + direction * closest, new Color(2.2f, .25f, 3));
             signals.FollowMuzzle=leftTarget.transform;
             if (target != null && target.Team != Allegiance.Hostile) target.ReceiveDamage(target.MaximumHealth * T.cannonDamageFraction, transform);
-            learner.Record(RiftAttackKind.Cannon, attackBand, target != null && target == playerVitals);
+            if (cannonTarget == null || cannonTarget == player) learner.Record(RiftAttackKind.Cannon, attackBand, target != null && target == playerVitals);
         }
         bool SlashDamage(float radius) { if (RightHealth > 0) { if (audioCues != null) audioCues.Play(CombatSound.Slash); return AreaDamage(transform.position, radius, T.meleeDamageFraction, true); } return false; }
         // Returns true when the player was among those hit.
