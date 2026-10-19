@@ -116,31 +116,45 @@ Why reflexes: they are cheap and immediate, which matters in a dynamic world. Le
 
 A Mamdani FIS following the lecture pipeline: **fuzzify, apply rules (AND = min, OR = max), aggregate (max), defuzzify by centre of gravity (COG)**.
 
-**Inputs and membership functions** (trapezoid `[a,b,c,d]`, triangle `[a,b,c]`):
+**Inputs and membership functions** (trapezoid `[a,b,c,d]`, triangle `[a,b,c]`), as implemented in `RelayFuzzyModel.cs`:
 
 | Linguistic variable | Universe | Terms |
 |---|---|---|
-| `PlayerHealth` | 0–1 | Critical `[0,0,.15,.3]`, Low `[.15,.35,.55]`, Healthy `[.45,.7,1,1]` |
-| `ThreatDistance` (to the player) | 0–20 m | Near `[0,0,4,8]`, Medium `[5,10,15]`, Far `[12,16,20,20]` |
-| `HealthTrend` (player loss per second) | 0–.2 | Stable `[0,0,.01,.03]`, Dropping `[.02,.05,.08]`, Plummeting `[.06,.1,.2,.2]` |
+| `PlayerHealth` | 0–1 | Critical `[0,0,.15,.3]`, Low `[.2,.45,.7]`, Healthy `[.55,.8,1,1]` |
+| `ThreatDistance` (threat to player) | 0–20 m | Near `[0,0,4,8]`, Medium `[5,10,15]`, Far `[12,16,20,20]`; 20 when no threat is visible |
+| `HealthTrend` (player health lost per second, over 2 s) | 0–.2 | Stable `[0,0,.01,.03]`, Dropping `[.02,.05,.08]`, Plummeting `[.06,.1,.2,.2]` |
 | `RelayHealth` | 0–1 | Weak `[0,0,.2,.4]`, Okay `[.3,.6,1,1]` |
 
-**Outputs** (each 0–1, terms Low `[0,0,.2,.4]`, Medium `[.3,.5,.7]`, High `[.6,.8,1,1]`): `HealUrgency`, `DefendUrgency`, `SelfPreservation`.
+**Outputs** (each 0–1, terms Low `[0,0,.2,.4]`, Medium `[.3,.5,.7]`, High `[.6,.8,1,1]`): `HealUrgency`, `DefendUrgency`, `SelfPreservation`. With no rule firing an output defaults to 0.
 
-**Rule base (initial):**
+**Rule base (implemented):**
 
-1. IF PlayerHealth is Critical THEN HealUrgency is High
-2. IF PlayerHealth is Low AND HealthTrend is Dropping THEN HealUrgency is High
-3. IF PlayerHealth is Low AND HealthTrend is Stable THEN HealUrgency is Medium
-4. IF PlayerHealth is Healthy THEN HealUrgency is Low
-5. IF ThreatDistance is Near AND PlayerHealth is NOT Critical THEN DefendUrgency is High
-6. IF ThreatDistance is Medium THEN DefendUrgency is Medium
-7. IF ThreatDistance is Far THEN DefendUrgency is Low
-8. IF HealthTrend is Plummeting THEN DefendUrgency is High
-9. IF RelayHealth is Weak AND ThreatDistance is Near THEN SelfPreservation is High
-10. IF RelayHealth is Okay THEN SelfPreservation is Low
+| Rule | IF | THEN |
+|---|---|---|
+| H1 | PlayerHealth is Critical | HealUrgency is High |
+| H2 | PlayerHealth is Low AND (HealthTrend is Dropping OR Plummeting) | HealUrgency is High |
+| H3 | PlayerHealth is Low | HealUrgency is Medium |
+| H4 | PlayerHealth is Healthy | HealUrgency is Low |
+| D1 | ThreatDistance is Near AND PlayerHealth is Healthy | DefendUrgency is High |
+| D2 | ThreatDistance is Near AND PlayerHealth is NOT Healthy | DefendUrgency is Medium |
+| D3 | ThreatDistance is Medium AND PlayerHealth is Healthy | DefendUrgency is Medium |
+| D4 | ThreatDistance is Medium AND PlayerHealth is NOT Healthy | DefendUrgency is Low |
+| D5 | ThreatDistance is Far | DefendUrgency is Low |
+| D6 | HealthTrend is Plummeting AND ThreatDistance is NOT Far | DefendUrgency is High |
+| S1 | RelayHealth is Weak AND ThreatDistance is Near | SelfPreservation is High |
+| S2 | RelayHealth is Weak AND ThreatDistance is Medium | SelfPreservation is Medium |
+| S3 | RelayHealth is Weak AND ThreatDistance is Far | SelfPreservation is Low |
+| S4 | RelayHealth is Okay | SelfPreservation is Low |
 
-Why fuzzy: "low health" and "near" are vague concepts with no correct crisp threshold. The current code's single `healThreshold = 0.25` is exactly the crisp-logic failure the lecture describes; fuzzy rules degrade smoothly instead.
+**Change from the first draft.** Tracing the draft rules by hand for "player at 50%, boss 7.5 m away" gave DefendUrgency ≈ 0.53 and HealUrgency ≈ 0.35, so a support robot would shoot instead of heal. The final rules make defending strong only while the player is Healthy (D1–D4), and every Low-health state gets at least Medium heal urgency (H3). The same case now gives HealUrgency 0.50 and DefendUrgency 0.24 (worked below); the lab scenario "heal at 50%" measured 0.50 and 0.18, its boss being slightly further away (`Docs/IS/Testing/Relay/step3_fuzzy_utility.txt`).
+
+**Worked example (player 50% health, no recent damage, boss 7.5 m from the player, Relay healthy):**
+- Fuzzification: PlayerHealth: Low = (.7 − .5)/.25 = 0.8, Healthy = 0, Critical = 0. ThreatDistance: Near = (8 − 7.5)/4 = 0.125, Medium = (7.5 − 5)/5 = 0.5. HealthTrend: Stable = 1.
+- Firing: H3 = 0.8 (Medium); H2 = min(0.8, 0) = 0; D2 = min(0.125, 1 − 0) = 0.125 (Medium); D4 = min(0.5, 1) = 0.5 (Low).
+- Aggregation: HealUrgency {Medium 0.8}; DefendUrgency {Medium 0.125, Low 0.5}.
+- COG: HealUrgency = 0.50 (the clipped Medium triangle is symmetric about 0.5); DefendUrgency = 0.24 (most of the mass is in the Low set, capped at 0.5).
+
+Why fuzzy: "low health" and "near" are vague concepts with no correct crisp threshold. The step-2 code's single `healThreshold = 0.25` is exactly the crisp-logic failure the lecture describes; fuzzy rules degrade smoothly instead.
 
 ### 4.5 Layer 3 — Expected-utility selection (Lecture 03)
 
@@ -148,11 +162,13 @@ Why fuzzy: "low health" and "near" are vague concepts with no correct crisp thre
 
 | Action | U(a) | P(success \| a, state) |
 |---|---|---|
-| Heal | `HealUrgency` | 1 if in heal range with line of sight and the heal is ready; otherwise 0 when on cooldown, and `0.7 × reachable` when it would first need to move |
-| Defend | `DefendUrgency × threatConfidence` | Line of sight to a vulnerable target and attack ready; scaled down by the share of the target's parts that are shielded |
-| Retreat | `SelfPreservation` | Reachable safe point found (layer 5) |
-| Follow | `0.2 + 0.4 × clamp(distanceToPlayer / 9)` | Path to the player exists |
-| Reposition | `0.3 × exposure` of the current spot | A better spot exists (layer 5 improvement > 0.1) |
+| Heal | `HealUrgency` | 0 if the player is down or the heal is on cooldown; 1 if Relay is in heal range with line of sight; 0.7 if it must fly into range first |
+| Defend | `DefendUrgency` (only a currently visible, vulnerable target, so threat confidence = 1) | 0 without a target or on cooldown; 1 if the target is within attack range; 0.6 if Relay must reposition first |
+| Retreat | `SelfPreservation` | 1 if a threat was seen within the memory window, else 0 (step 5 adds "a reachable safe spot exists") |
+| Follow | `0.2 + 0.4 × clamp(distanceToPlayer / 9)` | 1 (always possible; the fallback action) |
+| Reposition | added in step 5: `0.3 × exposure` of the current spot | a better spot exists (layer 5 improvement > 0.1) |
+
+An action with EU 0 is never chosen over Follow. Ties go to Retreat, then Heal, Defend, Follow. The old linear-score fields in `RelayTuning` (`healThreshold`, `followBase`, `retreatUtility`, …) are no longer read by Relay.
 
 Outcomes are uncertain because the boss and player act unpredictably, and threats come from a memory with confidence below 1. That is why utilities are weighted by probability instead of used directly: this is the lecture's expected-utility formulation.
 

@@ -8,8 +8,9 @@ namespace Skybreak.AI.Relay
 
     // Relay's agent program (Docs/IS/AgentDesign/Relay/RELAY_DESIGN.md): a layered (subsumption) agent.
     //   Layer 0  RelayReflexes   - condition-action rules that override everything (checked every frame)
-    //   Layer 1  RelayPerception - sensors + internal state (threat memory) for a partially observable world
-    //   Layer 3  RelayUtility    - utility scores per action and the selection rule
+    //   Layer 1  RelayPerception - sensors + internal state (threat memory, health trend) for a partially observable world
+    //   Layer 2  RelayFuzzyModel - fuzzy inference: how urgent healing, defending and self-preservation are
+    //   Layer 3  RelayUtility    - expected utility per action and the selection rule
     // This class runs the decision cycle and owns the actuators (movement, heal beam, defensive shot).
     public sealed class RelayBrain : DamageSink
     {
@@ -26,6 +27,12 @@ namespace Skybreak.AI.Relay
         public float HealScore { get; private set; }
         public float DefendScore { get; private set; }
         public float RetreatScore { get; private set; }
+        // Layer 2 outputs (0..1) and the full inference trace of the last cycle, for the debug overlay
+        public float HealUrgency { get; private set; }
+        public float DefendUrgency { get; private set; }
+        public float SelfPreservation { get; private set; }
+        public Skybreak.AI.Algorithms.Fuzzy.FuzzyResult LastAssessment => fuzzy.Last;
+        public RelayPercept LastPercept { get; private set; }
         public int HealsApplied { get; private set; }
         public int AttacksApplied { get; private set; }
         public override Allegiance Team => Allegiance.Friendly;
@@ -36,6 +43,8 @@ namespace Skybreak.AI.Relay
         void ApplyTuning(bool resetHealth) { if (resetHealth) maximumHealth=T.maximumHealth; healAmount=T.healAmount; healCooldown=T.healCooldown; attackCooldown=T.attackCooldown; }
         float health, nextSense, healReady, attackReady, signalOff;
         readonly RelayPerception perception = new RelayPerception();
+        readonly RelayFuzzyModel fuzzy = new RelayFuzzyModel();
+        RelayAction lastChoice = RelayAction.Follow;   // what layer 3 chose last cycle (before any Reposition fallback)
 
         void Start()
         {
@@ -55,7 +64,7 @@ namespace Skybreak.AI.Relay
             if (!Alive || amount <= 0) return 0;
             float before = health; health = Mathf.Min(maximumHealth, health + amount); return health - before;
         }
-        public void ResetSupport() { ApplyTuning(true); health = maximumHealth; nextSense = healReady = attackReady = 0; perception.Forget(); Action = RelayAction.Follow; signals.Clear(); }
+        public void ResetSupport() { ApplyTuning(true); health = maximumHealth; nextSense = healReady = attackReady = 0; perception.Forget(); lastChoice = Action = RelayAction.Follow; signals.Clear(); }
 
         void Update()
         {
@@ -69,14 +78,20 @@ namespace Skybreak.AI.Relay
             nextSense = Time.time + T.senseInterval; SenseAndDecide();
         }
 
-        // One deliberative cycle: sense (layer 1), score and select (layer 3), then act.
+        // One deliberative cycle: sense (layer 1), assess (layer 2), score and select (layer 3), then act.
         public void SenseAndDecide()
         {
             ApplyTuning(false);
             var percept = perception.Sense(this, player, playerVitals, T, Time.time);
-            var scores = RelayUtility.Score(percept, T, playerVitals != null && playerVitals.Alive, Time.time >= healReady, Time.time >= attackReady);
+            LastPercept = percept;
+            var urgency = fuzzy.Assess(percept.playerHealth01, percept.threatToPlayer, percept.healthTrend, percept.ownHealth01);
+            HealUrgency = (float)urgency[RelayFuzzyModel.HealUrgency];
+            DefendUrgency = (float)urgency[RelayFuzzyModel.DefendUrgency];
+            SelfPreservation = (float)urgency[RelayFuzzyModel.SelfPreservation];
+            var scores = RelayUtility.Score(percept, urgency, playerVitals != null && playerVitals.Alive, Time.time >= healReady, Time.time >= attackReady, lastChoice);
             FollowScore = scores.follow; HealScore = scores.heal; DefendScore = scores.defend; RetreatScore = scores.retreat;
-            switch (RelayUtility.Select(scores, percept.threat != null))
+            lastChoice = RelayUtility.Select(scores, percept.threat != null);
+            switch (lastChoice)
             {
                 case RelayAction.Retreat: Retreat(percept); break;
                 case RelayAction.Heal: Heal(percept); break;
@@ -88,7 +103,7 @@ namespace Skybreak.AI.Relay
         // ---------------------------------------------------------------- actuators
         void Retreat(in RelayPercept p)
         {
-            Action = RelayAction.Retreat; Decision = "Own health below retreat threshold + recent threat";
+            Action = RelayAction.Retreat; Decision = "Retreat / self-preservation has the highest expected utility (recent threat)";
             Vector3 away = transform.position - p.threatMemory; away.y = 0;
             if (away.sqrMagnitude < .1f) away = -player.forward;
             if (!motor.MoveTo(transform.position + away.normalized * 4, .5f)) { Action = RelayAction.Reposition; Decision = "Retreat blocked / seek player-side safe position"; motor.MoveTo(player.position - player.forward * 2, 1); }
@@ -96,8 +111,8 @@ namespace Skybreak.AI.Relay
 
         void Heal(in RelayPercept p)
         {
-            Action = RelayAction.Heal; Decision = "Player health need exceeds threshold / healing available";
-            if (p.distanceToPlayer <= T.healRange && Visible(AimPoint, playerVitals, transform))
+            Action = RelayAction.Heal; Decision = "Heal / player's fuzzy heal urgency has the highest expected utility";
+            if (p.canHealNow)
             { motor.Stop(); if (playerVitals.RestoreHealth(healAmount) > 0) { HealsApplied++; healReady = Time.time + healCooldown; signals.Beam(AimPoint, playerVitals.AimPoint, Color.cyan); signalOff = Time.time + .45f; if (audioCues != null) audioCues.Play(CombatSound.Heal, .6f); } }
             else if (!motor.MoveTo(player.position, Mathf.Min(2.2f, T.healRange * .75f))) { Action = RelayAction.Reposition; Decision = "Heal target unreachable / retry safely"; }
         }
@@ -105,7 +120,7 @@ namespace Skybreak.AI.Relay
         void Defend(in RelayPercept p)
         {
             var threat = p.threat;
-            Action = RelayAction.Defend; Decision = "Visible threat near player / defensive burst available";
+            Action = RelayAction.Defend; Decision = "Defend / visible threat endangers the player most";
             if (Vector3.Distance(AimPoint, threat.AimPoint) <= T.attackRange)
             { motor.Stop(); signals.Beam(AimPoint, threat.AimPoint, Color.cyan); signalOff = Time.time + .2f; threat.ReceiveDamage(T.attackDamage, transform); AttacksApplied++; attackReady = Time.time + attackCooldown; }
             else if (!motor.MoveTo(threat.transform.position, Mathf.Min(8, T.attackRange * .75f))) { Action = RelayAction.Reposition; Decision = "Firing position blocked / follow player"; motor.MoveTo(player.position, 3); }
