@@ -13,6 +13,7 @@ static class Program
         Check(new WorldGraph().Nearest(new Point())==-1,"empty graph is safe");
         SearchAndBeliefs();
         DecisionsAndTactics();
+        SyntaxChecks.Run();
         Console.WriteLine("TOTAL "+passed);
     }
     static void DecisionsAndTactics()

@@ -44,7 +44,7 @@ namespace Skybreak.Warden.Core
                 Scores[(int)Intent.Flank]=w.FlankBase+w.FlankQuality*C(s.FlankQuality)-w.TravelPenalty*cost;
             if(s.HasRetreat&&health<.35&&confidence>.08)
                 Scores[(int)Intent.Retreat]=w.RetreatBase+w.RetreatNeed*(1-health)+.05*C(s.RetreatQuality);
-            if(s.Visible&&s.InRange)Scores[(int)Intent.Attack]=w.AttackBase+w.AttackHealth*health;
+            if(s.Visible&&s.InRange)Scores[(int)Intent.Attack]=w.AttackBase+w.AttackHealth*health+.12*danger;
             int best=0;
             for(int i=1;i<(int)Intent.Disabled;i++)if(Scores[i]>Scores[best])best=i;
             bool feasible=!double.IsNegativeInfinity(Scores[(int)Current]);
