@@ -62,6 +62,7 @@ namespace Skybreak.PhysicsInteraction
         bool originalGravity;
         bool originalKinematic;
         float propBoundingRadius = 0.4f;
+        int pickUpFrame = -1;
 
         public PropState State => state;
         public bool IsCarried => state == PropState.Carried;
@@ -104,7 +105,8 @@ namespace Skybreak.PhysicsInteraction
 
         void Update()
         {
-            if (state != PropState.Carried) return;
+            // Skip the frame it was picked up, so the same F press doesn't drop it again
+            if (state != PropState.Carried || Time.frameCount == pickUpFrame) return;
 
             var keyboard = Keyboard.current;
             var mouse = Mouse.current;
@@ -150,6 +152,7 @@ namespace Skybreak.PhysicsInteraction
         public void PickUp(GameObject actor)
         {
             if (state == PropState.Carried || actor == null) return;
+            pickUpFrame = Time.frameCount;
 
             // Retrieve camera from actor or main camera
             viewCamera = actor.GetComponentInChildren<Camera>();
