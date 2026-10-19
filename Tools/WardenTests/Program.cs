@@ -12,7 +12,34 @@ static class Program
         g.SetLink(0,1,false,8); Check(g.Version==v+1,"unchanged door does not invalidate routes");
         Check(new WorldGraph().Nearest(new Point())==-1,"empty graph is safe");
         SearchAndBeliefs();
+        DecisionsAndTactics();
         Console.WriteLine("TOTAL "+passed);
+    }
+    static void DecisionsAndTactics()
+    {
+        var d=new Decision(); var s=new Situation{Alive=true,Health=1,CanPatrol=true};
+        Check(d.Choose(s,0)==Intent.Patrol,"quiet patrol");
+        s.Visible=true;s.InRange=true;s.Confidence=1;
+        Check(d.Choose(s,1)==Intent.Attack,"visible in-range target permits attack");
+        s.Visible=false;s.InRange=false;s.HasInvestigation=true;
+        Check(d.Choose(s,1.01)==Intent.Investigate,"lost target cancels attack despite commitment");
+        s.HasRetreat=true;s.Health=.1;s.RetreatQuality=1;
+        Check(d.Choose(s,1.02)==Intent.Retreat,"critical health interrupts commitment");
+        s.Alive=false;
+        Check(d.Choose(s,1.03)==Intent.Disabled,"death overrides every utility");
+        s=new Situation{Alive=true,Health=1,HasIntercept=true,ObjectiveDanger=1};
+        Check(d.Choose(s,2)==Intent.Intercept,"objective alarm selects interception");
+        s=new Situation{Alive=true,Health=1,HasInvestigation=true,Confidence=0,CanPatrol=true};
+        Check(d.Choose(s,3)==Intent.Patrol,"expired evidence returns to patrol");
+        var g=new WorldGraph();for(int i=0;i<6;i++)g.Add(new Point(i,0,0));
+        for(int i=0;i<5;i++)g.Connect(i,i+1);
+        var points=new[]{new TacticalPoint(true,1),new TacticalPoint(true,2),new TacticalPoint(true,1),
+            new TacticalPoint(true,4),new TacticalPoint(true,8),new TacticalPoint(false,999)};
+        Check(TacticalSearch.Climb(g,points,42,0,30)==4,"random restarts escape inferior local peak");
+        Check(TacticalSearch.Climb(g,new TacticalPoint[6],1)==-1,"no feasible cover returns no target");
+        Check(TacticalSearch.Climb(g,points,42,0,30)==TacticalSearch.Climb(g,points,42,0,30),"tactics deterministic with seeded randomness");
+        g.SetLink(2,3,false,4);
+        Check(double.IsPositiveInfinity(TacticalSearch.TravelCosts(g,0)[4]),"unreachable tactical points excluded by travel cost");
     }
     static void SearchAndBeliefs()
     {
