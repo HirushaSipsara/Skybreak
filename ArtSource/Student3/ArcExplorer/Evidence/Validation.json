@@ -1,0 +1,16 @@
+{
+  "asset": "ArcExplorer",
+  "design_reference": "Existing shared ArcExplorer prefab design",
+  "meshes": 92,
+  "triangles": 10020,
+  "bones": 18,
+  "uv_mapped": true,
+  "weighted_vertices": "all; rigid per-part weights",
+  "height_metres": 1.9184999465942383,
+  "front": "Blender -Y; exported with -Z forward and Y up",
+  "animations": 0,
+  "unity_tested": false,
+  "fbx_roundtrip": "passed: 92 meshes, 18 bones, UVs and weights retained",
+  "fbx_height_metres": 1.9184999777826164,
+  "forearm_pose_test": "passed: wrist scanner follows forearm and rest pose restored"
+}
