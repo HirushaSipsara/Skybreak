@@ -3,5 +3,8 @@
   "triangles": 3140,
   "front": "-Y in Blender; verify +Z in Unity",
   "standalone_source": "CrystalEchoWarden_Standalone.blend",
-  "unity_import_tested": false
+  "unity_import_tested": false,
+  "animated_source": "CrystalEchoWarden_Animated.blend",
+  "bones": 12,
+  "animation_takes": 8
 }

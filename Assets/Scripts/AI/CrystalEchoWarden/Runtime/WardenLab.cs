@@ -117,6 +117,7 @@ namespace Skybreak.Warden
                 Debug.LogError("Crystal Echo Warden FBX resource missing; showing diagnostic capsule.",this);
             }
             foreach(var child in go.GetComponentsInChildren<Transform>())child.gameObject.layer=8;
+            var motion=go.AddComponent<WardenAnimation>();motion.brain=brain;motion.visual=visual.transform;motion.Initialize();
             var fx=go.AddComponent<WardenPresentation>();fx.brain=brain;fx.visual=visual.transform;
             foreach(var renderer in visual.GetComponentsInChildren<Renderer>())if(renderer.name.Contains("resonance"))fx.core=renderer;
             var line=new GameObject("Echo pulse").AddComponent<LineRenderer>();line.transform.SetParent(go.transform,false);line.positionCount=2;line.useWorldSpace=true;line.widthMultiplier=.045f;line.sharedMaterial=energy;line.enabled=false;fx.beam=line;

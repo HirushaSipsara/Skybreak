@@ -14,8 +14,21 @@ static class Program
         SearchAndBeliefs();
         DecisionsAndTactics();
         RegressionAndStress();
+        MovementAnimations();
         SyntaxChecks.Run();
         Console.WriteLine("TOTAL "+passed);
+    }
+    static void MovementAnimations()
+    {
+        Check(MotionChoice.Choose(true,false,false,false,0,0)==MotionClip.Idle,"blocked stationary actor uses idle despite a requested path");
+        Check(MotionChoice.Choose(true,false,false,false,2.8,0)==MotionClip.Glide,"actual forward movement selects glide");
+        Check(MotionChoice.Choose(true,false,false,false,1,-180)==MotionClip.TurnLeft&&MotionChoice.Choose(true,false,false,false,1,180)==MotionClip.TurnRight,"turn direction selects matching bank clip");
+        Check(MotionChoice.Choose(true,false,false,true,2,0)==MotionClip.Retreat&&MotionChoice.Choose(true,false,false,true,0,0)==MotionClip.Idle,"retreat animation requires real movement");
+        Check(MotionChoice.Choose(true,true,true,false,2,180)==MotionClip.Attack,"attack wind-up takes visual priority over hit and movement");
+        Check(MotionChoice.Choose(false,true,true,true,2,180)==MotionClip.Death,"death overrides all animation states");
+        Check(MotionChoice.Choose(true,false,true,false,2,0)==MotionClip.Hit,"non-attacking damage selects hit reaction");
+        Check(MotionChoice.TryName("CEW_Rig|CEW_Glide",out var named)&&named==MotionClip.Glide&&!MotionChoice.TryName("__preview__",out _),"FBX take prefixes normalize and unrelated clips are rejected");
+        Check(MotionChoice.Loops(MotionClip.Idle)&&!MotionChoice.Loops(MotionClip.Death)&&!MotionChoice.Loops(MotionClip.Attack),"locomotion loops while one-shot actions hold their final pose");
     }
     static void RegressionAndStress()
     {

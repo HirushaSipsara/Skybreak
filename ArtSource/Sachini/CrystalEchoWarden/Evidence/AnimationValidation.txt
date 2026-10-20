@@ -1,0 +1,29 @@
+PASS 12-bone rig
+PASS 30 mesh parts bound to this rig
+PASS Every mesh vertex has exactly one valid full-weight bone
+PASS Idle frame range
+PASS Idle loop seam matches
+PASS Idle contains changing skeletal poses
+PASS Glide frame range
+PASS Glide loop seam matches
+PASS Glide contains changing skeletal poses
+PASS TurnLeft frame range
+PASS TurnLeft loop seam matches
+PASS TurnLeft contains changing skeletal poses
+PASS TurnRight frame range
+PASS TurnRight loop seam matches
+PASS TurnRight contains changing skeletal poses
+PASS Retreat frame range
+PASS Retreat loop seam matches
+PASS Retreat contains changing skeletal poses
+PASS Attack frame range
+PASS Attack contains changing skeletal poses
+PASS Hit frame range
+PASS Hit contains changing skeletal poses
+PASS Death frame range
+PASS Death contains changing skeletal poses
+PASS All clips keep Root stationary
+PASS Exported FBX contains exactly the eight named animation takes
+PASS FBX round trip retains rig and bones
+PASS FBX round trip retains all 30 mesh parts
+Unity import, playback transitions and Play Mode are still unverified.

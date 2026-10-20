@@ -35,6 +35,15 @@ PASS invalid sensor likelihood is rejected
 PASS small utility change respects commitment
 PASS urgent alarm interrupts commitment
 PASS four independent cores complete 1200 combined hearing/decision/path cycles
-CORE TIMING: 196.8 ms / 1200 cycles; excludes Unity physics, rendering and other agents.
-SYNTAX PASS: 16 C# files. Unity API type checking and Play Mode remain pending.
-TOTAL 37
+CORE TIMING: 156.1 ms / 1200 cycles; excludes Unity physics, rendering and other agents.
+PASS blocked stationary actor uses idle despite a requested path
+PASS actual forward movement selects glide
+PASS turn direction selects matching bank clip
+PASS retreat animation requires real movement
+PASS attack wind-up takes visual priority over hit and movement
+PASS death overrides all animation states
+PASS non-attacking damage selects hit reaction
+PASS FBX take prefixes normalize and unrelated clips are rejected
+PASS locomotion loops while one-shot actions hold their final pose
+SYNTAX PASS: 19 C# files. Unity API type checking and Play Mode remain pending.
+TOTAL 46

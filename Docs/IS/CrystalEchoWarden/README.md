@@ -7,12 +7,13 @@ Branch: `sachini-ISagent-crystal-echo-warden`. Base: `main` at `0c4da35`.
 ## What is delivered
 
 - Approved refined Blender model, standalone source and FBX export: 30 mesh parts, 3,140 triangles.
+- A 12-bone animation rig with eight clips for hovering, gliding, turning, retreat, attack, hit and defeat. See [Animations.md](Animations.md).
 - Engine-independent C# graph, A*, acoustic search, Bayesian beliefs, utility decisions and constrained random-restart hill climbing.
 - Unity adapters for perception, movement, damage, crystal alarms, footsteps and visual feedback.
 - A standalone FPS lab that builds its layout and actors when Play Mode starts.
 - Local regression tests and a Unity Editor smoke-check menu.
 
-**Validation status:** 37 core checks passed, including 150 randomized graph comparisons and 1,200 combined cycles across four independent cores. All 16 agent/editor C# files passed syntax parsing. Unity is unavailable on the development machine; Unity API compilation, Play Mode, FBX appearance and full team gameplay are still unverified. See [Validation.md](Validation.md).
+**Validation status:** The core and movement-selection test results are recorded in `CoreTestResults.txt`, including 150 randomized graph comparisons and 1,200 combined cycles across four independent cores. Blender rig/export checks are recorded separately in the animation evidence. Unity is unavailable on the development machine; Unity API compilation, Play Mode, Unity FBX appearance and full team gameplay are still unverified. See [Validation.md](Validation.md).
 
 ## Open the lab
 
@@ -42,6 +43,8 @@ The lab weapon is a ray-based test weapon with a crosshair. It does not include 
 | Purpose | Project-relative location |
 | --- | --- |
 | Clean Blender source | `ArtSource/Sachini/CrystalEchoWarden/Source/CrystalEchoWarden_Standalone.blend` |
+| Rigged animation source | `ArtSource/Sachini/CrystalEchoWarden/Source/CrystalEchoWarden_Animated.blend` |
+| Animated preview | `ArtSource/Sachini/CrystalEchoWarden/Evidence/CrystalEchoWarden_Movement.gif` |
 | Refined preview | `ArtSource/Sachini/CrystalEchoWarden/Evidence/CrystalEchoWarden_Refined.png` |
 | Source FBX | `ArtSource/Sachini/CrystalEchoWarden/Exports/CrystalEchoWarden.fbx` |
 | Unity model resource | `Assets/Resources/CrystalEchoWarden/CrystalEchoWarden.fbx` |

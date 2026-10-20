@@ -2,15 +2,17 @@
 
 ## Executed locally
 
-On 20 October 2026, the .NET 8 harness compiled with zero warnings/errors and passed 37 checks. It includes shortest paths, dynamic doors, sealed goals, invalid inputs, expansion budgets, Bayesian updates, conflicting/stale evidence, normalization, utility transitions, critical retreat, local-search restarts and unavailable cover.
+On 20 October 2026, the .NET 8 harness compiled with zero warnings/errors and passed 46 checks. It includes shortest paths, dynamic doors, sealed goals, invalid inputs, expansion budgets, Bayesian updates, conflicting/stale evidence, normalization, utility transitions, critical retreat, local-search restarts, unavailable cover and nine movement-animation selection checks.
 
 The randomized regression compares A* cost and legal route edges against uniform-cost/Dijkstra results on 150 weighted graphs with changing links. The stress check completes 1,200 combined perception-belief/decision/route cycles across four independent cores on a 144-node graph. Its elapsed time excludes Unity physics, rendering, input, animation and the other students' agents. It is **not an FPS benchmark**.
 
-Roslyn also parses all 16 agent/editor C# files as C# 9. This catches syntax errors but does not resolve Unity APIs or compile the Unity project. The core is compiled separately against .NET 8; Unity API/assembly compatibility remains to be tested in the editor.
+Roslyn also parses all 19 agent/editor C# files as C# 9. This catches syntax errors but does not resolve Unity APIs or compile the Unity project. The core is compiled separately against .NET 8; Unity API/assembly compatibility remains to be tested in the editor.
 
 Recorded console output: [CoreTestResults.txt](CoreTestResults.txt).
 
-`python Tools/WardenTests/validate_assets.py` also passed: 25 agent assets/folders have unique metadata, the lab's bootstrap script reference resolves, and the Unity FBX resource is byte-identical to the exported source. This validates file wiring, not Unity's model import.
+`python Tools/WardenTests/validate_assets.py` also passed: 28 agent assets/folders have unique metadata, the lab's bootstrap script reference resolves, and the Unity FBX resource is byte-identical to the exported source. This validates file wiring, not Unity's model import.
+
+Blender checks passed for the 12-bone rig, full rigid vertex weights, eight changing skeletal actions, matching loop endpoints and a stationary root. The exported FBX contains exactly eight named takes; importing it back into Blender retained all 12 bones and 30 mesh parts. Results are saved in `ArtSource/Sachini/CrystalEchoWarden/Evidence/AnimationValidation.txt`. A 64-frame labelled review GIF was rendered from the authored animations. These checks do not replace Unity animation playback testing.
 
 To repeat from PowerShell, first change into `Tools/WardenTests` so its SDK selection applies:
 

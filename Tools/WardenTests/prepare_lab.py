@@ -10,8 +10,9 @@ guid=lambda p: uuid.uuid5(uuid.NAMESPACE_URL,'skybreak/sachini/'+p).hex
 reference=(root/'Assets/Models/Custom/RiftWarden/RiftWarden.fbx.meta').read_text()
 import re
 reference=re.sub(r'^guid: .*$', 'guid: '+guid(target.relative_to(root).as_posix()), reference, flags=re.M)
-reference=re.sub(r'importAnimation: 1','importAnimation: 0',reference)
-reference=re.sub(r'animationType: [0-9]+','animationType: 0',reference)
+reference=re.sub(r'importAnimation: [0-9]+','importAnimation: 1',reference)
+reference=re.sub(r'animationType: [0-9]+','animationType: 1',reference)
+reference=re.sub(r'animationCompression: [0-9]+','animationCompression: 0',reference)
 Path(str(target)+'.meta').write_text(reference)
 lab=root/'Assets/Scenes/Tests/CrystalEchoWarden/CrystalEchoWardenLab.unity'
 lab.parent.mkdir(parents=True,exist_ok=True)

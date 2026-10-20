@@ -34,6 +34,8 @@ namespace Skybreak.WardenEditor
                 Require(Resources.Load<GameObject>("CrystalEchoWarden/CrystalEchoWarden")!=null,"FBX model imports as a Unity resource",report);
                 Require(lab.Map.Graph!=null&&lab.Map.Graph.Count>0,"Navigation graph builds",report);
                 var brain=lab.Wardens[0];
+                Require(brain.GetComponent<WardenAnimation>()!=null&&brain.GetComponent<WardenAnimation>().Ready,
+                    "All eight skeletal clips import and bind to the visual model",report);
                 Require(brain.Senses.target==lab.Player&&brain.Motor.map==lab.Map,"Perception and movement references are connected",report);
                 var g=lab.Map.Graph;
                 int left=g.Nearest(new Point(-4,1,0)),right=g.Nearest(new Point(4,1,0));

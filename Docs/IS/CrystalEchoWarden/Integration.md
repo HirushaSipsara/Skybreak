@@ -18,7 +18,7 @@ Create a root with `CharacterController`, `WardenMotor`, `WardenPerception`, `Wa
 
 Assign the shared map to brain, motor and perception. Assign the noise bus and actual player `DamageSink` to perception; assign the protected `WardenObjective` to the brain. Assign visual root, resonance-core renderer and pulse `LineRenderer` to presentation. Set URP materials using the lab's cyan, amber and metal mapping as a starting point. Save a reusable prefab in Unity after verifying its appearance; bind scene services and target references on each instance. No prebuilt Unity prefab is claimed in this delivery.
 
-Visual bobbing, core colours and beams are separate from the AI. Removing presentation must leave decisions and damage functional. The model has rigid parts rather than a skeletal animation rig.
+The model now has a 12-bone rig and eight skeletal clips. Add `WardenAnimation` on the gameplay root and assign its brain and FBX visual root; the lab does this automatically. It drives posing from actual movement and combat state. Core colours and beams remain separate from the AI. Removing visual components must leave decisions and damage functional. See [Animations.md](Animations.md).
 
 ## Player combat and sound
 

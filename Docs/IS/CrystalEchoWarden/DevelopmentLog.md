@@ -8,7 +8,8 @@ This records actual implementation stages. Consult Git for author and timestamp;
 | 2 | `e4d106f` | Bounded A*, acoustic attenuation, normalized Bayesian beliefs and evidence decay. |
 | 3 | `0bbd7d7` | Utility decisions, commitment rules, constrained tactical candidates and random-restart hill climbing. |
 | 4 | `0d19d68` | Unity sensors, movement, damage, presentation, model resource and a standalone FPS lab. |
-| 5 | See commit containing this file | Regression/stress cases, firing-transition fix, safe death/reset handling, Unity smoke-check menu and theory/integration/validation documents. |
+| 5 | `ca0ccbb` | Regression/stress cases, firing-transition fix, safe death/reset handling, Unity smoke-check menu and theory/integration/validation documents. |
+| Movement follow-up | See animation commit | 12-bone robot rig, eight authored clips, animated FBX, velocity-driven Unity clip playback and movement-selection tests. |
 
 ## Findings that changed the implementation
 

@@ -8,12 +8,10 @@ namespace Skybreak.Warden
         public Transform visual;
         public Renderer core;
         public LineRenderer beam;
-        Vector3 rest;
         MaterialPropertyBlock properties;
         float beamOff;
         void Start()
         {
-            if(visual!=null)rest=visual.localPosition;
             properties=new MaterialPropertyBlock();
             if(brain!=null)brain.Fired+=Shot;
         }
@@ -25,12 +23,7 @@ namespace Skybreak.Warden
         void Update()
         {
             if(brain==null)return;
-            if(visual!=null)
-            {
-                float bob=brain.Alive?Mathf.Sin(Time.time*2.5f)*.035f:0;
-                visual.localPosition=rest+Vector3.up*bob;
-                visual.localScale=Vector3.one*(brain.Alive?1:.6f);
-            }
+            // Skeletal clips own the pose; presentation handles only light and pulse effects.
             if(core!=null)
             {
                 Color color=!brain.Alive?Color.gray:brain.WindingUp?new Color(1,.35f,.03f):new Color(.02f,.8f,1);
