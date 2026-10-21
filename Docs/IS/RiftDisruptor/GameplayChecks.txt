@@ -1,35 +1,35 @@
 Rift Disruptor gameplay checks
-2026-10-21T09:53:58.9951248Z  Unity 6000.6.0f1  Null Device
+2026-10-21T13:05:45.1419289Z  Unity 6000.6.0f1  Null Device
 Scene Assets/Scenes/Tests/RiftDisruptor/RiftDisruptorLab.unity; player driven by script; agent code unmodified.
 
 PASS Hit-and-run cycle
-     actions: Move to strike anchor > Charge pulse (telegraph) > Release pulse > Phase-dash to escape anchor > Move to strike anchor; pulse hit True; player health 100 -> 80; relocated 15.7 m after release
-     state: Rift Disruptor 1 at (3.5,2.3) goal Hunt, step Move to strike anchor, sees False, line False, aim 178°, facts [PlayerKnown, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 5; "Hunt (requested): Move to strike anchor"
+     actions: Move to strike anchor > Charge pulse (telegraph) > Release pulse > Phase-dash to escape anchor; pulse hit True; player health 100 -> 80; relocated 14.6 m after release
+     state: Rift Disruptor 1 at (3.2,1.3) goal Disrupt, step Phase-dash to escape anchor, sees False, line False, aim 174°, facts [PlayerKnown, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 6; "Pulse hit"
 PASS Aim awareness drives evasion
-     Evade chosen True; peak aim pressure 1.00; in clear crosshair 39% of frames while the player tracked it
-     state: Rift Disruptor 1 at (6.1,-2.8) goal Hunt, step Investigate last known position, sees False, line False, aim 0°, facts [PlayerKnown, PulseReady, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 7; "Hunt (requested): Investigate last known position"
+     Evade chosen True; peak aim pressure 1.00; in clear crosshair 55% of frames while the player tracked it
+     state: Rift Disruptor 1 at (9.2,-2.1) goal Evade, step Phase-dash to escape anchor, sees False, line False, aim 0°, facts [PlayerKnown, PulseReady, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 7; "Evade (goal changed to Evade): Phase-dash to escape anchor"
 PASS Damage during the telegraph staggers the pulse
      charging observed True; shots 2; staggered 1; released 0; health 78
-     state: Rift Disruptor 1 at (-6.0,-8.7) goal Evade, step Phase-dash to escape anchor, sees False, line True, aim 14°, facts [PlayerKnown, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 5; "Evade (requested): Phase-dash to escape anchor"
+     state: Rift Disruptor 1 at (-6.3,-9.6) goal Evade, step Phase-dash to escape anchor, sees True, line True, aim 2°, facts [PlayerKnown, PlayerVisible, AtStrikePosition, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 7; "Evade (requested): Phase-dash to escape anchor"
 PASS Dodge learning adapts the telegraph
      observations 4, dodges 4; P(dodge) 0.73; charge 0.90 -> 0.81 s; strike 3.34 -> 3.07 m
-     state: Rift Disruptor 1 at (-11.6,-10.5) goal Disrupt, step Phase-dash to escape anchor, sees True, line True, aim 13°, facts [PlayerKnown, PlayerVisible, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 24; "Pulse dodged"
+     state: Rift Disruptor 1 at (-6.1,-0.9) goal Disrupt, step Phase-dash to escape anchor, sees True, line True, aim 165°, facts [PlayerKnown, PlayerVisible, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 21; "Pulse dodged"
 PASS Lost sight -> hunt from memory; closed door respected
      saw player first True; Hunt True; Investigate True; entered closed room False; nav version 1 -> 2; final goal Guard
-     state: Rift Disruptor 1 at (-8.1,5.9) goal Guard, step Patrol to next anchor, sees False, line False, aim 33°, facts [PulseReady, Concealed], replans 10; "Guard (periodic re-evaluation): Patrol to next anchor"
+     state: Rift Disruptor 1 at (-8.9,4.2) goal Guard, step Patrol to next anchor, sees False, line False, aim 28°, facts [PulseReady, Concealed], replans 9; "Guard (periodic re-evaluation): Patrol to next anchor"
 PASS Opening the door re-opens routes
      after opening: visible False, goal Guard, motor Moving
-     state: Rift Disruptor 1 at (3.9,-6.8) goal Guard, step Patrol to next anchor, sees False, line False, aim 22°, facts [PulseReady, Concealed], replans 17; "Guard (periodic re-evaluation): Patrol to next anchor"
+     state: Rift Disruptor 1 at (0.4,-4.7) goal Guard, step Patrol to next anchor, sees False, line False, aim 8°, facts [PulseReady, Concealed], replans 17; "Guard (periodic re-evaluation): Patrol to next anchor"
 PASS Three agents together
-     pulses 5; destination clashes 0; frames without a goal 3; decision cost avg 0.26 ms, worst 5.21 ms (editor, not a build benchmark)
-     state: Rift Disruptor 1 at (-6.0,-4.6) goal Guard, step Patrol to next anchor, sees False, line False, aim 180°, facts [PlayerKnown, PulseReady, Concealed], replans 10; "Guard (goal changed to Guard): Patrol to next anchor"
-     state: Rift Disruptor 2 at (-2.6,1.1) goal Disrupt, step Phase-dash to escape anchor, sees False, line False, aim 180°, facts [PlayerKnown, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 14; "Pulse hit"
-     state: Rift Disruptor 3 at (2.2,3.9) goal Guard, step Patrol to next anchor, sees False, line False, aim 180°, facts [PlayerKnown, Concealed], replans 14; "Guard (requested): Patrol to next anchor"
+     pulses 5; destination clashes 0; frames without a goal 3; decision cost avg 0.32 ms, worst 4.07 ms (editor, not a build benchmark)
+     state: Rift Disruptor 1 at (-5.8,-7.0) goal Guard, step Patrol to next anchor, sees False, line False, aim 180°, facts [PlayerKnown, PulseReady, Concealed], replans 12; "Guard (goal changed to Guard): Patrol to next anchor"
+     state: Rift Disruptor 2 at (-6.7,-8.0) goal Disrupt, step Phase-dash to escape anchor, sees False, line False, aim 180°, facts [PlayerKnown, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 15; "Pulse hit"
+     state: Rift Disruptor 3 at (1.2,2.8) goal Disrupt, step Phase-dash to escape anchor, sees False, line False, aim 180°, facts [PlayerKnown, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 15; "Pulse hit"
 PASS Defeat stops movement and attacks
      alive False; released after death 0; drift 0.000 m; motor Stopped
-     state: Rift Disruptor 1 at (-6.5,-9.8) goal none, step -, sees True, line True, aim 139°, facts [PlayerKnown, PlayerVisible, AtStrikePosition, PulseReady, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 4; "Disabled"
+     state: Rift Disruptor 1 at (-6.3,-9.8) goal none, step -, sees True, line True, aim 138°, facts [PlayerKnown, PlayerVisible, AtStrikePosition, PulseReady, Concealed, StrikeAnchorAvailable, EscapeAnchorAvailable], replans 6; "Disabled"
 PASS Player down -> no further attacks
      goal Guard; plan Patrol to next anchor
-     state: Rift Disruptor 1 at (0.4,-3.9) goal Guard, step Patrol to next anchor, sees False, line False, aim 180°, facts [PulseReady, Concealed], replans 4; "Guard (periodic re-evaluation): Patrol to next anchor"
+     state: Rift Disruptor 1 at (1.4,-4.5) goal Guard, step Patrol to next anchor, sees False, line False, aim 180°, facts [PulseReady, Concealed], replans 4; "Guard (periodic re-evaluation): Patrol to next anchor"
 
 SUMMARY: 9/9 scenarios passed

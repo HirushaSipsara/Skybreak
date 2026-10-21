@@ -85,6 +85,18 @@ AI assistance: Claude (Anthropic), through Claude Code. The agent concept (Rift 
 | 2026-10-21 | Shared `IPathFollower`/`PathResult` contract and a basic follower | AI-written | `Assets/Scripts/Core/Interfaces/IPathFollower.cs`, `Assets/Scripts/AgentMovement/BasicPathFollower.cs` |
 | 2026-10-21 | Self-building lab, 26 EditMode tests, 9 scripted Play Mode gameplay checks | AI-written; run in Unity batch mode | `Assets/Scenes/Tests/RiftDisruptor/`, `Assets/Tests/EditMode/DisruptorCore/`, `Docs/IS/RiftDisruptor/GameplayChecks.txt` |
 
+### Agent movement, rotation and animation (GV assessment)
+
+AI assistance: Claude (Anthropic), through Claude Code. The student supplied the visual reference for the mech and the Blender install, set the goal, and reviewed the work. The AI wrote the Blender build script, the Unity editor builders, the runtime motor and presenters, the checks and the documentation. AI assistance is recorded here rather than in the commit messages.
+
+| Date | Work | How | Evidence |
+|---|---|---|---|
+| 2026-10-21 | Rift Disruptor mech modelled from the student's reference: rigid parts on 20 joint pivots, merged to 18 renderers, 7.5k triangles; .blend, FBX, preview renders | AI-written Blender script | `ArtSource/Student4/RiftDisruptor/` |
+| 2026-10-21 | Unity import settings, URP materials, generated wear texture, seven in-place transform clips, Animator Controller, prefab | AI-written editor builder | `Assets/Editor/RiftDisruptor/RiftDisruptorAssetBuilder.cs`, `Assets/Animations/Disruptor/`, `Assets/Prefabs/Enemies/RiftDisruptor/` |
+| 2026-10-21 | `SmoothPathFollower` (movement budget, braking and corner speed, capped yaw, validation, blocked detection) and shared `AgentAnimationPresenter` | AI-written | `Assets/Scripts/AgentMovement/` |
+| 2026-10-21 | Disruptor presentation glue (events to Animator, glow), mech in the IS lab, `AgentMovementLab` scene | AI-written | `DisruptorVisuals.cs`, `Assets/Scenes/Tests/Student4Movement/` |
+| 2026-10-21 | 14 movement/animation checks, URP pose renders, GV design and optimisation document | AI-written; run in Unity batch mode | `Docs/GV/AgentMovement/` |
+
 ### Student 4's own contributions
 
 | Date | Contribution |
@@ -93,5 +105,6 @@ AI assistance: Claude (Anthropic), through Claude Code. The agent concept (Rift 
 | 2026-10-21 | Supplied the IS and GV briefs and the team's agent proposals; set the requirement that the agent fit the existing game alongside the other members' agents |
 | 2026-10-21 | Set the work order: IS agent first on `module/is-samith`, then GV movement and animation on `module/gv-samith` |
 | 2026-10-21 | Reviewed the implementation, design document and test evidence; chose not to let the AI commit, and committed the work in eight logical commits under own account |
+| 2026-10-21 | Chose the visual design for the mech (reference image: teal and cream armour, arm cannon, claw, orange vents); installed Blender 5.2 for the model build; merged the IS branch into `module/gv-samith` before the GV work |
 
 *Still to add:* own play testing in the lab (what you tried, what you observed) and any tuning or code changes you make yourself.
