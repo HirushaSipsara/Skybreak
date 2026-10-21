@@ -99991,6 +99991,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9170589434738375864, guid: e814d522b6a05ae41bf62b3a515c6118, type: 3}
   m_PrefabInstance: {fileID: 446087848}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &446440260
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 528339747}
+    m_Modifications:
+    - target: {fileID: 1047381120121374991, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_Name
+      value: Rift Disruptor C / loading court west
+      objectReference: {fileID: 0}
+    - target: {fileID: 8320392703240191455, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: grid
+      value: 
+      objectReference: {fileID: 1677739403}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.43935147
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.89831525
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+--- !u!4 &446440261 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+  m_PrefabInstance: {fileID: 446440260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &446595277
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -115354,6 +115420,42 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 132553843826603055, guid: f789aa7d60168db458c22ccc90199aab, type: 3}
   m_PrefabInstance: {fileID: 528239452}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &528339746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 528339747}
+  m_Layer: 0
+  m_Name: 21 / Student 4 Rift Disruptors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &528339747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528339746}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1677739404}
+  - {fileID: 1617657834}
+  - {fileID: 626720579}
+  - {fileID: 446440261}
+  - {fileID: 1986076960}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &528385271
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -144072,6 +144174,72 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3150221762992708590, guid: ce515fa2bfea3064f82d16fdd631b1f1, type: 3}
   m_PrefabInstance: {fileID: 626475907}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &626720578
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 528339747}
+    m_Modifications:
+    - target: {fileID: 1047381120121374991, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_Name
+      value: Rift Disruptor B / security hall south
+      objectReference: {fileID: 0}
+    - target: {fileID: 8320392703240191455, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: grid
+      value: 
+      objectReference: {fileID: 1677739403}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 41
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9974842
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.070889026
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+--- !u!4 &626720579 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+  m_PrefabInstance: {fileID: 626720578}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &627180043
 GameObject:
@@ -387979,6 +388147,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9170589434738375864, guid: e814d522b6a05ae41bf62b3a515c6118, type: 3}
   m_PrefabInstance: {fileID: 1617407364}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1617657833
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 528339747}
+    m_Modifications:
+    - target: {fileID: 1047381120121374991, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_Name
+      value: Rift Disruptor A / security hall north-west
+      objectReference: {fileID: 0}
+    - target: {fileID: 8320392703240191455, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: grid
+      value: 
+      objectReference: {fileID: 1677739403}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 58
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.4331887
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9013033
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+--- !u!4 &1617657834 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+  m_PrefabInstance: {fileID: 1617657833}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1617706646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -401261,6 +401495,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9170589434738375864, guid: e814d522b6a05ae41bf62b3a515c6118, type: 3}
   m_PrefabInstance: {fileID: 1677460691}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1677739402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1677739404}
+  - component: {fileID: 1677739403}
+  m_Layer: 0
+  m_Name: Disruptor nav grid / whole map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1677739403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677739402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09c8fbb5e45587644bc40370199962d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Skybreak.AI.Disruptor.DisruptorNavGrid
+  origin: {x: -18, y: 0, z: -9}
+  size: {x: 178, y: 216}
+  cellSize: 0.5
+  agentRadius: 0.65
+  agentHeight: 2.1
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  floorProbe: 2.5
+  watchDoorsAndBarricades: 1
+  watched: []
+  watchInterval: 0.25
+  drawGizmos: 1
+--- !u!4 &1677739404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677739402}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 528339747}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1678830415
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -467202,6 +467493,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 520054133868550235, guid: fb551c5c83ee288468a1d71a3879cd49, type: 3}
   m_PrefabInstance: {fileID: 1985745361}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1986076959
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 528339747}
+    m_Modifications:
+    - target: {fileID: 1047381120121374991, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_Name
+      value: Rift Disruptor D / loading court east
+      objectReference: {fileID: 0}
+    - target: {fileID: 8320392703240191455, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: grid
+      value: 
+      objectReference: {fileID: 1677739403}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.47185794
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.8816746
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+--- !u!4 &1986076960 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9127642579572952598, guid: 2b87ea72947371548a34d02fd2bf1498, type: 3}
+  m_PrefabInstance: {fileID: 1986076959}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1986624703
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -499811,3 +500168,4 @@ SceneRoots:
   - {fileID: 1240953664}
   - {fileID: 1762154172}
   - {fileID: 736455403}
+  - {fileID: 528339747}
