@@ -44,6 +44,7 @@
 
 # Visual Studio cache directory
 .vs/
+.vscode
 
 # Gradle cache directory
 .gradle/
@@ -133,4 +134,7 @@ InitTestScene*.unity*
 /resources/DungeonAssetLibrary/
 /resources/MapDecorationKit/
 
-.vscode
+# Crystal Echo Warden local test build output
+/Tools/WardenTests/bin/
+/Tools/WardenTests/obj/
+!/Tools/WardenTests/WardenTests.csproj
