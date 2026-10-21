@@ -53,6 +53,8 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         // ── Data ──────────────────────────────────────────────────────────────
 
+        public static VaultHoundGrid Instance { get; private set; }
+
         bool[] passable;  // flat row-major array: passable[z * width + x]
 
         /// <summary>Increments whenever <see cref="SetCellPassable"/> or
@@ -66,7 +68,16 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
-        void Awake() => Bake();
+        void Awake()
+        {
+            Instance = this;
+            Bake();
+        }
+
+        void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
 
         // ── Public API ────────────────────────────────────────────────────────
 
@@ -95,6 +106,33 @@ namespace Skybreak.AI.SawanIS.VaultHound
             if (!InBounds(x, z)) return;
             passable[z * width + x] = value;
             Version++;
+        }
+
+        /// <summary>Marks all grid cells intersecting the given world-space bounds as passable or blocked.
+        /// Increments Version so brains dynamically re-plan their paths.</summary>
+        public void SetAreaPassable(Bounds bounds, bool isPassable)
+        {
+            Vector2Int min = WorldToCell(bounds.min);
+            Vector2Int max = WorldToCell(bounds.max);
+
+            bool changed = false;
+            for (int z = min.y; z <= max.y; z++)
+            {
+                for (int x = min.x; x <= max.x; x++)
+                {
+                    if (InBounds(x, z))
+                    {
+                        int idx = z * width + x;
+                        if (passable[idx] != isPassable)
+                        {
+                            passable[idx] = isPassable;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+
+            if (changed) Version++;
         }
 
         /// <summary>Force a version bump without full rebake (use when many cells change).</summary>
