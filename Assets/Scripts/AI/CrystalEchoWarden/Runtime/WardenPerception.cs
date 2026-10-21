@@ -17,6 +17,7 @@ namespace Skybreak.Warden
         public int HeardCount {get;private set;}
         public string Evidence {get;private set;}="No evidence";
         public Vector3 Eye=>transform.TransformPoint(eyeOffset);
+        public void ResetForEncounter(){Belief=null;Visible=false;LastSeen=Vector3.zero;HeardCount=0;Evidence="No evidence";processedNoise=noise!=null?noise.LatestId:0;lastTick=Time.time;}
         long processedNoise;
         float lastTick;
         public bool CanSeeNow()

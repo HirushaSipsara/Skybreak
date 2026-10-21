@@ -1,0 +1,12 @@
+Four checked 16-point quiet patrol loops, radius 1.8m, root height 1.95m, speed 2.8m/s. Original utility selection, tactical goals and stationary charged attack retained. Graph: 223 nodes.
+Initial run with external combat active (guards 1 and 2 were defeated; this did not isolate quiet patrol):
+FAIL: crystal 1 travel=-39.4 degrees; radius error=8.931m; height error=0.000m; Defeated
+FAIL: crystal 2 travel=89.3 degrees; radius error=11.829m; height error=0.000m; Defeated
+PASS: crystal 3 travel=1631.3 degrees; radius error=0.071m; height error=0.000m; Patrol selected at 0.32 / node 192 / Found
+PASS: crystal 4 travel=1631.3 degrees; radius error=0.071m; height error=0.000m; Patrol selected at 0.32 / node 212 / Found
+Repeat with player input, Relay combat and incoming sensory events isolated during the quiet-patrol check; restored afterward:
+PASS: crystal 1 travel=1632.3 degrees; radius error=0.070m; height error=0.000m; Patrol selected at 0.32 / node 168 / Found
+PASS: crystal 2 travel=1634.3 degrees; radius error=0.093m; height error=0.000m; Patrol selected at 0.32 / node 188 / Found
+PASS: crystal 3 travel=1632.3 degrees; radius error=0.070m; height error=0.000m; Patrol selected at 0.32 / node 192 / Found
+PASS: crystal 4 travel=1652.5 degrees; radius error=0.070m; height error=0.000m; Patrol selected at 0.32 / node 213 / Found
+

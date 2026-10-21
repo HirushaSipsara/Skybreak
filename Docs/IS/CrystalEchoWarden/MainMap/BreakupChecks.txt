@@ -1,0 +1,3 @@
+PASS: lethal damage produces 30 correctly scaled falling model parts, hides the intact model and disables its controller. Debris ignores player collisions.
+PASS: debris and temporary meshes expire after the configured lifetime.
+PASS: a second defeat works and encounter restart immediately removes its debris and restores all four guards.

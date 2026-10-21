@@ -10,6 +10,9 @@ namespace Skybreak.Warden
         public WardenMap map;
         public WardenObjective objective;
         public float maximumHealth=90,attackRange=8,attackDamage=10,attackCooldown=1.8f,windupSeconds=.6f;
+        public float patrolRadius=9;
+        // Scene-authored quiet patrol only; evidence and combat keep their original goals.
+        public int[] patrolRoute=System.Array.Empty<int>();
         public DecisionWeights weights=new DecisionWeights();
         public bool showDebug=true;
         public override Allegiance Team=>Allegiance.Hostile;
@@ -26,7 +29,7 @@ namespace Skybreak.Warden
         public WardenMotor Motor {get;private set;}
         public event System.Action<Vector3,Vector3> Fired;
         float health,nextThink,attackReady,windupAt=-1;
-        int home=-1,patrolCursor,planSeed=17;
+        int home=-1,patrolCursor,routeCursor=-1,planSeed=17;
         static int nextStartOffset;
         double[] travel;
         void Awake()
@@ -36,6 +39,14 @@ namespace Skybreak.Warden
             // Spread newly spawned decision ticks without relying on Unity object identifiers.
             nextThink=Time.time+nextStartOffset*.04f;
             nextStartOffset=(nextStartOffset+1)%5;
+        }
+        public void ResetForEncounter()
+        {
+            health=maximumHealth;Mind=new Decision(weights);home=-1;Goal=-1;Shots=0;
+            nextThink=Time.time;attackReady=Time.time+1;windupAt=-1;patrolCursor=0;routeCursor=-1;
+            Motor.ResetForEncounter();Senses.ResetForEncounter();
+            GetComponent<CharacterController>().enabled=true;Status="Guard reset";
+            GetComponent<WardenPresentation>()?.ResetDefeatFx();
         }
         public override void ReceiveDamage(float amount,Transform source)
         {
@@ -62,7 +73,7 @@ namespace Skybreak.Warden
                 watch.Stop();LastTickMilliseconds=watch.Elapsed.TotalMilliseconds;
             }
             ResolveAttack();
-            if(Mind.Current==Intent.Guard||Mind.Current==Intent.Patrol&&Motor.Arrived)
+            if((Mind.Current==Intent.Guard||Mind.Current==Intent.Patrol)&&Motor.Arrived)
                 transform.Rotate(0,30*Time.deltaTime,0);
         }
         public void Think()
@@ -151,12 +162,13 @@ namespace Skybreak.Warden
                 case Intent.Retreat: selected=retreat;break;
                 case Intent.Intercept: selected=intercept;break;
                 case Intent.Patrol:
+                    if(patrolRoute.Length>0){selected=PatrolGoal();break;}
                     if(Goal<0||Motor.Arrived||Motor.Blocked)
                     {
                         for(int k=0;k<map.nodes.Length;k++)
                         {
                             patrolCursor=(patrolCursor+1)%map.nodes.Length;
-                            if(WorldGraph.Finite(travel[patrolCursor])&&travel[patrolCursor]>1&&Vector3.Distance(map.nodes[patrolCursor],map.nodes[guard])<9)break;
+                            if(WorldGraph.Finite(travel[patrolCursor])&&travel[patrolCursor]>1&&Vector3.Distance(map.nodes[patrolCursor],map.nodes[guard])<patrolRadius)break;
                         }
                         selected=patrolCursor;
                     }else selected=Goal;
@@ -167,6 +179,26 @@ namespace Skybreak.Warden
             Status=Mind.Reason+" / node "+selected+" / "+Motor.LastResult;
             // Face the suspected region at a search destination and let real vision clear it.
             if(Motor.Arrived&&intent==Intent.Investigate)transform.Rotate(0,45,0);
+        }
+        int PatrolGoal()
+        {
+            // Rejoin at the closest point after returning from another behaviour.
+            if(routeCursor<0||Goal!=patrolRoute[routeCursor])
+            {
+                float nearest=float.PositiveInfinity;
+                for(int i=0;i<patrolRoute.Length;i++)
+                {
+                    int n=patrolRoute[i];if(!map.Graph.Valid(n))continue;
+                    float distance=(map.nodes[n]-transform.position).sqrMagnitude;
+                    if(distance<nearest){nearest=distance;routeCursor=i;}
+                }
+                if(routeCursor<0)return -1;
+            }
+            int node=patrolRoute[routeCursor];
+            if(!map.Graph.Valid(node))return -1;
+            if((map.nodes[node]-transform.position).sqrMagnitude<.09f)
+                routeCursor=(routeCursor+1)%patrolRoute.Length;
+            return patrolRoute[routeCursor];
         }
         void ResolveAttack()
         {
