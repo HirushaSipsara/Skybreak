@@ -1,0 +1,12 @@
+{
+  "mesh_parts": 30,
+  "triangles": 3140,
+  "front": "-Y in Blender; verify +Z in Unity",
+  "standalone_source": "CrystalEchoWarden_Standalone.blend",
+  "unity_import_tested": true,
+  "unity_editor_version": "6000.6.0f1",
+  "unity_clip_binding_tested": true,
+  "animated_source": "CrystalEchoWarden_Animated.blend",
+  "bones": 12,
+  "animation_takes": 8
+}
