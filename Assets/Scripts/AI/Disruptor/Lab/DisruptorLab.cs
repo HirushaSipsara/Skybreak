@@ -11,6 +11,8 @@ namespace Skybreak.AI.Disruptor.Lab
     public sealed class DisruptorLab : MonoBehaviour
     {
         public bool threeDisruptors;
+        [Tooltip("The Rift Disruptor prefab (mech, smooth motor, animation). Without it a capsule placeholder is built.")]
+        public GameObject disruptorPrefab;
         public DisruptorNavGrid Grid { get; private set; }
         public DisruptorLabPlayer Player { get; private set; }
         public readonly List<DisruptorBrain> Disruptors = new List<DisruptorBrain>();
@@ -62,6 +64,8 @@ namespace Skybreak.AI.Disruptor.Lab
             gridObject.transform.SetParent(transform, false);
             Grid = gridObject.AddComponent<DisruptorNavGrid>();
             Grid.origin = new Vector3(-16, 0, -16); Grid.size = new Vector2Int(64, 64); Grid.cellSize = .5f;
+            if (disruptorPrefab != null && disruptorPrefab.TryGetComponent<CharacterController>(out var mech))
+            { Grid.agentRadius = mech.radius + .1f; Grid.agentHeight = mech.height; }   // clearance for the mech's shoulders
             Grid.watched.Add(Door.GetComponent<Collider>());
             gridObject.SetActive(true);
 
@@ -105,6 +109,14 @@ namespace Skybreak.AI.Disruptor.Lab
 
         public DisruptorBrain Spawn(Vector3 position)
         {
+            if (disruptorPrefab != null)
+            {
+                var mech = Instantiate(disruptorPrefab, position, Quaternion.LookRotation(PlayerSpawn - position), transform);
+                mech.name = "Rift Disruptor " + (Disruptors.Count + 1);
+                var b = mech.GetComponent<DisruptorBrain>(); b.grid = Grid; b.player = Player.transform; b.playerVitals = Player;
+                Disruptors.Add(b);
+                return b;
+            }
             var go = new GameObject("Rift Disruptor " + (Disruptors.Count + 1)); go.layer = 8;
             go.transform.SetParent(transform, false); go.transform.position = position;
             go.transform.rotation = Quaternion.LookRotation(PlayerSpawn - position);
