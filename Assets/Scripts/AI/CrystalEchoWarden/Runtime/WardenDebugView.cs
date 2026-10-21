@@ -52,7 +52,7 @@ namespace Skybreak.Warden
 
             InitStyles();
 
-            int id = GetInstanceID();
+            int id = GetEntityId().GetHashCode();
             int offsetIndex = Mathf.Abs(id % 4);
             float xPos = Screen.width - 360;
             float yPos = 12 + offsetIndex * 190;
