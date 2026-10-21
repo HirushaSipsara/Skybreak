@@ -1,111 +1,149 @@
-# Skybreak — The Descent
+# Skybreak: The Descent
 
-Shared Unity coursework project for SE3032 Graphics & Visualization and SE3062 Intelligent Systems. The current direction is a single-player stylised shooter in one continuous facility: entrance → first encounter → winding passage → second encounter and security rooms → final chamber.
+A single-player science-fantasy shooter built in Unity for **SE3032 Graphics & Visualization** and **SE3062 Intelligent Systems**. Explore the Aurora Vault with Arc and Relay, fight its mechanical guardians, and confront Rift Warden in the final chamber.
 
-## Game story and mission
+**Main scene:** [SkybreakMain.unity](Assets/Scenes/GameLevel/SkybreakMain.unity)  
+**Unity Editor:** **6000.6.0f1**, pinned in [ProjectVersion.txt](ProjectSettings/ProjectVersion.txt).  
+**Rendering:** Universal Render Pipeline. Keep the committed versions in [Packages/manifest.json](Packages/manifest.json).
 
-**Skybreak — The Descent** follows **Arc**, a rescue engineer sent into the **Aurora Vault** to restore emergency power to Skybreak's district hospital. The Vault is an old underground facility with stone chambers, winding passages and energy machinery. An unexplained failure has shut down its power controls, sealed its gates and cut communication with the surface. The player must reach the central reactor, overcome the dangers inside and restart the emergency supply.
+![Arc in the main dungeon map](Docs/IS/CrystalEchoWarden/MainMap/ThirdPersonView.png)
 
-The journey takes place in **one connected map**: the loading court, the maintenance passage and security wing, and the final reactor chamber. Each section takes the player deeper into the facility.
+## Game setting
 
-| Section | Player objective | Possible enemy appearances |
-| --- | --- | --- |
-| **Loading court** | Enter the Vault and open the maintenance passage. | Near the entrance checkpoint, behind cover or around the first gate. |
-| **Maintenance passage and security wing** | Follow the winding tunnel and reach the reactor access gate. | Around corners, at corridor junctions and inside the side rooms. Opening room doors can reveal threats or release them onto the route. |
-| **Reactor chamber** | Overcome the final obstacle, reach the control console and restore power. | Inside the chamber, near its entrances or in concealed positions around the reactor. |
+Arc is a half-human, half-machine pathfinder exploring an ancient fortress around the fractured Aether Core. With Relay's support, Arc crosses stone halls, crystal machinery and security chambers to reach the corrupted Rift Warden.
 
-The tunnel becomes quieter and darker as the player descends. Warning lights, opening doors and movement from hidden rooms build tension. The player continues towards a clear rescue objective throughout the journey.
+The science-fantasy mission is to defeat the guardian, awaken the Core, seal the rift and return through the restored gate. The intended closing line is **"Rift sealed. Sky reclaimed."** The complete introduction and victory presentation belong to the pending local work below.
 
-After the final danger is overcome, Arc activates the reactor console. Lights return through the facility, communication reconnects and the hospital confirms that its emergency systems are online. The closing message is **“Power restored. People first.”**
+## Development status
 
-**Enemy designs are open for each member to develop.** This story does not assign enemy types, numbers, abilities, attack patterns or member roles. Encounter locations provide a shared setting for those designs.
-
-The visual direction remains a stylised cartoon environment with readable lighting and effects, designed for the team's weakest Intel-integrated laptop. This is the intended story; implementation status is listed below. Read the [shareable story and encounter-location guide](Docs/GV/Concept/GAME_STORY.md).
-
-## Current playable scene
-
-Open **`Assets/Scenes/GameLevel/SkybreakMain.unity`**, press Play, then click the Game window. This is the main project scene and the only enabled scene in the default build list.
-
-| Control | Action |
+| System | Shared main-map implementation |
 | --- | --- |
-| WASD / arrow keys | Walk relative to the camera |
-| Mouse | Look around |
-| Shift | Run |
-| Space | Jump |
-| Escape | Release the cursor |
-| Click Game view | Capture the cursor again |
+| Dungeon map | Connected loading court, winding passage, security wing, side chambers and boss room. Stone textures, weathering, cavern rocks, conduits, lanterns, statues and glowing crystals. |
+| Lighting and navigation | Saved lightmaps, reflection probes and an initial main-map NavMesh. Moving holding gates use carving obstacles. See [world verification](Docs/GV/LevelDesign/Reports/WorldFinish/). |
+| Arc and carbine | Imported character and weapon, aligned energy-shot traces, reload animation, double jump, damage feedback and first-person/third-person views. See [combat code](Assets/Scripts/Player/Combat/). |
+| Relay | Support companion that follows, heals, defends, retreats and searches for safer positions. |
+| Crystal Echo Warden | Four hovering crystal guards, with quiet patrol loops, perception, tactical movement, charged attacks and a defeat breakup effect. |
+| Rift Disruptor | Four tactical enemies that respond to the player's aim, telegraph pulses, relocate and adapt to dodges. Defeat scatters the model's armor parts. |
+| Vault Hound | Two coordinated hunters inside the security-wing holding rooms. Clearing the loading-court enemies opens their gates and releases the pair. See [integration](Docs/IS/AgentDesign/SawanIS/MainMap/INTEGRATION.md). |
+| Rift Warden | Final boss with destructible arms, an exposed-core stage, close rear teleports, attack effects and a death sequence. |
 
-This scene currently contains editable stone floors, textured walls, two security-room extensions and a controllable Arc explorer. Combat, operating room doors, the planned agents and final encounter progression are still work to implement. Completed lighting/NavMesh bakes and weakest-laptop performance are not claimed.
+**Pending local work:** the maintainer's working copy also contains a title menu, skippable introduction, pause/defeat screens, objectives, portal extraction and a victory screen. Unlimited energy reserve belongs to that uncommitted mission-flow work. A fresh clone of shared main does not include those features yet.
 
-Earlier demos are preserved under `Assets/Scenes/Demos/`: `SkybreakLastLightDemo.unity` (city/escort prototype) and `SkybreakDescentDemo.unity` (earlier dungeon environment). Their controls/features differ. They are excluded from the default game build. See [the scene guide](Docs/SCENES.md).
+The shared carbine has a **20-shot magazine, 80 reserve rounds and a 2.2-second reload**. The pending local version retains the magazine and recharge delay while making the reserve unlimited. [LocalMagazine.cs](Assets/Scripts/Player/Combat/LocalMagazine.cs) controls those rules.
 
-The template scene, duplicate demo copy and six incremental map backups have been removed from Assets. Their original files remain recoverable from Git history. New editor-tool snapshots go to ignored `Tools/SceneSnapshots/` outside Assets.
+## Open and play
 
-## Open a fresh clone
+### First clone
 
-1. Ask the repository owner for collaborator access; this repository is private.
-2. Install Git and Git LFS. Install Unity Hub and **Unity 6000.6.0f1** for members using Unity.
-3. Run the following in your chosen parent folder:
+Install Git, Git LFS and Unity Hub. Install the matching Editor above, then run:
 
-   ```powershell
-   git lfs install
-   git clone https://github.com/HirushaSipsara/Skybreak.git
-   Set-Location -LiteralPath '.\Skybreak'
-   git lfs pull
-   git config user.name "YOUR REAL NAME"
-   git config user.email "YOUR OWN GIT ACCOUNT EMAIL"
-   ```
+~~~powershell
+git lfs install
+git clone https://github.com/HirushaSipsara/Skybreak.git
+Set-Location -LiteralPath '.\Skybreak'
+git lfs pull
+git config user.name "YOUR REAL NAME"
+git config user.email "YOUR OWN GIT ACCOUNT EMAIL"
+~~~
 
-4. In Unity Hub: Projects → Add → Add project from disk → select this cloned root, which contains Assets, Packages and ProjectSettings.
-5. Open using the matching Editor and allow package/asset import. Keep the committed package versions; do not independently upgrade them.
-6. Open the current scene above. Check Console and test the controls. Save permanent scene changes outside Play Mode.
+Repository access must be available to your GitHub account. In Unity Hub, add the cloned project root containing Assets, Packages and ProjectSettings. Allow package restoration and asset import to finish.
 
-Student 3 can skip Unity entirely and work on `ArtSource/Student3/` in Blender. Student 1 imports her FBX exports into Unity, with her reviewing the result. See her guide for the assessed import-workflow handoff.
+Open the main scene linked above and press **Play**. Click the Game view to capture the mouse. Only this scene is enabled in the default build list; see [EditorBuildSettings.asset](ProjectSettings/EditorBuildSettings.asset).
 
-Save each original `.blend` in `ArtSource/Student3/<ModelName>/Source/`; keep Exports, Textures and Evidence alongside that Source folder. Materials and Textures already have Environment, Characters and InteractiveObjects subfolders under Assets.
+If the Game view is blank, check the scene path, finish importing assets, run **git lfs pull** and inspect the Console for compilation errors. Opening a project folder alone does not select its main scene.
 
-## Team roles
+### Update an existing clone
 
-| Member | Graphics responsibility | Starting locations |
+Save your work and close Unity. Check **git status**; commit intended changes on your own branch before switching. With a clean working tree:
+
+~~~powershell
+git switch main
+git pull --ff-only origin main
+git lfs pull
+~~~
+
+Reopen Unity and the main scene. If Git refuses the update or reports conflicts, preserve your changes and resolve them with the team. A GitHub merge does not automatically update another teammate's Editor.
+
+## Main-map controls
+
+| Input | Action |
+| --- | --- |
+| WASD / mouse | Move / look and aim |
+| Left Shift | Sprint |
+| Space, then Space again | Jump and double jump |
+| Hold left mouse | Fire the carbine |
+| R | Reload |
+| V | Switch first-person/third-person view |
+| F | Interact with nearby objects or guarded crystals |
+| Q | Place a sound decoy, with a cooldown |
+| Escape / click Game view | Release / recapture the cursor in the shared combat controller |
+| Backspace | Reset the shared combat test state |
+
+The pending local mission flow uses Escape for pause/resume and Backspace for a full mission restart. Its title menu starts gameplay through **Start Mission**.
+
+Testing shortcuts in [LocalCombatDriver.cs](Assets/Scripts/Player/Combat/LocalCombatDriver.cs): **F2** activates the boss, **F7** moves Arc to the boss area, **F3/F4** destroy its left/right arms, and **F5** damages the exposed core. Test scenes have their own controls.
+
+## Intelligent agents
+
+Each coursework member owns one distinct IS agent design. Rift Warden is additional boss scope. Multiple instances of one design remain the same agent type.
+
+| Agent | Decisions and algorithms | Source and guide |
 | --- | --- | --- |
-| Student 1 | World layout, textures, lighting, initial NavMesh and main-scene integration | `Assets/Scenes/GameLevel/SkybreakMain.unity`; existing environment assets and new environment folders |
-| Student 2 | Player interactions and physics | `Assets/Scripts/Player/`, `Assets/Scripts/Physics/`, `Assets/Prefabs/InteractiveObjects/` |
-| Student 3 | Two original Blender models and assisted import workflow | `ArtSource/Student3/`, imported assets in `Assets/Models/Custom/` |
-| Student 4 | Follow IS path arrays, smooth turning and animation | `Assets/Scripts/AgentMovement/`, `Assets/Animations/`, enemy prefabs |
+| Relay | Layered reflexes and perception, fuzzy urgency, expected utility, threat-aware A* and simulated annealing for positioning. | [Code](Assets/Scripts/AI/Relay/), [design](Docs/IS/AgentDesign/Relay/RELAY_DESIGN.md), [evaluation](Docs/IS/Testing/Relay/EVALUATION.md) |
+| Crystal Echo Warden | Acoustic evidence, Bayesian beliefs, utility decisions, A* routes and constrained position search. Separate world-model, decision, movement and debug components. | [Code](Assets/Scripts/AI/CrystalEchoWarden/), [implementation](Docs/IS/CrystalEchoWarden/Implementation.md), [validation](Docs/IS/CrystalEchoWarden/Validation.md) |
+| Vault Hound | Goal-driven deployment, shared sightings and roles, A* pursuit, BFS flank candidates and last-sighting sweeps. | [Code](Assets/Scripts/AI/SawanIS/VaultHound/), [design](Docs/IS/AgentDesign/SawanIS/VaultHoundDesign.md), [integration](Docs/IS/AgentDesign/SawanIS/MainMap/INTEGRATION.md) |
+| Rift Disruptor | Utility goal selection, GOAP, threat-aware A*, tactical position scoring and Bayesian dodge learning. | [Code](Assets/Scripts/AI/Disruptor/), [design](Docs/IS/RiftDisruptor/DESIGN.md) |
+| Rift Warden | Player-motion prediction, Bayesian attack learning, utility scores, expectimax combos and animation-timed attacks. Destroy both arms before attacking the core. | [Code](Assets/Scripts/AI/RiftWarden/), [design](Docs/IS/AgentDesign/RiftWarden/RIFT_WARDEN_AI_DESIGN.md), [evaluation](Docs/IS/Testing/RiftWarden/EVALUATION.md) |
 
-Each member designs their own IS agent and agrees its integration with the group. The shared story establishes the mission and possible encounter locations; it does not require other members to build regular hostile enemies or use a particular enemy type. Existing AI folder names are earlier scaffolding, not an agreed roster or behaviour requirement.
+Agent decisions live under Assets/Scripts/AI. Shared world adapters and combat contracts live under Assets/Scripts/Core; movement implementations live under Assets/Scripts/AgentMovement.
 
-Student 1's boss model, 19-bone rig and 20 animation clips are available at `ArtSource/Student1/RiftWarden/Source/RiftWarden_Animated.blend` and `Assets/Models/Custom/RiftWarden/RiftWarden_Animated.fbx`. The FBX has been imported into Unity, but boss gameplay, controller and scene placement remain to implement. See the [boss handoff guide](Docs/IS/AgentDesign/RiftWarden/HANDOFF.md).
+### Agent field lab
 
-Agent decisions belong in `Assets/Scripts/AI/<AgentName>/`. `Assets/Scripts/Core/World/` is for observations, world-state access and adapters connecting navigation/perception to the game; it is not a home for agent behaviour. Gameplay folders are organised by function, while GV/IS evidence is grouped under Docs.
+The [HTML workbench](Tools/AIWorkbench/README.md) explains Relay and Rift Warden and previews boss combat. With Python 3, run from the project root:
 
-## Working together
+~~~powershell
+python Tools/AIWorkbench/server.py
+~~~
 
-- Start with [what each member should do next](Docs/TeamGuide/START_HERE.md), then read [the complete team guide](Docs/TeamGuide/README.md) and [the folder map](Docs/FOLDER_STRUCTURE.md).
-- Keep `main` as the reviewed integrated project. Use a feature branch for each task.
-- Student 1 owns the main map scene. Other Unity members use the separate test-scene folders and reusable prefabs, then hand those to Student 1 for placement.
-- Save your work, review the diff, commit only the intended changes and matching `.meta` files, push your branch and open a pull request.
-- Test before merging, then everyone updates their local `main`. A Git push does not automatically update another person's Unity Editor.
-- Save/close Unity before switching branches or pulling for the team's beginner workflow.
-- Preserve `.meta` identities; move existing assets using Unity's Project window.
-- Use your own commit identity and genuine incremental history. Do not rewrite another member's work as yours.
+Open **http://127.0.0.1:8765**. **Save to Unity** writes the shared [AgentTuning.json](Assets/Resources/AI/AgentTuning.json). The browser uses a simplified JavaScript simulation; test saved tuning in Unity.
 
-Example feature names: `feature/world-walls`, `feature/security-doors`, `feature/custom-models`, `feature/agent-movement`.
+## Test scenes and evidence
 
-## Files and source control
+| Scene | Purpose |
+| --- | --- |
+| Assets/Scenes/Tests/CrystalEchoWarden/CrystalEchoWardenLab.unity | Crystal guard perception, combat and navigation lab |
+| Assets/Scenes/Tests/RiftDisruptor/RiftDisruptorLab.unity | Disruptor decision and combat lab |
+| Assets/Scenes/Tests/Student4Movement/AgentMovementLab.unity | Shared movement and animation checks |
+| Assets/Scenes/Tests/Student2Interactions/InteractionLab.unity | Physics and interaction lab |
+| Assets/Scenes/Tests/StrikerIS/StrikerLab.unity | Legacy Striker experiment; the main map uses Vault Hound |
 
-Track Assets with their metadata, Packages, ProjectSettings, original art sources, tooling and documentation. Git LFS stores models/textures and other binary assets according to `.gitattributes`.
+Earlier demonstration maps are recoverable from Git history. Test scenes are excluded from the default game build.
 
-Library, Temp, Logs, UserSettings, IDE caches, local build outputs, `.blend1` backups and machine-local Codex configuration are ignored. Do not commit credentials. New folder `.gitkeep` markers preserve empty scaffolding through clones; Unity folder metadata is included too.
+Recorded checks include [world navigation](Docs/GV/LevelDesign/Reports/WorldFinish/NavigationChecks.txt), [camera views](Docs/IS/CrystalEchoWarden/MainMap/CameraViewChecks.txt), [Disruptor gameplay](Docs/IS/RiftDisruptor/GameplayChecks.txt), [Disruptor breakup](Docs/IS/RiftDisruptor/MainMap/BreakupChecks.txt) and [Vault Hound integration](Docs/IS/AgentDesign/SawanIS/MainMap/IntegrationChecks.txt).
 
-The first commit captures the current saved project and team scaffolding. Static integrity checks do not replace opening a fresh clone or testing a standalone build.
+For the engine-independent Crystal Echo Warden checks, install the .NET SDK specified in [Tools/WardenTests/global.json](Tools/WardenTests/global.json), then run:
 
-## Role guides and credits
+~~~powershell
+dotnet run --project Tools/WardenTests/WardenTests.csproj
+~~~
 
-- [Student 2 — interaction physics](Docs/TeamGuide/STUDENT_2_INTERACTION_PHYSICS.md)
-- [Student 3 — Blender models and Unity handoff](Docs/TeamGuide/STUDENT_3_BLENDER_MODELS.md)
-- [Student 4 — path movement and animation](Docs/TeamGuide/STUDENT_4_AGENT_MOVEMENT.md)
-- [Existing map editing instructions](Docs/GV/LevelDesign/StoneKit_EDITING.md)
-- [External asset credits](Docs/ASSET_CREDITS.md)
+Evidence describes the tested scenarios and revisions. It does not establish a complete standalone release, final difficulty balance or performance on the weakest teammate's Intel-integrated laptop.
 
-GV requires source and a 3-minute demo, with the supplied brief's deadline of 21 October 2026. Confirm IS submission details separately. See the team guide for requirements, role evidence, calendar targets and viva preparation.
+## Team workflow and assets
+
+- Use feature branches and pull requests. Coordinate main-scene edits; test reusable agents and props in separate scenes before integration.
+- Commit intended files and matching Unity .meta files. Move assets through Unity's Project window to preserve references.
+- Keep Blender originals, exports and evidence under ArtSource. Imported models, materials, textures and prefabs belong under their functional Assets folders.
+- Preserve each contributor's source files and actual commit history. Graphics responsibilities and individual IS responsibilities remain separate.
+- Track Assets, Packages, ProjectSettings, documentation and source art. Git LFS handles binary types listed in [.gitattributes](.gitattributes).
+- Keep generated Library, Temp, caches and local builds out of source control. Local scene snapshots belong under ignored Tools/SceneSnapshots.
+
+| Graphics responsibility | Guide |
+| --- | --- |
+| World layout, textures, lighting and initial navigation | [Map editing](Docs/GV/LevelDesign/StoneKit_EDITING.md) |
+| Player interactions and physics | [Interaction guide](Docs/TeamGuide/STUDENT_2_INTERACTION_PHYSICS.md) |
+| Custom Blender models and import handoff | [Modelling guide](Docs/TeamGuide/STUDENT_3_BLENDER_MODELS.md) |
+| Path following, smooth turning and animation | [Movement guide](Docs/TeamGuide/STUDENT_4_AGENT_MOVEMENT.md) |
+
+See [asset credits](Docs/ASSET_CREDITS.md), [the folder map](Docs/FOLDER_STRUCTURE.md) and [Unity/Blender MCP setup](Docs/TeamGuide/MCP_SETUP.md). Older team-planning sections describe earlier project stages; use the current code and integration reports for implemented behavior.
+

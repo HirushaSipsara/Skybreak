@@ -1,0 +1,89 @@
+{
+  "asset": "VaultHound",
+  "blender": "5.1.2",
+  "editable_parts": 104,
+  "export_meshes": 1,
+  "materials": 1,
+  "triangles": 6192,
+  "vertices": 3304,
+  "bones": 19,
+  "dimensions_xyz_metres": [
+    1.0013463497161865,
+    1.8910698294639587,
+    1.1449998617172241
+  ],
+  "forward": "Blender -Y; FBX Y up/-Z forward",
+  "fps": 30,
+  "clips": {
+    "Idle": {
+      "frames": [
+        1,
+        61
+      ],
+      "seconds": 2.0,
+      "loop": true
+    },
+    "Walk": {
+      "frames": [
+        1,
+        31
+      ],
+      "seconds": 1.0,
+      "loop": true
+    },
+    "Run": {
+      "frames": [
+        1,
+        21
+      ],
+      "seconds": 0.6666666666666666,
+      "loop": true
+    },
+    "Alert": {
+      "frames": [
+        1,
+        31
+      ],
+      "seconds": 1.0,
+      "loop": false
+    },
+    "Sniff": {
+      "frames": [
+        1,
+        61
+      ],
+      "seconds": 2.0,
+      "loop": true
+    },
+    "Lunge": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8,
+      "loop": false
+    },
+    "Hit": {
+      "frames": [
+        1,
+        13
+      ],
+      "seconds": 0.4,
+      "loop": false
+    },
+    "Death": {
+      "frames": [
+        1,
+        46
+      ],
+      "seconds": 1.5,
+      "loop": false
+    }
+  },
+  "root_motion": false,
+  "weighted_vertices": "one bone at full weight per vertex",
+  "uv": "Palette atlas UVs; intentionally shared swatches, not a unique lightmap unwrap",
+  "unity_runtime_tested": false,
+  "ai_implemented": false,
+  "source_work_preserved": true
+}
