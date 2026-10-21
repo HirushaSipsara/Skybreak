@@ -1,0 +1,7 @@
+PASS: actual player shot consumed one round, damaged Crystal Echo Warden, emitted audible evidence, and kept the visible muzzle aligned.
+PASS: F interaction raised the guarded crystal alarm.
+Reload started with 19/20; completion check pending.
+PASS: timed reload refilled 20 rounds and consumed one reserve round.
+PASS: restart restored all four Wardens, the protected crystals, and ammunition. All eight clips bound on each Warden.
+PASS: authored utility attack stops patrol, charges, fires and damages the real player without drifting off its firing position.
+PASS: Q decoy emits an acoustic event and rejects reuse during its three-second cooldown.

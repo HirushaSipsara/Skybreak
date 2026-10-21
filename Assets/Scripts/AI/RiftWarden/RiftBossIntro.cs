@@ -173,7 +173,9 @@ namespace Skybreak.AI.RiftWarden
         // ------------------------------------------------------------------ HUD
         void EnsureStyles()
         {
-            if (titleStyle != null) return;
+            if (titleStyle != null && barTex != null && glowTex != null) return;
+            if (barTex != null) Destroy(barTex);
+            if (glowTex != null) Destroy(glowTex);
             titleStyle = new GUIStyle(GUI.skin.label) { fontSize = 64, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
             subStyle = new GUIStyle(GUI.skin.label) { fontSize = 20, fontStyle = FontStyle.Italic, alignment = TextAnchor.MiddleCenter };
             labelStyle = new GUIStyle(GUI.skin.label) { fontSize = 15, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleLeft };

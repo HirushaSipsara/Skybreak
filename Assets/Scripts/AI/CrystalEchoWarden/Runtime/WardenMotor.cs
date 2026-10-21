@@ -17,6 +17,7 @@ namespace Skybreak.Warden
         CharacterController body;
         void Awake(){body=GetComponent<CharacterController>();}
         public void Stop(){Path=System.Array.Empty<int>();cursor=0;goal=-1;stuckFor=0;}
+        public void ResetForEncounter(){Stop();version=-1;Blocked=false;retryAt=0;}
         public void Go(int node)
         {
             if(map==null||map.Graph==null||!map.Graph.Valid(node)){Stop();return;}

@@ -1,0 +1,1 @@
+Updated eight pedestal instances and the shared prefab. Original lower body and cornice retained. Crystal glow materials, eight sparkle systems and existing lights retained. Original collider sizes retained. New upper geometry uses existing light probes. Backup: Tools/SceneSnapshots/CombinedPedestal_20261021_135553

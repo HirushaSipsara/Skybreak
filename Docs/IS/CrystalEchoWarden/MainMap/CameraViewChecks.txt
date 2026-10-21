@@ -1,0 +1,5 @@
+PASS: third person has correct body/weapon visibility and the actual centre-screen shot damages its target with aligned muzzle.
+PASS: first person has correct body/weapon visibility and the actual centre-screen shot damages its target with aligned muzzle.
+PASS: switching during reload preserves the timer and ammunition; 20 rounds loaded, reserve 78.
+PASS: close cover between camera and muzzle prevents first-person damage.
+PASS: boss HUD automatically recreates its missing runtime texture.
