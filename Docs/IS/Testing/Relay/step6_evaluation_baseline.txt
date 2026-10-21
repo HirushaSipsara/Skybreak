@@ -1,0 +1,12 @@
+Relay version: baseline (step 2 linear utility)
+seed | survived | player <30% (s) | min player health | heals | heals while player <40% | Relay damage taken | Relay in fire lane (s) | Relay in boss sight (s) | mean distance to player | boss defeated | duration (s)
+11 | yes | 22.1 | 2 | 8 | 0 | 68 | 4.6 | 88.1 | 7.4 | no | 90.0
+22 | no | 10.0 | 0 | 10 | 1 | 88 | 11.3 | 74.2 | 5.8 | no | 74.4
+33 | no | 10.0 | 0 | 4 | 0 | 76 | 4.3 | 76.5 | 7.1 | no | 79.2
+44 | no | 10.0 | 0 | 6 | 2 | 81 | 6.8 | 65.3 | 6.1 | no | 68.0
+55 | no | 7.1 | 0 | 8 | 0 | 88 | 9.9 | 84.1 | 4.6 | no | 84.1
+66 | no | 38.5 | 0 | 7 | 4 | 88 | 11.4 | 83.3 | 7.3 | no | 84.8
+77 | no | 6.9 | 0 | 6 | 2 | 49 | 4.5 | 37.0 | 3.1 | no | 37.0
+88 | yes | 12.7 | 10 | 12 | 5 | 76 | 9.2 | 90.0 | 4.7 | no | 90.0
+MEAN over 8 runs | player fell 6/8 | 14.7 | 1 | 7.6 | 1.8 | 77 | 7.8 | 74.8 | 5.8 | - | 75.9
+mean decision cycle: 0.005 ms (200 calls of SenseAndDecide)

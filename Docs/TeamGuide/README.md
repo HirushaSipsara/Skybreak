@@ -2,6 +2,8 @@
 
 Updated 3 October 2026 for the reorganised project. **Start with [what each member should do next](START_HERE.md)**, then use this page and the detailed guide for your graphics role.
 
+To connect the assistant to the applications, use the [Unity and Blender MCP setup guide](MCP_SETUP.md).
+
 ## 1. What the assignment actually requires
 
 Sources: the supplied **Assignmnet_GV.pdf** (pages 1–3) and **Assignmnet_IS.pdf** (pages 1–2). The requirements below come from those documents. Specific models, scripts, dimensions, development dates and agent assignments proposed later in this guide are our implementation plan.

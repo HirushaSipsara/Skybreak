@@ -1,0 +1,15 @@
+{
+  "asset": "ArcRescueCarbine",
+  "type": "stylised first-person rescue carbine",
+  "mesh_parts": 24,
+  "triangles": 2720,
+  "dimensions_metres": [
+    0.2510000020265579,
+    1.0013030022382736,
+    0.5867013037204742
+  ],
+  "anchor": "FP_WeaponAnchor",
+  "muzzle": "Cyan muzzle emitter",
+  "external_textures": false,
+  "unity_tested": false
+}

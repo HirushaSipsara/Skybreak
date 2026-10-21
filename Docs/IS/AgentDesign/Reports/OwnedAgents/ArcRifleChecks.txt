@@ -1,0 +1,7 @@
+Arc rifle and reload live checks, 10 October 2026.
+PASS: armored explorer/rifle generated; muzzle matches low, level and high aim points.
+PASS: camera acquires target but actual shot originates at muzzle and stops at close cover.
+PASS: one shot consumes one round; immediate second shot is rate-limited; manual reload cannot restart and blocks firing while allowing movement.
+PASS: 2.2-second manual reload refills only the missing round (19+80 -> 20+79); magazine visibly moves and firing stays blocked during reload.
+PASS: 18-damage rifle needs 35 successful hits for both arms/core; its 20-round magazine forces a reload; final ammo is 5+60 and defeat powers the return field.
+PASS: encounter reset restores 20+80 ammunition and clears reloading.

@@ -1,0 +1,1216 @@
+<title>Rift Warden Boss Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a field manual. Sticky contents rail on the left, one reading column on the right;
+   the fight is described like a technical sheet (parts, timings, damage), the AI like a schematic of layers. */
+:root {
+  --bg: #f2f1f6;
+  --surface: #ffffff;
+  --sunk: #e8e6ef;
+  --ink: #1c1a2b;
+  --muted: #5c5870;
+  --line: #d8d5e3;
+  --accent: #0a7c84;      /* rift crystal */
+  --accent-soft: #d6eeef;
+  --is: #4844c4;          /* lecture material */
+  --is-soft: #e3e2fb;
+  --beyond: #a2560a;      /* beyond the lectures */
+  --beyond-soft: #f7e7d3;
+  --cannon: #c2410c;
+  --blade: #b3175a;
+  --core: #0e6f8a;
+  --good: #1f7a3d;
+  --warn: #9a5b00;
+  --shadow: 0 1px 2px rgba(28, 26, 43, .06), 0 6px 18px rgba(28, 26, 43, .06);
+  --f-display: "Oxanium", "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --step--1: .86rem;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.5rem;
+  --step-3: 2.1rem;
+  --step-4: clamp(2.4rem, 6vw, 3.6rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12111b; --surface: #1b1a27; --sunk: #232133; --ink: #ecebf4; --muted: #a6a2bb; --line: #322f47;
+    --accent: #5ed3c9; --accent-soft: #163a3c; --is: #a3a0ff; --is-soft: #2a2852; --beyond: #f0a650; --beyond-soft: #3d2a14;
+    --cannon: #fb8b52; --blade: #f472b6; --core: #5ccfe6; --good: #5fd08a; --warn: #f2b84b;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12111b; --surface: #1b1a27; --sunk: #232133; --ink: #ecebf4; --muted: #a6a2bb; --line: #322f47;
+  --accent: #5ed3c9; --accent-soft: #163a3c; --is: #a3a0ff; --is-soft: #2a2852; --beyond: #f0a650; --beyond-soft: #3d2a14;
+  --cannon: #fb8b52; --blade: #f472b6; --core: #5ccfe6; --good: #5fd08a; --warn: #f2b84b;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: var(--step-0); line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: .01em; }
+h2 { font-size: var(--step-3); font-weight: 700; }
+h3 { font-size: var(--step-1); font-weight: 600; }
+h4 { font-size: var(--step-0); font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); }
+code, kbd, .mono { font-family: var(--f-mono); font-size: .88em; }
+code { background: var(--sunk); padding: .08em .35em; border-radius: 4px; overflow-wrap: anywhere; }
+kbd {
+  display: inline-block; min-width: 1.9em; text-align: center; padding: .1em .45em;
+  border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--surface); font-weight: 600;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+ul, ol { margin: 0; padding-left: 1.25em; display: grid; gap: .35em; max-width: 68ch; }
+.eyebrow { font-family: var(--f-mono); font-size: var(--step--1); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.small { font-size: var(--step--1); }
+
+/* ---------- hero ---------- */
+.hero { max-width: 1180px; margin: 0 auto; padding-block: 48px 36px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.hero h1 { font-size: var(--step-4); font-weight: 700; letter-spacing: .02em; }
+.hero h1 span { color: var(--accent); }
+.hero .lede { font-size: var(--step-1); color: var(--muted); margin-top: 14px; }
+.hero .stats { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 22px; }
+.stat b { display: block; font-family: var(--f-display); font-size: var(--step-2); font-variant-numeric: tabular-nums; }
+.stat span { font-size: var(--step--1); color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; align-items: center; }
+.schematic { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; box-shadow: var(--shadow); }
+.schematic svg { width: 100%; height: auto; display: block; }
+.schematic figcaption { font-size: var(--step--1); color: var(--muted); margin-top: 6px; }
+
+/* ---------- badges ---------- */
+.tag { display: inline-flex; align-items: center; gap: .35em; font-family: var(--f-mono); font-size: .74rem; font-weight: 600; letter-spacing: .04em; padding: .18em .55em; border-radius: 999px; white-space: nowrap; }
+.tag.is { background: var(--is-soft); color: var(--is); }
+.tag.beyond { background: var(--beyond-soft); color: var(--beyond); }
+.tag.plain { background: var(--sunk); color: var(--muted); }
+
+/* ---------- shell ---------- */
+.shell { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 48px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; display: grid; gap: 2px; font-size: var(--step--1); padding-top: 6px; }
+nav.toc .eyebrow { margin-bottom: 8px; }
+nav.toc a { color: var(--muted); text-decoration: none; padding: 5px 10px; border-left: 2px solid var(--line); }
+nav.toc a:hover { color: var(--ink); border-left-color: var(--muted); }
+nav.toc a.on { color: var(--accent); border-left-color: var(--accent); font-weight: 700; }
+main { display: grid; gap: 72px; min-width: 0; }
+section { display: grid; gap: 20px; min-width: 0; scroll-margin-top: 20px; }
+section > header { display: grid; gap: 8px; }
+section > header p { color: var(--muted); }
+
+/* ---------- generic blocks ---------- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.stack { display: grid; gap: 12px; }
+.callout { border: 1px solid var(--line); background: var(--sunk); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; }
+.callout.key { border-color: var(--accent); background: var(--accent-soft); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--f-mono); font-size: .74rem; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--sunk); }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+pre { margin: 0; background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-family: var(--f-mono); font-size: .84rem; line-height: 1.55; }
+pre code { background: none; padding: 0; overflow-wrap: normal; }
+.copyrow { display: grid; gap: 6px; }
+.copyrow .bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+button, .btn {
+  font: 600 .86rem var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 12px; cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+button.ghost { background: transparent; }
+button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+
+/* ---------- fight: parts + phases ---------- */
+.phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.phase { padding: 18px; display: grid; gap: 8px; align-content: start; border-right: 1px solid var(--line); min-width: 0; }
+.phase:last-child { border-right: 0; }
+.phase .when { font-family: var(--f-mono); font-size: var(--step--1); color: var(--muted); }
+.phase ul { font-size: .93rem; }
+.phase-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.phase-head .n { font-family: var(--f-mono); font-size: .8rem; color: var(--muted); }
+.meter { height: 6px; border-radius: 3px; background: var(--sunk); overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--accent); }
+
+/* attack sheets */
+.attacks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.attack { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.attack-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.attack-head h3 { display: flex; align-items: center; gap: 10px; }
+.swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.spec { background: var(--sunk); border-radius: 8px; padding: 8px 10px; min-width: 0; }
+.spec b { display: block; font-family: var(--f-mono); font-size: .95rem; font-variant-numeric: tabular-nums; }
+.spec span { font-size: .74rem; color: var(--muted); }
+.timeline { position: relative; height: 34px; border-radius: 6px; background: var(--sunk); overflow: hidden; }
+.timeline .seg { position: absolute; top: 0; bottom: 0; opacity: .22; }
+.timeline .mark { position: absolute; top: 4px; bottom: 4px; width: 3px; border-radius: 2px; transform: translateX(-1px); }
+.timeline .lbl { position: absolute; bottom: 2px; font-family: var(--f-mono); font-size: .66rem; color: var(--muted); transform: translateX(-50%); white-space: nowrap; }
+.timeline-scale { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: .66rem; color: var(--muted); margin-top: -8px; }
+.dodge { border-top: 1px dashed var(--line); padding-top: 10px; font-size: .93rem; }
+.dodge b { color: var(--accent); }
+
+/* ---------- AI pipeline ---------- */
+.pipeline { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0; align-items: stretch; }
+.pipe { position: relative; background: var(--surface); border: 1px solid var(--line); padding: 12px 10px; display: grid; gap: 6px; align-content: start; min-width: 0; margin-right: -1px; }
+.pipe:first-child { border-radius: 10px 0 0 10px; }
+.pipe:last-child { border-radius: 0 10px 10px 0; }
+.pipe .k { font-family: var(--f-mono); font-size: .7rem; color: var(--muted); }
+.pipe h4 { font-size: .9rem; }
+.pipe p { font-size: .8rem; color: var(--muted); }
+.pipe.exec { background: var(--sunk); }
+.layer { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 18px; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.layer .num { font-family: var(--f-display); font-size: 2.4rem; font-weight: 700; color: var(--accent); line-height: 1; }
+.layer .body { display: grid; gap: 12px; min-width: 0; }
+.layer .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.layer .q { font-style: italic; color: var(--muted); }
+.formula { font-family: var(--f-mono); font-size: .9rem; background: var(--sunk); border-radius: 8px; padding: 10px 14px; overflow-x: auto; white-space: pre; }
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.split > div { min-width: 0; display: grid; gap: 6px; align-content: start; }
+
+/* ---------- explainers ---------- */
+.lab { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 16px; box-shadow: var(--shadow); min-width: 0; }
+.lab-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ctl { display: grid; gap: 4px; font-size: .88rem; min-width: 0; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
+.ctl label output { font-family: var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+canvas { width: 100%; display: block; border-radius: 10px; background: var(--sunk); }
+.readout { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.readout div { background: var(--sunk); border-radius: 8px; padding: 8px 10px; min-width: 0; }
+.readout b { display: block; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.readout span { font-size: .76rem; color: var(--muted); }
+.arms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.arm { border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: grid; gap: 8px; min-width: 0; }
+.arm.win { border-color: var(--accent); background: var(--accent-soft); }
+.arm .top { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.arm .top b { font-family: var(--f-display); }
+.arm .ab { font-family: var(--f-mono); font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.arm .btnrow button { padding: 5px 9px; font-size: .8rem; }
+.share { height: 8px; background: var(--sunk); border-radius: 4px; overflow: hidden; }
+.share i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+.moves { display: grid; gap: 8px; }
+.move { display: grid; grid-template-columns: 130px minmax(0, 1fr) 70px; gap: 12px; align-items: center; padding: 8px 10px; border-radius: 8px; border: 1px solid transparent; }
+.move.best { border-color: var(--accent); background: var(--accent-soft); }
+.move .name { font-weight: 700; font-size: .92rem; }
+.move .bars { display: flex; height: 18px; border-radius: 4px; overflow: hidden; background: var(--sunk); min-width: 0; }
+.move .bars i { display: block; height: 100%; }
+.move .val { font-family: var(--f-mono); text-align: right; font-variant-numeric: tabular-nums; }
+.key-now { background: var(--accent); }
+.key-follow { background: var(--is); opacity: .75; }
+.key-risk { background: var(--beyond); }
+.keyline { display: flex; flex-wrap: wrap; gap: 14px; font-size: .8rem; color: var(--muted); }
+.keyline i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.verdict { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.verdict div { background: var(--sunk); border-radius: 8px; padding: 10px 12px; font-size: .9rem; min-width: 0; }
+.verdict b { font-family: var(--f-display); }
+
+/* evaluation bars */
+.evalbars { display: grid; gap: 14px; }
+.evalrow { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; align-items: center; }
+.evalrow .who { font-weight: 700; }
+.evalrow .pair { display: grid; gap: 4px; }
+.hbar { position: relative; height: 16px; background: var(--sunk); border-radius: 4px; }
+.hbar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+.hbar em { position: absolute; top: 50%; transform: translateY(-50%); font-style: normal; font-family: var(--f-mono); font-size: .72rem; padding-left: 6px; font-variant-numeric: tabular-nums; }
+.hbar.orig i { background: var(--muted); opacity: .45; }
+.hbar.adapt i { background: var(--accent); }
+.axis { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; }
+.axis div { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: .68rem; color: var(--muted); }
+
+/* steps + Q&A */
+ol.steps { counter-reset: s; list-style: none; padding: 0; gap: 14px; }
+ol.steps > li { counter-increment: s; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+ol.steps > li::before { content: counter(s); font-family: var(--f-display); font-weight: 700; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+ol.steps > li > div { display: grid; gap: 6px; min-width: 0; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 0 16px; }
+details + details { margin-top: 8px; }
+summary { cursor: pointer; padding: 13px 0; font-weight: 700; list-style-position: outside; }
+details[open] summary { border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+details > div { padding-bottom: 14px; display: grid; gap: 8px; }
+footer { max-width: 1180px; margin: 72px auto 0; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--step--1); display: grid; gap: 6px; }
+
+@media (max-width: 980px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  nav.toc { position: static; display: flex; flex-wrap: wrap; gap: 6px; }
+  nav.toc .eyebrow { width: 100%; margin: 0; }
+  nav.toc a { border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; background: var(--surface); }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pipe, .pipe:first-child, .pipe:last-child { border-radius: 10px; margin-right: 0; }
+}
+@media (max-width: 760px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 28px 20px; gap: 24px; }
+  .grid2, .grid3, .attacks, .split, .verdict { grid-template-columns: minmax(0, 1fr); }
+  .phases { grid-template-columns: minmax(0, 1fr); }
+  .phase { border-right: 0; border-bottom: 1px solid var(--line); }
+  .phase:last-child { border-bottom: 0; }
+  .controls { grid-template-columns: minmax(0, 1fr); }
+  .readout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .arms { grid-template-columns: minmax(0, 1fr); }
+  .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .layer { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 18px; }
+  .move { grid-template-columns: 96px minmax(0, 1fr) 52px; gap: 8px; }
+  .evalrow, .axis { grid-template-columns: 70px minmax(0, 1fr); }
+  h2 { font-size: var(--step-2); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">Skybreak · final boss · field manual</div>
+    <h1>The Rift <span>Warden</span></h1>
+    <p class="lede">A 3.4 m crystal machine with a cannon arm, a blade arm and a shielded core. It learns how you move during the fight, predicts where you will be, and plans two-move combos around your habits, while keeping every attack fair to dodge.</p>
+    <div class="stats">
+      <div class="stat"><b>180 + 180</b><span>arm health (cannon, blade)</span></div>
+      <div class="stat"><b>260</b><span>core health</span></div>
+      <div class="stat"><b>12 m</b><span>arena radius</span></div>
+      <div class="stat"><b>0.2 s</b><span>between decisions</span></div>
+    </div>
+    <div class="legend">
+      <span class="tag is">IS · lecture technique</span>
+      <span class="tag beyond">Beyond · game AI past the syllabus</span>
+      <span class="small muted">Every AI layer below carries one or both tags.</span>
+    </div>
+  </div>
+  <figure class="schematic" style="margin:0">
+    <svg viewBox="0 0 360 250" role="img" aria-label="Top-down schematic of the Rift Warden: cannon arm on the left, blade arm on the right, core in the centre">
+      <circle cx="180" cy="120" r="104" fill="none" stroke="var(--line)" stroke-dasharray="4 5"/>
+      <text x="180" y="240" text-anchor="middle" font-family="var(--f-mono)" font-size="10" fill="var(--muted)">dashed ring: slash reach (not to scale)</text>
+      <rect x="40" y="96" width="78" height="48" rx="10" fill="var(--cannon)" opacity=".18" stroke="var(--cannon)"/>
+      <rect x="20" y="111" width="30" height="18" rx="4" fill="var(--cannon)"/>
+      <text x="79" y="124" text-anchor="middle" font-family="var(--f-display)" font-size="13" font-weight="700" fill="var(--cannon)">CANNON</text>
+      <text x="79" y="160" text-anchor="middle" font-family="var(--f-mono)" font-size="10" fill="var(--muted)">left arm · 180</text>
+      <rect x="242" y="96" width="78" height="48" rx="10" fill="var(--blade)" opacity=".18" stroke="var(--blade)"/>
+      <polygon points="320,104 350,120 320,136" fill="var(--blade)"/>
+      <text x="281" y="124" text-anchor="middle" font-family="var(--f-display)" font-size="13" font-weight="700" fill="var(--blade)">BLADE</text>
+      <text x="281" y="160" text-anchor="middle" font-family="var(--f-mono)" font-size="10" fill="var(--muted)">right arm · 180</text>
+      <polygon points="180,70 223,95 223,145 180,170 137,145 137,95" fill="var(--core)" opacity=".18" stroke="var(--core)" stroke-width="2"/>
+      <polygon points="180,98 199,109 199,131 180,142 161,131 161,109" fill="var(--core)"/>
+      <text x="180" y="190" text-anchor="middle" font-family="var(--f-mono)" font-size="10" fill="var(--muted)">core · 260 · shielded</text>
+      <path d="M180 64 L180 34" stroke="var(--ink)" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="188" y="40" font-family="var(--f-mono)" font-size="10" fill="var(--muted)">facing</text>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"/></marker></defs>
+    </svg>
+    <figcaption>Top-down view. Break both arms to open the core, then destroy the core.</figcaption>
+  </figure>
+</header>
+
+<div class="shell">
+  <nav class="toc" aria-label="Contents">
+    <div class="eyebrow">Contents</div>
+    <a href="#start">Start the fight</a>
+    <a href="#fight">How the fight works</a>
+    <a href="#attacks">Attacks and dodges</a>
+    <a href="#brain">How it thinks</a>
+    <a href="#layers">The five layers</a>
+    <a href="#aim">Try: predictive aim</a>
+    <a href="#bandit">Try: attack learner</a>
+    <a href="#planner">Try: combo planner</a>
+    <a href="#fair">Fairness rules</a>
+    <a href="#eval">Does it work?</a>
+    <a href="#overlay">Read its mind (F10)</a>
+    <a href="#tests">Tests and tuning</a>
+    <a href="#code">Code map</a>
+    <a href="#viva">Viva questions</a>
+  </nav>
+
+  <main>
+    <!-- ================= START ================= -->
+    <section id="start">
+      <header>
+        <div class="eyebrow">Instructions</div>
+        <h2>Start the fight</h2>
+        <p>Two ways in: the full game, or the local combat lab, which has shortcut keys for testing each phase.</p>
+      </header>
+      <div class="grid2">
+        <div class="card stack">
+          <h3>In the full game</h3>
+          <ol>
+            <li>Open <code>Assets/Scenes/GameLevel/SkybreakMain.unity</code> and press Play.</li>
+            <li>Reach the circular arena at the end of the dungeon.</li>
+            <li>The Warden wakes when you come within <b>19 m</b> and its intro plays.</li>
+            <li>When the core is destroyed, the return point powers up. Walk to it to leave.</li>
+          </ol>
+        </div>
+        <div class="card stack">
+          <h3>In the combat lab</h3>
+          <ol>
+            <li>Open <code>Assets/LocalCombatLab/OwnedAgentsLab.unity</code> and press Play. The lab is local only and is not in git.</li>
+            <li>Click the game view to lock the cursor. <kbd>Esc</kbd> releases it.</li>
+            <li>Press <kbd>F7</kbd> to jump to the boss room, then <kbd>F2</kbd> to wake the boss.</li>
+            <li>Press <kbd>F10</kbd> to see what the boss is thinking (see <a href="#overlay">Read its mind</a>).</li>
+          </ol>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Key</th><th>Player controls</th></tr></thead>
+            <tbody>
+              <tr><td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> · mouse</td><td>Move and look</td></tr>
+              <tr><td><kbd>LMB</kbd></td><td>Fire (20-round magazine plus reserve)</td></tr>
+              <tr><td><kbd>R</kbd></td><td>Reload</td></tr>
+              <tr><td><kbd>Space</kbd></td><td>Jump; press again in the air for a double jump</td></tr>
+              <tr><td><kbd>Shift</kbd></td><td>Sprint</td></tr>
+              <tr><td><kbd>Backspace</kbd></td><td>Restart the encounter</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Key</th><th>Lab test shortcuts</th></tr></thead>
+            <tbody>
+              <tr><td><kbd>F7</kbd></td><td>Teleport to the boss room</td></tr>
+              <tr><td><kbd>F2</kbd></td><td>Wake the boss</td></tr>
+              <tr><td><kbd>F3</kbd></td><td>Break the cannon arm (starts the Enraged phase)</td></tr>
+              <tr><td><kbd>F4</kbd></td><td>Break the blade arm. F3 then F4 opens the core.</td></tr>
+              <tr><td><kbd>F5</kbd></td><td>Destroy the core once it is exposed</td></tr>
+              <tr><td><kbd>F9</kbd> / <kbd>F10</kbd></td><td>Relay overlay / Rift Warden overlay</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="callout key">
+        <b>To beat it</b>
+        <p>Shoot an arm until it breaks, then the other. Each broken arm removes its attacks, but the boss gets angrier. When both are gone the core opens and the boss switches to teleport slams. Keep moving, and change direction after an attack locks on. The boss punishes habits, not reactions.</p>
+      </div>
+    </section>
+
+    <!-- ================= FIGHT ================= -->
+    <section id="fight">
+      <header>
+        <div class="eyebrow">The fight</div>
+        <h2>Three phases, set by what you break</h2>
+        <p>The boss's phase depends only on its own damage. Each phase changes its temperament: how long it rests, how much risk it accepts and which attacks it has left.</p>
+      </header>
+      <div class="phases">
+        <div class="phase">
+          <div class="phase-head"><h3>Measured</h3><span class="n">phase 1</span></div>
+          <div class="when">Both arms intact</div>
+          <div class="meter" aria-hidden="true"><i style="width:100%"></i></div>
+          <ul>
+            <li>Attacks: cannon, slash, double rear teleport</li>
+            <li>Normal cooldowns</li>
+            <li>Rests 1.15 s after each attack</li>
+            <li>Risk weight 1.0: cautious under fire</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-head"><h3>Enraged</h3><span class="n">phase 2</span></div>
+          <div class="when">One arm destroyed</div>
+          <div class="meter" aria-hidden="true"><i style="width:66%"></i></div>
+          <ul>
+            <li>Loses the broken arm's attacks</li>
+            <li>Cooldowns × 0.8</li>
+            <li>Rests 0.85 s</li>
+            <li>Risk weight 0.6: prefers combos</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-head"><h3>Desperate</h3><span class="n">phase 3</span></div>
+          <div class="when">Both arms gone, core open</div>
+          <div class="meter" aria-hidden="true"><i style="width:33%"></i></div>
+          <ul>
+            <li>Only attack: core teleport and slam</li>
+            <li>Slam cooldown 7 s → 5.5 s</li>
+            <li>Rests 0.85 s</li>
+            <li>Risk weight 0.3: presses you hard</li>
+          </ul>
+        </div>
+      </div>
+      <p class="muted small">Breaking an arm plays a 1.4 s break animation. Opening the core takes 2 s, and the core can only be damaged after it opens.</p>
+    </section>
+
+    <!-- ================= ATTACKS ================= -->
+    <section id="attacks">
+      <header>
+        <div class="eyebrow">Attack sheet</div>
+        <h2>Attacks and how to dodge them</h2>
+        <p>Times are from the start of each attack. Damage is a share of your maximum health. These values are fixed: the AI chooses <i>which</i> attack and <i>where</i> to aim, never how fast or how hard it hits.</p>
+      </header>
+      <div class="attacks">
+        <article class="attack">
+          <div class="attack-head"><h3><i class="swatch" style="background:var(--cannon)"></i>Cannon burst</h3><span class="tag plain">cannon arm</span></div>
+          <div class="specs">
+            <div class="spec"><b>≤ 19 m</b><span>range</span></div>
+            <div class="spec"><b>3 × 8%</b><span>damage</span></div>
+            <div class="spec"><b>4 s</b><span>cooldown</span></div>
+            <div class="spec"><b>1.8 s</b><span>duration</span></div>
+          </div>
+          <div class="timeline" data-total="1.8" data-color="var(--cannon)" data-segs="0:0.4:turn to face" data-marks="0.4:lock,0.57:shot 1,0.87:shot 2,1.17:shot 3"></div>
+          <div class="timeline-scale"><span>0 s</span><span>1.8 s</span></div>
+          <p>Turns to face you for 0.4 s, then locks aim. Three shots follow 0.17, 0.47 and 0.77 s after the lock. Each shot aims where you are predicted to be at that moment, so the burst walks along your path.</p>
+          <p class="dodge"><b>Dodge:</b> change direction right after the lock. The prediction assumes you keep going, and it leads by at most 2.5 m.</p>
+        </article>
+        <article class="attack">
+          <div class="attack-head"><h3><i class="swatch" style="background:var(--blade)"></i>Blade slash</h3><span class="tag plain">blade arm</span></div>
+          <div class="specs">
+            <div class="spec"><b>≤ 3 m</b><span>range</span></div>
+            <div class="spec"><b>30%</b><span>damage</span></div>
+            <div class="spec"><b>3 s</b><span>cooldown</span></div>
+            <div class="spec"><b>2.7 m</b><span>red ring</span></div>
+          </div>
+          <div class="timeline" data-total="1.8" data-color="var(--blade)" data-segs="0:0.67:wind-up" data-marks="0.67:hit"></div>
+          <div class="timeline-scale"><span>0 s</span><span>1.77 s</span></div>
+          <p>A red 2.7 m ring appears around the boss, which faces you. The blade hits in front of it at 0.67 s.</p>
+          <p class="dodge"><b>Dodge:</b> leave the red ring, or get behind the boss, before 0.67 s. It is not a low attack, so jumping does not help.</p>
+        </article>
+        <article class="attack">
+          <div class="attack-head"><h3><i class="swatch" style="background:var(--blade)"></i>Double rear teleport</h3><span class="tag plain">blade arm</span></div>
+          <div class="specs">
+            <div class="spec"><b>4–17 m</b><span>range</span></div>
+            <div class="spec"><b>30%</b><span>damage</span></div>
+            <div class="spec"><b>10 s</b><span>cooldown</span></div>
+            <div class="spec"><b>2.15 m</b><span>strike radius</span></div>
+          </div>
+          <div class="timeline" data-total="2.4" data-color="var(--blade)" data-segs="0.18:1.18:behind you, waiting" data-marks="0.18:1st,1.18:2nd + strike"></div>
+          <div class="timeline-scale"><span>0 s</span><span>2.32 s</span></div>
+          <p>Lands 1.6 m behind you at 0.18 s, waits 1 s, then lands behind you again and strikes at once. The adaptive boss rates this attack highly when you are shooting it, because you have to turn around to keep firing.</p>
+          <p class="dodge"><b>Dodge:</b> after the first landing, sprint away. The second landing follows you, but the strike only reaches 2.15 m.</p>
+        </article>
+        <article class="attack">
+          <div class="attack-head"><h3><i class="swatch" style="background:var(--core)"></i>Core teleport and slam</h3><span class="tag plain">core phase</span></div>
+          <div class="specs">
+            <div class="spec"><b>any</b><span>range</span></div>
+            <div class="spec"><b>30%</b><span>damage</span></div>
+            <div class="spec"><b>5.5 s</b><span>cooldown (7 s base)</span></div>
+            <div class="spec"><b>4.2 m</b><span>slam radius</span></div>
+          </div>
+          <div class="timeline" data-total="4.6" data-color="var(--core)" data-segs="0:1.55:teleport,1.55:2.82:ring tracks you" data-marks="0.23:warning,0.67:lands,2.82:lock,3.05:slam"></div>
+          <div class="timeline-scale"><span>0 s</span><span>4.55 s</span></div>
+          <p>A landing warning shows where it will appear. It then lands and an orange 4.2 m ring follows your predicted position. The ring locks at 2.82 s and the slam hits at 3.05 s, when the ring turns magenta.</p>
+          <p class="dodge"><b>Dodge:</b> step out of the ring after it locks, or jump so you are in the air at 1.5 s. This is the one low attack.</p>
+        </article>
+      </div>
+      <p class="muted small">After every attack the boss recovers: 1.15 s in Measured, 0.85 s later, plus 0.5 s during a mercy window. The planner uses the full cycle time of each move: cannon 2.95 s, slash 2.92 s, teleport 3.47 s.</p>
+    </section>
+
+    <!-- ================= BRAIN ================= -->
+    <section id="brain">
+      <header>
+        <div class="eyebrow">The AI</div>
+        <h2>How it thinks, every 0.2 seconds</h2>
+        <p>The original boss checked distance, intact arms and ready cooldowns, then picked from a fixed order: blade, then teleport, then cannon. The adaptive boss stacks five layers on top of the same attack state machine. Each layer answers one question.</p>
+      </header>
+      <div class="pipeline">
+        <div class="pipe"><span class="k">in</span><h4>Sensors</h4><p>Sight (linecast every 0.1 s), your position, damage per part, Relay's heals</p></div>
+        <div class="pipe"><span class="k">L1</span><h4>Player model</h4><p>How do you move and dodge?</p></div>
+        <div class="pipe"><span class="k">L2</span><h4>Predictive aim</h4><p>Where will you be at impact?</p></div>
+        <div class="pipe"><span class="k">L3</span><h4>Attack learner</h4><p>Which attacks work on you?</p></div>
+        <div class="pipe"><span class="k">L4</span><h4>Combo planner</h4><p>What wins over two moves?</p></div>
+        <div class="pipe"><span class="k">L5</span><h4>Phase + director</h4><p>How bold, and is it fair?</p></div>
+        <div class="pipe exec"><span class="k">out</span><h4>Attack states</h4><p>Original timings, unchanged</p></div>
+      </div>
+      <div class="card stack">
+        <h3>One decision, in plain words</h3>
+        <ol>
+          <li><b>See.</b> You are visible at 7 m, moving left at 3.4 m/s. The player model has seen you strafe left after the last four cannon bursts.</li>
+          <li><b>Set the mood.</b> Both arms are intact and you have 90% health, so the phase is Measured and the director is at normal (lead factor 0.65).</li>
+          <li><b>Ask the learner.</b> At mid range the cannon has hit you 6 times out of 9. A Thompson draw gives cannon 0.71, double teleport 0.44.</li>
+          <li><b>Plan.</b> Expectimax looks two moves ahead: "Cannon, then you most likely strafe left and stay at mid range, then the double teleport is ready." That line scores highest.</li>
+          <li><b>Act.</b> It starts the cannon burst. Each of the three shots leads your path by up to 1.7 m.</li>
+          <li><b>Learn.</b> Each shot is recorded as a hit or miss. Your movement between lock and impact becomes one more dodge observation.</li>
+        </ol>
+        <p class="small muted">Example values for illustration. The F10 overlay shows the real ones live.</p>
+      </div>
+    </section>
+
+    <!-- ================= LAYERS ================= -->
+    <section id="layers">
+      <header>
+        <div class="eyebrow">Layer by layer</div>
+        <h2>The five layers</h2>
+        <p>The tags show where each idea comes from: the SE3062 lectures, or game AI beyond them.</p>
+      </header>
+
+      <article class="layer">
+        <div class="num">1</div>
+        <div class="body">
+          <div class="tags"><span class="tag is">L03 model-based agent</span><span class="tag is">L09 probability</span></div>
+          <h3>Player model <span class="muted small mono">RiftPlayerModel</span></h3>
+          <p class="q">How does this player move, and how do they answer each attack?</p>
+          <p>The boss keeps an internal state about you, updated every 0.1 s while you are visible. This is what makes it a model-based agent rather than a reflex agent.</p>
+          <div class="formula">velocity    v̂ ← v̂ + 0.35 · (Δp/Δt − v̂)        exponential smoothing
+range       r̄ ← r̄ + 0.05 · (distance − r̄)
+strafe bias b ← EMA of sign(lateral velocity)   −1 left … +1 right
+answer      P(r | attack) = (n_r + 1) / (N + 6)  Dirichlet(1,…,1) prior</div>
+          <div class="split">
+            <div>
+              <h4>Dodge answers</h4>
+              <p class="small">Between each attack's telegraph and its impact, your movement is classified as one of six answers: <b>Stay, Strafe left, Strafe right, Back off, Close in, Jump</b>. Counts are kept per attack.</p>
+            </div>
+            <div>
+              <h4>Why the +1</h4>
+              <p class="small">The Dirichlet prior is Laplace smoothing. With no data every answer has 1/6. After 4 strafes left out of 4 cannon bursts, strafe left is (4+1)/(4+6) = 50%, not 100%. One observation never makes the boss certain.</p>
+            </div>
+          </div>
+          <p class="small muted">It also tracks which part you are shooting (damage over the last 10 s) and when Relay heals you.</p>
+        </div>
+      </article>
+
+      <article class="layer">
+        <div class="num">2</div>
+        <div class="body">
+          <div class="tags"><span class="tag beyond">Beyond: target leading</span></div>
+          <h3>Predictive aim <span class="muted small mono">RiftWardenBrain.Lead</span></h3>
+          <p class="q">Where will the player be when the shot lands?</p>
+          <p>The original boss aimed at where you were at the lock. Constant movement made you untouchable. Now the cannon and slam aim at a constant-velocity intercept, deliberately weakened so that changing direction still works.</p>
+          <div class="formula">aim = p + v̂ · t · κ,     |v̂ · t · κ| ≤ 2.5 m
+t: 0.17 / 0.47 / 0.77 s after lock (cannon), up to 0.6 s (slam)
+κ: lead factor 0.4 (mercy), 0.65 (normal), 0.85 (pressure)</div>
+          <p class="small">Because κ is below 1 and the lead is capped, a player who runs in a straight line gets hit, and a player who reacts to the lock escapes. Try it in <a href="#aim">the aim explainer</a>.</p>
+        </div>
+      </article>
+
+      <article class="layer">
+        <div class="num">3</div>
+        <div class="body">
+          <div class="tags"><span class="tag is">L09 Bayes' rule</span><span class="tag is">L03 learning agent</span><span class="tag beyond">Beyond: Thompson sampling bandit</span></div>
+          <h3>Attack learner <span class="muted small mono">RiftAttackLearner · BetaBelief</span></h3>
+          <p class="q">Which attacks actually work against this player, at this range?</p>
+          <p>Each attack has a separate belief for each range band (close &lt; 4 m, mid 4–10 m, far &gt; 10 m). The belief is a Beta(α, β) distribution over its hit chance, starting at Beta(2, 2): a weak 50/50.</p>
+          <div class="formula">hit   α ← γ·α + 1         miss  β ← γ·β + 1        γ = 0.97, floor 1
+mean  α / (α + β)
+pick  draw θ ~ Beta(α, β) for each ready attack, use the draws</div>
+          <div class="split">
+            <div>
+              <h4>Bayes</h4>
+              <p class="small">The Beta is the conjugate prior of a hit/miss outcome, so Bayes' rule reduces to adding 1 to a count. Each cannon shot and each melee or slam swing is one trial.</p>
+            </div>
+            <div>
+              <h4>Explore vs exploit</h4>
+              <p class="small">Thompson sampling draws a plausible hit chance from each belief. An untested attack has a wide belief, so it sometimes draws high and gets tried. A proven attack usually wins. Forgetting (γ) fades old evidence, so the boss notices when you change tactics.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="layer">
+        <div class="num">4</div>
+        <div class="body">
+          <div class="tags"><span class="tag is">L10 adversarial search: expectimax</span><span class="tag is">L03 expected utility</span></div>
+          <h3>Combo planner <span class="muted small mono">RiftComboPlanner · Expectimax</span></h3>
+          <p class="q">If I do this, how will they react, and what punishes that?</p>
+          <p>A depth-2 expectimax search over a small fight state: range band, cooldowns, phase and weakest part. The boss's moves are MAX nodes. Your answers are CHANCE nodes, weighted by the player model. Hit chances come from the learner.</p>
+          <div class="formula">MAX     boss move:  Cannon · Slash · Double teleport · Approach · Hold
+CHANCE  your answer r ~ P(r | move)   hit ~ θ(move, band)
+MAX     boss follow-up in the new state
+value = hit chance × payoff − w_risk · extra damage taken
+risk  = rate × duration × (exposure − 1)     exposure: teleport 0.5, approach 0.8, slash 0.9, cannon/hold 1.0
+leaf  = ½ × best attack ready soon, × 0.85 per second of waiting</div>
+          <div class="split">
+            <div>
+              <h4>Why expectimax, not minimax</h4>
+              <p class="small">Minimax assumes you always pick the reply that is worst for the boss, which makes it timid. You are not a perfect opponent. Expectimax weights your <i>observed</i> replies, so the boss exploits your habits.</p>
+            </div>
+            <div>
+              <h4>Why relative risk</h4>
+              <p class="small">You are shooting the boss whatever it does, so standing still is never safe. A move is charged only for the extra damage it invites. Under heavy fire the rear teleport earns a bonus, because you have to turn around.</p>
+            </div>
+          </div>
+          <p class="small">The learner joins at the root: each attack's value is shifted by (Thompson draw − posterior mean) × payoff, so exploration survives planning. The whole tree is at most 6⁴ leaves and runs in well under a millisecond. Try it in <a href="#planner">the planner explainer</a>.</p>
+        </div>
+      </article>
+
+      <article class="layer">
+        <div class="num">5</div>
+        <div class="body">
+          <div class="tags"><span class="tag is">L03 hierarchical state machine</span><span class="tag is">L03 utility</span><span class="tag beyond">Beyond: dynamic difficulty</span></div>
+          <h3>Phases, tactics and director <span class="muted small mono">RiftDirector</span></h3>
+          <p class="q">Given my damage and how the fight is going, how should I behave?</p>
+          <p>The phase (Measured, Enraged, Desperate) sets the parameters the attack states run with: a hierarchical state machine. Three utility tactics run while it pursues you:</p>
+          <div class="grid3">
+            <div class="callout"><b>Shield the weak arm</b><p class="small">An arm below 50% health that you keep shooting is turned up to 25° away from you.</p></div>
+            <div class="callout"><b>Punish the healer</b><p class="small">If Relay healed you in the last 6 s and is in sight and range, a cannon burst may target Relay. At most once per 12 s.</p></div>
+            <div class="callout"><b>Cut off</b><p class="small">While approaching, it walks to a point 2 m to the side you usually strafe toward, not straight at you.</p></div>
+          </div>
+          <p class="small">The director is covered in <a href="#fair">Fairness rules</a>.</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= AIM EXPLAINER ================= -->
+    <section id="aim">
+      <header>
+        <div class="eyebrow">Interactive</div>
+        <h2>Try: predictive aim</h2>
+        <p>Top-down view of one cannon burst. You strafe sideways past the boss. Compare where each boss fires against where you actually are.</p>
+      </header>
+      <div class="lab">
+        <div class="lab-head"><h3>Cannon burst against a strafing player</h3><span class="tag beyond">Layer 2</span></div>
+        <div class="controls">
+          <div class="ctl"><label for="aimK">Lead factor κ <output id="aimKo">0.65</output></label><input id="aimK" type="range" min="0" max="0.85" step="0.05" value="0.65"></div>
+          <div class="ctl"><label for="aimV">Your speed <output id="aimVo">3.4 m/s</output></label><input id="aimV" type="range" min="0" max="7" step="0.1" value="3.4"></div>
+          <div class="ctl"><label for="aimR">After the lock you</label>
+            <select id="aimR"><option value="keep">keep running</option><option value="stop">stop</option><option value="rev">reverse direction</option></select></div>
+        </div>
+        <div class="btnrow">
+          <span class="small muted">Director mood:</span>
+          <button type="button" data-k="0.4">Mercy 0.4</button>
+          <button type="button" data-k="0.65">Normal 0.65</button>
+          <button type="button" data-k="0.85">Pressure 0.85</button>
+        </div>
+        <canvas id="aimCanvas" height="300" aria-label="Top-down plot of shots and player positions"></canvas>
+        <div class="readout" id="aimOut"></div>
+        <p class="small muted">Grid squares are 1 m. Shot positions use the boss's formula; the miss distance is the gap between each shot and your position when it lands. A cannon shot needs to land close to you to hit.</p>
+      </div>
+    </section>
+
+    <!-- ================= BANDIT EXPLAINER ================= -->
+    <section id="bandit">
+      <header>
+        <div class="eyebrow">Interactive</div>
+        <h2>Try: attack learner</h2>
+        <p>Three attacks at one range band. Add hits and misses, then let the boss draw. The curves are the Beta beliefs; the dots are this draw's samples.</p>
+      </header>
+      <div class="lab">
+        <div class="lab-head"><h3>Thompson sampling over Beta beliefs</h3><span class="tag is">Layer 3</span></div>
+        <canvas id="betaCanvas" height="220" aria-label="Beta belief curves for three attacks"></canvas>
+        <div class="arms" id="arms"></div>
+        <div class="btnrow">
+          <button type="button" class="primary" id="drawOne">Draw once</button>
+          <button type="button" id="drawMany">Draw 1,000 times</button>
+          <label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="forget" checked> Forget old evidence (γ = 0.97)</label>
+          <button type="button" class="ghost" id="betaReset">Reset to example</button>
+        </div>
+        <p class="small" id="betaMsg">The example starts with some evidence: the cannon has worked, the double teleport mostly has not, and the slash is untested.</p>
+      </div>
+    </section>
+
+    <!-- ================= PLANNER EXPLAINER ================= -->
+    <section id="planner">
+      <header>
+        <div class="eyebrow">Interactive</div>
+        <h2>Try: combo planner</h2>
+        <p>The boss is at mid range with every attack ready. Tell it how you usually answer, and watch the best two-move line change. This is a simplified version of the real planner: one shared answer table for all attacks, and four answers instead of six.</p>
+      </header>
+      <div class="lab">
+        <div class="lab-head"><h3>Depth-2 expectimax, mid range</h3><span class="tag is">Layer 4</span></div>
+        <div class="btnrow">
+          <span class="small muted">Player habit:</span>
+          <button type="button" data-habit="0,6,1,2">Strafer</button>
+          <button type="button" data-habit="1,1,8,0">Backpedaler</button>
+          <button type="button" data-habit="1,1,0,8">Rusher</button>
+          <button type="button" data-habit="8,1,1,0">Camper</button>
+          <button type="button" data-habit="0,0,0,0">Unknown</button>
+        </div>
+        <div class="controls">
+          <div class="ctl"><label for="hStay">Times you stayed <output id="hStayo">0</output></label><input id="hStay" type="range" min="0" max="10" step="1" value="0"></div>
+          <div class="ctl"><label for="hStrafe">Times you strafed <output id="hStrafeo">6</output></label><input id="hStrafe" type="range" min="0" max="10" step="1" value="6"></div>
+          <div class="ctl"><label for="hBack">Times you backed off <output id="hBacko">1</output></label><input id="hBack" type="range" min="0" max="10" step="1" value="1"></div>
+          <div class="ctl"><label for="hClose">Times you closed in <output id="hCloseo">2</output></label><input id="hClose" type="range" min="0" max="10" step="1" value="2"></div>
+          <div class="ctl"><label for="pFire">Damage you deal to it <output id="pFireo">6 /s</output></label><input id="pFire" type="range" min="0" max="15" step="1" value="6"></div>
+          <div class="ctl"><label for="pPhase">Phase (risk weight)</label>
+            <select id="pPhase"><option value="1">Measured (1.0)</option><option value="0.6">Enraged (0.6)</option><option value="0.3">Desperate (0.3)</option></select></div>
+        </div>
+        <div class="small mono muted" id="probs"></div>
+        <div class="keyline"><span><i class="key-now"></i>expected damage now</span><span><i class="key-follow"></i>best follow-up (expected)</span><span><i class="key-risk"></i>risk bonus under fire</span></div>
+        <div class="moves" id="moves"></div>
+        <div class="verdict" id="verdict"></div>
+        <p class="small muted">Values are expected damage in % of your health. Hit chances per answer are fixed example numbers here; in the game they come from the learner.</p>
+      </div>
+    </section>
+
+    <!-- ================= FAIRNESS ================= -->
+    <section id="fair">
+      <header>
+        <div class="eyebrow">Fairness</div>
+        <h2>Smarter, not cheaper</h2>
+        <p>A boss that reads you can easily become unfair. The director (dynamic difficulty adjustment) and a set of hard limits keep the fight beatable.</p>
+      </header>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Director mood</th><th>When</th><th>What changes</th></tr></thead>
+          <tbody>
+            <tr><td><b style="color:var(--good)">Mercy</b></td><td>Your health drops below 25%</td><td>For 6 s: lead factor 0.4, no planned combos (depth 1), cooldowns × 1.2, +0.5 s rest. Then 12 s before it can trigger again.</td></tr>
+            <tr><td><b>Normal</b></td><td>Otherwise</td><td>Lead factor 0.65</td></tr>
+            <tr><td><b style="color:var(--warn)">Pressure</b></td><td>You are above 80% health and the boss lost over 30% of an arm in the last 20 s</td><td>Lead factor 0.85, cooldowns × 0.9</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid2">
+        <div class="callout key">
+          <b>Never changes</b>
+          <ul class="small">
+            <li>Telegraph times and attack timings</li>
+            <li>Damage values</li>
+            <li>The rule that only the slam can be jumped</li>
+            <li>Every attack keeps its warning ring or wind-up</li>
+          </ul>
+        </div>
+        <div class="callout">
+          <b>Built-in escape routes</b>
+          <ul class="small">
+            <li>Lead factor below 1 and a 2.5 m cap: reacting still dodges</li>
+            <li>Dirichlet prior: one dodge never makes it certain</li>
+            <li>Forgetting: changing tactics works again</li>
+            <li>Range rules: no slash beyond 3 m, ever</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EVAL ================= -->
+    <section id="eval">
+      <header>
+        <div class="eyebrow">Evaluation</div>
+        <h2>Does it work?</h2>
+        <p>Four scripted player styles fought the original boss and the adaptive boss: 3 runs of 75 s each, audio muted, the player dealing 6 damage per second so every fight reached the core phase.</p>
+      </header>
+      <div class="card stack">
+        <h3>Hit rate: share of attacks that connected</h3>
+        <div class="evalbars" id="evalbars"></div>
+        <div class="axis"><span></span><div><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div></div>
+        <div class="keyline"><span><i style="background:var(--muted);opacity:.45"></i>original boss</span><span><i style="background:var(--accent)"></i>adaptive boss</span></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Style</th><th>What it does</th><th class="num">Damage dealt</th><th class="num">Player falls</th><th class="num">Mix entropy (bits)</th></tr></thead>
+          <tbody>
+            <tr><td><b>Strafer</b></td><td>Circles at 3.4 m/s, always counter-clockwise</td><td class="num">190 → 270</td><td class="num">1.0 → 2.0</td><td class="num">1.95 → 1.74</td></tr>
+            <tr><td><b>Jumper</b></td><td>Mid range, jumps so the peak lands on each impact</td><td class="num">320 → 490</td><td class="num">3.0 → 4.0</td><td class="num">1.34 → 1.39</td></tr>
+            <tr><td><b>Kiter</b></td><td>Backs away at 3.4 m/s along the arena edge</td><td class="num">74 → 97</td><td class="num">0 → 0.3</td><td class="num">1.25 → 0.96</td></tr>
+            <tr><td><b>Camper</b></td><td>Stands still at 9 m</td><td class="num">530 → 530</td><td class="num">5 → 5</td><td class="num">1.34 → 1.39</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid3">
+        <div class="callout"><b>Reads movers</b><p class="small">Against every moving style, the hit rate rose 12–21 points. The Kiter's more than doubled, because the old boss kept firing where the kiter had been.</p></div>
+        <div class="callout"><b>Learns habits</b><p class="small">Against the Strafer the player model reached a strafe bias of −0.98 within seconds, and the double rear teleport, which ignores strafing, became its main attack (7 of 17).</p></div>
+        <div class="callout"><b>The trade-off</b><p class="small">Against fixed habits it repeats what works, so variety drops. The Camper is hit 90% instead of 100%: those misses are exploration. Mercy triggered 2–4 times a fight.</p></div>
+      </div>
+      <p class="small muted">Full report: <code>Docs/IS/Testing/RiftWarden/EVALUATION.md</code>. Scripted players never change tactics, so this test cannot show the forgetting term at work; the unit tests cover it.</p>
+    </section>
+
+    <!-- ================= OVERLAY ================= -->
+    <section id="overlay">
+      <header>
+        <div class="eyebrow">Instructions</div>
+        <h2>Read its mind with F10</h2>
+        <p>Press <kbd>F10</kbd> in Play mode. The overlay attaches itself to the boss at runtime; nothing needs to be added to the scene.</p>
+      </header>
+      <div class="grid2">
+        <div class="card stack">
+          <h3>On screen</h3>
+          <ul class="small">
+            <li><b>Phase and mood:</b> Measured / Enraged / Desperate, and Normal / Mercy / Pressure</li>
+            <li><b>Player model:</b> your smoothed speed, preferred range and strafe bias</li>
+            <li><b>Learned answers:</b> your most likely dodge for each attack, with its probability</li>
+            <li><b>Learner table:</b> hit chance for each attack in each range band</li>
+            <li><b>Planner:</b> the value of each move and the planned two-move line</li>
+            <li><b>Decision:</b> the same text as the lab HUD's Decision line</li>
+          </ul>
+        </div>
+        <div class="card stack">
+          <h3>In the world</h3>
+          <ul class="small">
+            <li>A line for your smoothed velocity</li>
+            <li>The predicted lead point the next shot will use</li>
+            <li>The cut-off point it walks toward while approaching</li>
+          </ul>
+          <h3>Things to try</h3>
+          <ul class="small">
+            <li>Strafe the same way for a minute, and watch the strafe bias and the cut-off point.</li>
+            <li>Back off every slash, and watch the slash's learned answer turn to Back off.</li>
+            <li>Let your health drop under 25%, and watch the mood switch to Mercy.</li>
+            <li>Shoot one arm below half, and watch the boss turn it away.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TESTS ================= -->
+    <section id="tests">
+      <header>
+        <div class="eyebrow">Instructions</div>
+        <h2>Tests and tuning</h2>
+        <p>The algorithms are pure C# with unit tests. Two lab harnesses check the whole boss in Play mode. Close the Unity editor before any command-line run.</p>
+      </header>
+      <ol class="steps">
+        <li><div>
+          <h3>Unit tests (43, all passing)</h3>
+          <p>In Unity: <b>Window › General › Test Runner</b>, the <b>EditMode</b> tab, then run <code>Skybreak.AI.Algorithms.Tests</code>. The boss's tests are <code>PlayerModelTests</code>, <code>BanditTests</code> and <code>ExpectimaxTests</code>; the rest are Relay's.</p>
+          <div class="copyrow">
+            <div class="bar"><span class="small muted">Or from a terminal:</span><button type="button" data-copy="cmdTests">Copy</button></div>
+            <pre><code id="cmdTests">"F:\Unity\Editors\6000.6.0f1\Editor\Unity.exe" -batchmode -projectPath "F:\UnityProjects\Skybreak" -runTests -testPlatform EditMode -assemblyNames Skybreak.AI.Algorithms.Tests -testResults rift_tests.xml -logFile -</code></pre>
+          </div>
+        </div></li>
+        <li><div>
+          <h3>Regression snapshots</h3>
+          <p>Runs fixed scenarios (the 14 original ones plus moving target, phase, mercy, healer and shield) and writes what the boss decided. Used to prove step 1 changed nothing.</p>
+          <div class="copyrow">
+            <div class="bar"><span class="small muted">Runs muted; Unity exits when done.</span><button type="button" data-copy="cmdReg">Copy</button></div>
+            <pre><code id="cmdReg">"F:\Unity\Editors\6000.6.0f1\Editor\Unity.exe" -batchmode -projectPath "F:\UnityProjects\Skybreak" -executeMethod RiftRegressionCheck.RunBatch -riftOut RiftSnapshot.txt -logFile -</code></pre>
+          </div>
+        </div></li>
+        <li><div>
+          <h3>Archetype evaluation</h3>
+          <p>The four scripted styles, 3 runs of 75 s each at double speed. Takes several minutes. Results go to the file named by <code>-riftEvalOut</code>.</p>
+          <div class="copyrow">
+            <div class="bar"><span class="small muted">Runs muted; Unity exits when done.</span><button type="button" data-copy="cmdEval">Copy</button></div>
+            <pre><code id="cmdEval">"F:\Unity\Editors\6000.6.0f1\Editor\Unity.exe" -batchmode -projectPath "F:\UnityProjects\Skybreak" -executeMethod RiftEvaluation.RunBatch -riftEvalOut RiftEvaluation.txt -logFile -</code></pre>
+          </div>
+          <p class="small muted">Both harnesses live in the git-excluded <code>Assets/LocalCombatLab/Editor</code> folder, so they only exist on the machine that has the lab.</p>
+        </div></li>
+        <li><div>
+          <h3>Tune it</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Setting</th><th>Where</th><th>Default</th><th>Effect</th></tr></thead>
+              <tbody>
+                <tr><td><code>directorEnabled</code></td><td>RiftWardenBrain (Inspector)</td><td>on</td><td>Off gives fixed phase-less behaviour with no mercy or pressure</td></tr>
+                <tr><td><code>leadFactor</code></td><td>RiftWardenBrain (Inspector)</td><td class="num">0.65</td><td>Aim lead when the director is off; the director overrides it</td></tr>
+                <tr><td><code>MaxLead</code></td><td>RiftWardenBrain const</td><td class="num">2.5 m</td><td>Longest lead any shot may take</td></tr>
+                <tr><td><code>cannonCooldown</code> · <code>bladeCooldown</code> · <code>teleportCooldown</code> · <code>slamCooldown</code></td><td>AgentTuningData</td><td class="num">4 · 3 · 10 · 7 s</td><td>Base cooldowns before phase scaling</td></tr>
+                <tr><td><code>armHealth</code> · <code>coreHealth</code></td><td>AgentTuningData</td><td class="num">180 · 260</td><td>Fight length</td></tr>
+                <tr><td><code>MercyBelow</code> · <code>LeadMercy</code> · <code>LeadPressure</code></td><td>RiftDirector const</td><td class="num">0.25 · 0.4 · 0.85</td><td>How kind or harsh the director is</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div></li>
+      </ol>
+    </section>
+
+    <!-- ================= CODE ================= -->
+    <section id="code">
+      <header>
+        <div class="eyebrow">Reference</div>
+        <h2>Code map</h2>
+        <p>Boss scripts are in <code>Assets/Scripts/AI/RiftWarden/</code>. Pure algorithms are in <code>Assets/Scripts/AI/Algorithms/</code> (no Unity references, so they can be unit tested).</p>
+      </header>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>File</th><th>Layer</th><th>What it holds</th></tr></thead>
+          <tbody>
+            <tr><td><code>RiftWardenBrain.cs</code></td><td>all</td><td>Orchestration and the attack state machine; predictive aim (<code>Lead</code>), tactics, damage and recording outcomes</td></tr>
+            <tr><td><code>RiftPerception.cs</code></td><td>sensors</td><td>Sight linecast every 0.1 s and last-seen memory</td></tr>
+            <tr><td><code>RiftPlayerModel.cs</code></td><td>1</td><td>Velocity, range, strafe bias, dodge answers, part pressure, heal detection</td></tr>
+            <tr><td><code>RiftAttackLearner.cs</code></td><td>3</td><td>Beta(2, 2) belief per attack and range band, γ = 0.97</td></tr>
+            <tr><td><code>RiftComboPlanner.cs</code></td><td>4</td><td>Fight-state model for expectimax: moves, durations, payoff, exposure, risk</td></tr>
+            <tr><td><code>RiftDirector.cs</code></td><td>5</td><td>Phases, moods and their parameters</td></tr>
+            <tr><td><code>RiftUtility.cs</code></td><td>baseline</td><td>The original fixed-order attack scores, kept for comparison</td></tr>
+            <tr><td><code>RiftDebugOverlay.cs</code></td><td>tools</td><td>The F10 overlay</td></tr>
+            <tr><td><code>Algorithms/Probability/DirichletCategorical.cs</code></td><td>1</td><td>Smoothed categorical counts</td></tr>
+            <tr><td><code>Algorithms/Prediction/TargetPrediction.cs</code></td><td>1, 2</td><td>Smoothing, intercept lead, dodge classification</td></tr>
+            <tr><td><code>Algorithms/Bandit/BetaBelief.cs</code></td><td>3</td><td>Beta belief, Marsaglia–Tsang gamma sampler, Thompson sampling</td></tr>
+            <tr><td><code>Algorithms/Adversarial/Expectimax.cs</code></td><td>4</td><td>Generic expectimax with an optional pessimistic (minimax) mode</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">Design: <code>Docs/IS/AgentDesign/RiftWarden/RIFT_WARDEN_AI_DESIGN.md</code>. Step-by-step evidence: <code>Docs/IS/Testing/RiftWarden/</code>.</p>
+    </section>
+
+    <!-- ================= VIVA ================= -->
+    <section id="viva">
+      <header>
+        <div class="eyebrow">Defence practice</div>
+        <h2>Viva questions</h2>
+        <p>Short answers you should be able to give from memory.</p>
+      </header>
+      <div>
+        <details><summary>What kind of agent is the Rift Warden?</summary><div><p>A layered, model-based, learning agent in a competitive multi-agent environment. It keeps an internal model of the player (model-based), updates its beliefs from outcomes (learning), and chooses by expected value over a short search (utility-based).</p></div></details>
+        <details><summary>Describe its task environment.</summary><div><p>Partially observable (you can break line of sight), multi-agent and competitive, stochastic (your dodges), sequential, dynamic and continuous, with known rules. What is unknown is your behaviour, and learning it during the fight is the point.</p></div></details>
+        <details><summary>Why a Beta distribution for hit chance?</summary><div><p>A hit is a Bernoulli outcome, and the Beta is its conjugate prior. Bayes' rule becomes counting: a hit adds 1 to α, a miss adds 1 to β. The mean is α/(α+β), and the width shows how sure the boss is.</p></div></details>
+        <details><summary>Why Thompson sampling instead of always using the best mean?</summary><div><p>Always using the best mean never tests the alternatives, so the boss could get stuck on an attack that worked early. Sampling from each belief tries uncertain attacks in proportion to the chance they are actually best. That balances exploration and exploitation.</p></div></details>
+        <details><summary>What does the forgetting factor γ = 0.97 do?</summary><div><p>Before each update α and β shrink by 3% (never below 1). Old evidence fades, so the problem is treated as non-stationary: if you change tactics, the boss's beliefs follow within a few trials.</p></div></details>
+        <details><summary>Why expectimax and not minimax?</summary><div><p>Minimax assumes the player always picks the reply that is worst for the boss. Real players are not optimal, so minimax would make the boss overly cautious. Expectimax weights replies by their observed probability, which lets it exploit habits. The library has a pessimistic mode, and a unit test shows a tree where the two disagree.</p></div></details>
+        <details><summary>Why is risk relative to standing still?</summary><div><p>The first version charged absolute risk. Because the boss is shot whatever it does, every move looked costly and it froze while under fire; a regression scenario caught it. Charging only the extra damage a move invites, (exposure − 1), fixed it.</p></div></details>
+        <details><summary>How do you stop predictive aim from being unfair?</summary><div><p>The lead factor is below 1 (0.4–0.85) and capped at 2.5 m, so changing direction after the lock still dodges. Telegraphs and damage never change. The director adds a mercy window below 25% health.</p></div></details>
+        <details><summary>Why the +1 in the dodge probabilities?</summary><div><p>It is a Dirichlet(1,…,1) prior, which is Laplace smoothing. With few observations no answer gets probability 0 or 1, so one dodge does not make the boss certain.</p></div></details>
+        <details><summary>How did you show it is better than the original?</summary><div><p>Scripted archetypes fought both versions under identical conditions. Hit rate rose 12–21 points against all moving styles. Against fixed habits variety fell, which is the bandit exploiting. The 43 unit tests check the algorithms against hand-solved cases, and the regression harness proved the refactor kept the original behaviour.</p></div></details>
+        <details><summary>What would you improve next?</summary><div><p>Test against human players who change tactics, since the scripted ones cannot show the forgetting at work. Separate dodge tables per range band. A deeper search with pruning if more attacks are added.</p></div></details>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div>Rift Warden adaptive AI · Skybreak · SE3062 Intelligent Systems, Student 1 (additional agent; the graded agent is Relay).</div>
+  <div>Numbers on this page come from the project's code and <code>EVALUATION.md</code>. Built with AI assistance, recorded in <code>Docs/CONTRIBUTION_LOG.md</code>.</div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function fit(canvas) {
+    var dpr = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.height / (canvas._dpr || 1);
+    canvas._dpr = dpr; canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    var ctx = canvas.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return { ctx: ctx, w: w, h: h };
+  }
+
+  /* ---------- attack timelines ---------- */
+  document.querySelectorAll(".timeline").forEach(function (el) {
+    var total = parseFloat(el.dataset.total), color = el.dataset.color;
+    (el.dataset.segs || "").split(",").filter(Boolean).forEach(function (s) {
+      var p = s.split(":"), a = parseFloat(p[0]), b = parseFloat(p[1]);
+      var d = document.createElement("div"); d.className = "seg";
+      d.style.left = (a / total * 100) + "%"; d.style.width = ((b - a) / total * 100) + "%"; d.style.background = color; d.title = p[2];
+      el.appendChild(d);
+    });
+    (el.dataset.marks || "").split(",").filter(Boolean).forEach(function (m, i, all) {
+      var p = m.split(":"), t = parseFloat(p[0]);
+      var k = document.createElement("div"); k.className = "mark"; k.style.left = (t / total * 100) + "%"; k.style.background = color; el.appendChild(k);
+      var l = document.createElement("div"); l.className = "lbl"; l.textContent = p[1] + " " + t + "s";
+      l.style.left = Math.min(92, Math.max(8, t / total * 100)) + "%"; l.style.top = (i % 2 ? "auto" : "2px"); if (i % 2) l.style.bottom = "2px"; else l.style.bottom = "auto";
+      el.appendChild(l);
+    });
+  });
+
+  /* ---------- copy buttons ---------- */
+  document.querySelectorAll("[data-copy]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var el = $(b.dataset.copy), text = el.textContent;
+      var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1500); };
+      var fallback = function () { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Selected, press Ctrl+C"; };
+      try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+    });
+  });
+
+  /* ---------- contents highlight ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) links.forEach(function (a) { a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id); });
+      });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    document.querySelectorAll("main > section").forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- predictive aim ---------- */
+  var aimK = $("aimK"), aimV = $("aimV"), aimR = $("aimR"), aimCanvas = $("aimCanvas");
+  var SHOTS = [0.17, 0.47, 0.77], MAXLEAD = 2.5;
+  function drawAim() {
+    var k = parseFloat(aimK.value), v = parseFloat(aimV.value), mode = aimR.value;
+    $("aimKo").textContent = k.toFixed(2); $("aimVo").textContent = v.toFixed(1) + " m/s";
+    var f = fit(aimCanvas), ctx = f.ctx, W = f.w, H = f.h;
+    var scale = Math.max(18, Math.min(W / 14, H / 12)), ox = W * 0.12, oy = H * 0.5;
+    var P = { x: 9, y: -1.2 }; // player at 9 m, slightly up; strafes in +y (screen up)
+    function sx(x) { return ox + x * scale; } function sy(y) { return oy - y * scale; }
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = css("--line"); ctx.lineWidth = 1;
+    for (var gx = -2; gx <= 30; gx++) { ctx.beginPath(); ctx.moveTo(sx(gx), 0); ctx.lineTo(sx(gx), H); ctx.stroke(); }
+    for (var gy = -10; gy <= 10; gy++) { ctx.beginPath(); ctx.moveTo(0, sy(gy)); ctx.lineTo(W, sy(gy)); ctx.stroke(); }
+    // boss
+    ctx.fillStyle = css("--core"); ctx.beginPath(); ctx.arc(sx(0), sy(0), 11, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = css("--muted"); ctx.font = "11px " + css("--f-mono"); ctx.fillText("boss", sx(0) - 14, sy(0) + 26);
+    function actual(t) { var d = mode === "keep" ? v * t : mode === "stop" ? 0 : -v * t; return { x: P.x, y: P.y + d }; }
+    function predicted(t) { var lead = Math.min(v * t * k, MAXLEAD); return { x: P.x, y: P.y + lead }; }
+    // path before lock
+    ctx.strokeStyle = css("--muted"); ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(sx(P.x), sy(P.y - 1.5)); ctx.lineTo(sx(P.x), sy(P.y)); ctx.stroke(); ctx.setLineDash([]);
+    // actual path after lock
+    var end = actual(0.77); ctx.strokeStyle = css("--ink"); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(sx(P.x), sy(P.y)); ctx.lineTo(sx(end.x), sy(end.y)); ctx.stroke(); ctx.lineWidth = 1;
+    // lines of fire
+    var rows = [];
+    SHOTS.forEach(function (t, i) {
+      var a = actual(t), pr = predicted(t);
+      ctx.strokeStyle = css("--accent"); ctx.globalAlpha = .35; ctx.beginPath(); ctx.moveTo(sx(0), sy(0)); ctx.lineTo(sx(pr.x), sy(pr.y)); ctx.stroke(); ctx.globalAlpha = 1;
+      // player position at t
+      ctx.fillStyle = css("--ink"); ctx.beginPath(); ctx.arc(sx(a.x), sy(a.y), 5, 0, Math.PI * 2); ctx.fill();
+      // adaptive shot
+      ctx.fillStyle = css("--accent"); ctx.beginPath(); ctx.arc(sx(pr.x) - 16 - i * 0, sy(pr.y), 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = css("--accent"); ctx.font = "600 11px " + css("--f-mono"); ctx.fillText(String(i + 1), sx(pr.x) - 36, sy(pr.y) + 4);
+      ctx.fillStyle = css("--ink"); ctx.font = "11px " + css("--f-mono"); ctx.fillText("you @" + t + "s", sx(a.x) + 10, sy(a.y) + 4);
+      rows.push({ t: t, orig: Math.abs(a.y - P.y), adapt: Math.abs(a.y - pr.y) });
+    });
+    // original aim (cross at lock)
+    ctx.strokeStyle = css("--cannon"); ctx.lineWidth = 2;
+    var cx = sx(P.x) - 16, cy = sy(P.y); ctx.beginPath(); ctx.moveTo(cx - 6, cy - 6); ctx.lineTo(cx + 6, cy + 6); ctx.moveTo(cx + 6, cy - 6); ctx.lineTo(cx - 6, cy + 6); ctx.stroke(); ctx.lineWidth = 1;
+    ctx.fillStyle = css("--cannon"); ctx.font = "11px " + css("--f-mono"); ctx.fillText("original: all 3 shots here", Math.max(4, cx - 190), cy + 4);
+    ctx.fillStyle = css("--accent"); ctx.fillText("adaptive shots 1-3 (offset left for clarity)", 8, 16);
+    var mean = function (key) { return rows.reduce(function (s, r) { return s + r[key]; }, 0) / rows.length; };
+    $("aimOut").innerHTML =
+      '<div><b>' + mean("orig").toFixed(2) + ' m</b><span>original, mean miss</span></div>' +
+      '<div><b>' + mean("adapt").toFixed(2) + ' m</b><span>adaptive, mean miss</span></div>' +
+      '<div><b>' + Math.min(v * 0.77 * k, MAXLEAD).toFixed(2) + ' m</b><span>lead on shot 3' + (v * 0.77 * k > MAXLEAD ? ' (capped)' : '') + '</span></div>' +
+      '<div><b>' + (mode === "keep" ? "punished" : mode === "rev" ? "escapes" : "partly") + '</b><span>' + (mode === "keep" ? "running straight" : mode === "rev" ? "reacting to the lock" : "stopping dead") + '</span></div>';
+  }
+  [aimK, aimV, aimR].forEach(function (el) { el.addEventListener("input", drawAim); });
+  document.querySelectorAll("#aim [data-k]").forEach(function (b) { b.addEventListener("click", function () { aimK.value = b.dataset.k; drawAim(); }); });
+
+  /* ---------- Beta + Thompson ---------- */
+  function lgamma(z) {
+    var g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lgamma(1 - z);
+    z -= 1; var x = c[0]; for (var i = 1; i < g + 2; i++) x += c[i] / (z + i);
+    var t = z + g + 0.5; return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+  }
+  function betaPdf(x, a, b) { if (x <= 0 || x >= 1) return 0; return Math.exp((a - 1) * Math.log(x) + (b - 1) * Math.log(1 - x) - (lgamma(a) + lgamma(b) - lgamma(a + b))); }
+  function gauss() { var u = 0, v = 0; while (u === 0) u = Math.random(); while (v === 0) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function gammaSample(k) { // Marsaglia–Tsang, as in BetaBelief.cs
+    if (k < 1) return gammaSample(k + 1) * Math.pow(Math.random(), 1 / k);
+    var d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
+    for (;;) { var x = gauss(), v = 1 + c * x; if (v <= 0) continue; v = v * v * v; var u = Math.random();
+      if (u < 1 - 0.0331 * x * x * x * x || Math.log(u) < 0.5 * x * x + d * (1 - v + Math.log(v))) return d * v; }
+  }
+  function betaSample(a, b) { var x = gammaSample(a), y = gammaSample(b); return x / (x + y); }
+  var EXAMPLE = [{ n: "Cannon", a: 6, b: 4, c: "--cannon" }, { n: "Slash", a: 2, b: 2, c: "--blade" }, { n: "Double teleport", a: 3, b: 6, c: "--core" }];
+  var arms, lastDraw = null, shares = null;
+  function resetArms() { arms = EXAMPLE.map(function (e) { return { n: e.n, a: e.a, b: e.b, c: e.c }; }); lastDraw = null; shares = null; }
+  function record(i, hit) {
+    var arm = arms[i];
+    if ($("forget").checked) { arm.a = Math.max(1, arm.a * 0.97); arm.b = Math.max(1, arm.b * 0.97); }
+    if (hit) arm.a += 1; else arm.b += 1;
+    lastDraw = null; shares = null;
+    $("betaMsg").textContent = arm.n + (hit ? " hit: α + 1." : " missed: β + 1.") + " Its belief is now Beta(" + arm.a.toFixed(2) + ", " + arm.b.toFixed(2) + "), mean " + (arm.a / (arm.a + arm.b) * 100).toFixed(0) + "%.";
+    renderBeta();
+  }
+  function renderArms() {
+    var winner = lastDraw ? lastDraw.indexOf(Math.max.apply(null, lastDraw)) : -1;
+    $("arms").innerHTML = arms.map(function (arm, i) {
+      var mean = arm.a / (arm.a + arm.b);
+      return '<div class="arm' + (i === winner ? ' win' : '') + '"><div class="top"><b style="color:var(' + arm.c + ')">' + arm.n + '</b><span class="ab">mean ' + (mean * 100).toFixed(0) + '%</span></div>' +
+        '<div class="ab">Beta(' + arm.a.toFixed(2) + ', ' + arm.b.toFixed(2) + ')' + (lastDraw ? ' · drew ' + lastDraw[i].toFixed(2) : '') + '</div>' +
+        '<div class="share" title="share of picks"><i style="width:' + (shares ? shares[i] * 100 : 0) + '%"></i></div>' +
+        '<div class="ab">' + (shares ? 'picked ' + (shares[i] * 100).toFixed(1) + '% of 1,000 draws' : '&nbsp;') + '</div>' +
+        '<div class="btnrow"><button type="button" data-arm="' + i + '" data-hit="1">+ Hit</button><button type="button" data-arm="' + i + '" data-hit="0">+ Miss</button></div></div>';
+    }).join("");
+    $("arms").querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { record(+b.dataset.arm, b.dataset.hit === "1"); }); });
+  }
+  function renderBeta() {
+    var f = fit($("betaCanvas")), ctx = f.ctx, W = f.w, H = f.h, padL = 34, padB = 24, padT = 10, pw = W - padL - 10, ph = H - padB - padT;
+    ctx.clearRect(0, 0, W, H);
+    var peak = 0; arms.forEach(function (arm) { for (var x = 0.005; x < 1; x += 0.005) peak = Math.max(peak, betaPdf(x, arm.a, arm.b)); });
+    peak = Math.max(peak, 1) * 1.08;
+    ctx.strokeStyle = css("--line"); ctx.fillStyle = css("--muted"); ctx.font = "10px " + css("--f-mono");
+    for (var t = 0; t <= 1.0001; t += 0.25) { var gx = padL + t * pw; ctx.beginPath(); ctx.moveTo(gx, padT); ctx.lineTo(gx, padT + ph); ctx.stroke(); ctx.fillText((t * 100).toFixed(0) + "%", gx - 10, H - 8); }
+    ctx.beginPath(); ctx.moveTo(padL, padT + ph); ctx.lineTo(padL + pw, padT + ph); ctx.stroke();
+    ctx.save(); ctx.translate(11, padT + ph / 2); ctx.rotate(-Math.PI / 2); ctx.fillText("belief density", -36, 0); ctx.restore();
+    arms.forEach(function (arm, i) {
+      var col = css(arm.c);
+      ctx.beginPath();
+      for (var x = 0.002; x < 1; x += 0.004) { var px = padL + x * pw, py = padT + ph - betaPdf(x, arm.a, arm.b) / peak * ph; if (x === 0.002) ctx.moveTo(px, py); else ctx.lineTo(px, py); }
+      ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.stroke();
+      ctx.lineTo(padL + pw, padT + ph); ctx.lineTo(padL, padT + ph); ctx.closePath(); ctx.globalAlpha = 0.08; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = 1;
+      if (lastDraw) { var dx = padL + lastDraw[i] * pw; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(dx, padT + ph - 6, 6, 0, Math.PI * 2); ctx.fill(); }
+    });
+    ctx.lineWidth = 1;
+    renderArms();
+  }
+  $("drawOne").addEventListener("click", function () {
+    lastDraw = arms.map(function (arm) { return betaSample(arm.a, arm.b); }); shares = null;
+    var w = lastDraw.indexOf(Math.max.apply(null, lastDraw));
+    $("betaMsg").textContent = "The boss picks " + arms[w].n + " (drew " + lastDraw[w].toFixed(2) + "). Draw again: a wide belief can win even with a lower mean.";
+    renderBeta();
+  });
+  $("drawMany").addEventListener("click", function () {
+    var c = [0, 0, 0];
+    for (var n = 0; n < 1000; n++) { var d = arms.map(function (arm) { return betaSample(arm.a, arm.b); }); c[d.indexOf(Math.max.apply(null, d))]++; }
+    shares = c.map(function (x) { return x / 1000; }); lastDraw = null;
+    $("betaMsg").textContent = "Over 1,000 decisions each attack is picked about as often as the chance it is the best one. That is exploration in proportion to uncertainty.";
+    renderBeta();
+  });
+  $("betaReset").addEventListener("click", function () { resetArms(); $("betaMsg").textContent = "Reset to the example evidence."; renderBeta(); });
+
+  /* ---------- Expectimax mini-planner ---------- */
+  var R = ["Stay", "Strafe", "Back off", "Close in"];
+  var HIT = { // example hit chance of each attack against each answer
+    Cannon: [0.90, 0.55, 0.65, 0.75],
+    Teleport: [0.75, 0.55, 0.35, 0.65],
+    Slash: [0.80, 0.50, 0.25, 0.85]
+  };
+  var PAY = { Cannon: 24, Teleport: 30, Slash: 30 };             // 3 × 8%, 30%, 30%
+  var DUR = { Cannon: 2.95, Teleport: 3.47, Approach: 1.5, Hold: 0.5 };
+  var EXPO = { Cannon: 1, Teleport: 0.5, Approach: 0.8, Hold: 1 };
+  var CD = { Cannon: 4, Teleport: 10 };
+  var NEXT = { // range band after each move and answer, starting from mid
+    Cannon: ["mid", "mid", "far", "close"],
+    Teleport: ["close", "close", "mid", "close"],
+    Approach: ["close", "mid", "mid", "close"],
+    Hold: ["mid", "mid", "far", "close"]
+  };
+  var hIds = ["hStay", "hStrafe", "hBack", "hClose"];
+  function probs() { var n = hIds.map(function (id) { return +$(id).value; }), N = n.reduce(function (a, b) { return a + b; }, 0); return n.map(function (x) { return (x + 1) / (N + 4); }); }
+  function expectHit(att, p, pess) { var h = HIT[att].map(function (x, i) { return x; }); return pess ? Math.min.apply(null, h) : h.reduce(function (s, x, i) { return s + x * p[i]; }, 0); }
+  function disc(wait) { return Math.pow(0.85, Math.max(0, wait)); }
+  function follow(band, used, p, pess) {
+    var opts = [];
+    var farMul = band === "far" ? 0.8 : 1;
+    if (band === "close") opts.push({ m: "Slash", v: expectHit("Slash", p, pess) * PAY.Slash });
+    var cw = used === "Cannon" ? CD.Cannon - DUR.Cannon : 0, tw = used === "Teleport" ? CD.Teleport - DUR.Teleport : 0;
+    opts.push({ m: "Cannon", v: disc(cw) * expectHit("Cannon", p, pess) * PAY.Cannon * farMul });
+    if (band !== "close") opts.push({ m: "Double teleport", v: disc(tw) * expectHit("Teleport", p, pess) * PAY.Teleport });
+    return opts.reduce(function (a, b) { return b.v > a.v ? b : a; });
+  }
+  function evaluate(p, pess) {
+    var fire = +$("pFire").value, w = +$("pPhase").value;
+    return ["Cannon", "Teleport", "Approach", "Hold"].map(function (m) {
+      var now = PAY[m] ? expectHit(m, p, pess) * PAY[m] : 0;
+      var risk = -w * fire * DUR[m] * (EXPO[m] - 1) / 180 * 100;
+      var fol, line;
+      if (pess) { // minimax: the answer that is worst for the boss, over this hit and the follow-up together
+        var worst = null;
+        NEXT[m].forEach(function (band, i) {
+          var hitNow = PAY[m] ? HIT[m][i] * PAY[m] : 0, f = follow(band, m, p, true);
+          if (!worst || hitNow + f.v < worst.now + worst.v) worst = { now: hitNow, v: f.v, m: f.m, r: i, band: band };
+        });
+        now = worst.now; fol = worst.v; line = worst;
+      } else {
+        fol = 0; var bestI = p.indexOf(Math.max.apply(null, p));
+        NEXT[m].forEach(function (band, i) { fol += p[i] * follow(band, m, p, false).v; });
+        var fb = follow(NEXT[m][bestI], m, p, false); line = { r: bestI, band: NEXT[m][bestI], m: fb.m };
+      }
+      return { m: m === "Teleport" ? "Double teleport" : m, now: now, risk: risk, fol: fol, total: now + risk + fol, line: line };
+    });
+  }
+  function renderPlanner() {
+    hIds.forEach(function (id) { $(id + "o").textContent = $(id).value; });
+    $("pFireo").textContent = $("pFire").value + " /s";
+    var p = probs();
+    $("probs").textContent = "P(answer) = (n + 1) / (N + 4):  " + R.map(function (r, i) { return r + " " + (p[i] * 100).toFixed(0) + "%"; }).join(" · ");
+    var ex = evaluate(p, false), mm = evaluate(p, true);
+    var max = Math.max.apply(null, ex.map(function (e) { return e.now + Math.max(0, e.risk) + e.fol; })) || 1;
+    var best = ex.reduce(function (a, b) { return b.total > a.total ? b : a; });
+    $("moves").innerHTML = ex.map(function (e) {
+      var pct = function (v) { return (Math.max(0, v) / max * 100).toFixed(1) + "%"; };
+      return '<div class="move' + (e === best ? ' best' : '') + '"><span class="name">' + e.m + '</span>' +
+        '<span class="bars"><i class="key-now" style="width:' + pct(e.now) + '"></i><i class="key-follow" style="width:' + pct(e.fol) + '"></i><i class="key-risk" style="width:' + pct(e.risk) + '"></i></span>' +
+        '<span class="val">' + e.total.toFixed(1) + '</span></div>';
+    }).join("");
+    var mBest = mm.reduce(function (a, b) { return b.total > a.total ? b : a; });
+    $("verdict").innerHTML =
+      '<div><b>Expectimax picks ' + best.m + '</b><br>Planned line: ' + best.m + ' → you most likely <i>' + R[best.line.r].toLowerCase() + '</i> → ' + best.line.band + ' range → ' + best.line.m + '.</div>' +
+      '<div><b>Minimax would pick ' + mBest.m + '</b><br>It assumes your worst-case answer every time' + (mBest.m === best.m ? ', and here agrees.' : ', so it ignores your habit.') + ' Worst case: ' + R[mBest.line.r].toLowerCase() + ', worth ' + mBest.total.toFixed(1) + '.</div>';
+  }
+  hIds.concat(["pFire", "pPhase"]).forEach(function (id) { $(id).addEventListener("input", renderPlanner); });
+  document.querySelectorAll("[data-habit]").forEach(function (b) {
+    b.addEventListener("click", function () { b.dataset.habit.split(",").forEach(function (v, i) { $(hIds[i]).value = v; }); renderPlanner(); });
+  });
+
+  /* ---------- evaluation bars ---------- */
+  var EVAL = [["Strafer", 38, 51], ["Jumper", 71, 83], ["Kiter", 16, 37], ["Camper", 100, 90]];
+  $("evalbars").innerHTML = EVAL.map(function (r) {
+    return '<div class="evalrow"><span class="who">' + r[0] + '</span><div class="pair">' +
+      '<div class="hbar orig"><i style="width:' + r[1] + '%"></i><em style="left:' + Math.min(r[1], 88) + '%">' + r[1] + '%</em></div>' +
+      '<div class="hbar adapt"><i style="width:' + r[2] + '%"></i><em style="left:' + Math.min(r[2], 88) + '%">' + r[2] + '%</em></div></div></div>';
+  }).join("");
+
+  /* ---------- boot ---------- */
+  resetArms();
+  function drawAll() { drawAim(); renderBeta(); }
+  drawAll(); renderPlanner();
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(drawAll, 120); });
+  if (window.matchMedia) { var mq = window.matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+  new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>

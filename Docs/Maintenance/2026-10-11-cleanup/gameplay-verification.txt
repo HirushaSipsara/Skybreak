@@ -1,0 +1,1 @@
+PASS: Main Play Mode player/rifle/muzzle, Relay, Rift Warden, 12 audio clips, 20+80 ammunition, shooting and reload start.

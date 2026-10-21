@@ -1,0 +1,29 @@
+# Agent storyboard generation prompts
+
+Generated with the built-in image generation tool on 3 October 2026. Concept illustrations, not implemented Unity screenshots. Numerical health values shown by the artwork are illustrative, except the proposed boss slash damage of 30% maximum health.
+
+## relay_storyboard
+
+Use case: illustration-story. Create a high-resolution landscape game concept storyboard titled "SKYBREAK — RELAY SUPPORT COMPANION", six numbered illustrated panels in a clean 3 by 2 grid, readable short captions and generous space. Original stylized cartoon 3D game aesthetic suitable for a simple Unity student project, bevelled low-poly geometry, cohesive teal/orange/cream accents. Setting: the SAME continuous dungeon facility in each panel, blue-grey stone slab floor and tall stone block walls, doorway and simple crates; glowing cyan fixtures. No photorealism, no zombies, no licensed superhero characters. Main player ARC consistently a human rescue hero with dark hair, teal suit, cream shoulder armor, orange boots and orange backpack with cyan circular light, carrying a compact energy blaster. RELAY consistently a small hovering cream-and-teal support robot with a single cyan eye, side stabilizers, cyan healing emitter and modest energy blaster. Enemies are original hostile security robots, clearly distinct from Relay.
+Panel 1 caption "1 FOLLOW": Relay hovers beside and slightly behind walking Arc, clear follow arrow and camera/aim lane unobstructed.
+Panel 2 caption "2 ASSESS DANGER": Arc behind cover with a small readable HUD "HEALTH 42%"; Relay scans player and a hostile robot, danger indicator; illustrate choosing action.
+Panel 3 caption "3 HEAL": Relay positioned beside Arc in cover projects a cyan healing beam toward Arc; health bar increases, readable "HEAL READY".
+Panel 4 caption "4 PROTECT": readable "HEAL COOLDOWN"; Relay fires at the approaching hostile robot while low-health Arc retreats; teal friendly energy versus orange hostile shots.
+Panel 5 caption "5 REPOSITION": Relay moves around a crate toward safer cover, curved route arrow, walls visibly block direct movement.
+Panel 6 caption "6 SUPPORT FIRE": recovered Arc and Relay attack together from separate positions. Tiny decision strip below panels with readable words "HEAL • ATTACK • FOLLOW • REPOSITION". Draw actions as cinematic visual scenes, not dense text diagrams. Consistent hero and robot proportions, clear silhouettes, tasteful UI, no gore. This is a conceptual behaviour illustration, not a claim of real gameplay screenshots.
+
+## boss_storyboard
+
+Use case: illustration-story. Create a high-resolution landscape illustrated gameplay storyboard titled "SKYBREAK — RIFT WARDEN BOSS FIGHT". Eight numbered panels in a clean 4 by 2 grid, large clearly readable short captions, extremely clear spatial choreography. Cohesive stylized cartoon low-poly 3D Unity concept aesthetic, original designs, readable shapes, moderate details, no photorealism or gore or licensed superhero imagery. Setting consistent circular stone dungeon boss arena, blue-grey floor slabs, tall block walls, four portal anchors, cyan fixtures, violet portal glow. ARC consistently human hero with dark hair, teal suit, cream shoulders, orange harness/backpack/boots, cyan backpack circle and compact energy blaster. RELAY a small friendly cream hovering robot with cyan eye appears beside the player in a couple panels. RIFT WARDEN consistently large imposing armored original robot boss, broad silhouette, dark teal armour with violet glow, separate LEFT arm with burst cannon and RIGHT arm with charged slash blade, chest core protected until both arms gone. Show damage as broken metal with no blood.
+Top row is the DOUBLE TELEPORT COMBO, all panels same camera facing direction initially, arrows and ghost silhouettes convey spatial positions:
+1 caption "1 BEHIND YOU": first violet portal puts boss behind Arc. Arc starts turning to face it, curved look arrow.
+2 caption "2 TELEPORT AGAIN": after Arc turns toward first position, boss makes ONE second teleport to in FRONT of Arc's NEW facing direction. Show two numbered portal positions and a simple curved arrow demonstrating it is a two-step feint.
+3 caption "3 JUMP THE SLASH": a bright blade warning precedes a low horizontal orange/violet slash; Arc uses two-stage upward trajectory labeled "SPACE" then "SPACE", holding sideways direction, CLEARLY above the slash plane; modest violet motion trail, boss attack direction locked. Small corner label "HIT: 30% MAX HP" conveys damage if hit, do NOT depict player receiving unavoidable damage.
+4 caption "4 COUNTERATTACK": boss stationary in recovery after slash; Arc lands and fires at an arm with a clear orange target ring.
+Bottom row is the BOSS TARGET AND CORE PROGRESSION:
+5 caption "5 BREAK FIRST ARM": left cannon arm broken off, right blade arm remaining, chest still visibly SHIELDED; callout "CORE SHIELDED".
+6 caption "6 BREAK SECOND ARM": both arm assemblies destroyed, chest plates open showing a large vulnerable glowing cyan/violet core; callout "CORE EXPOSED".
+7 caption "7 DODGE THE SLAM": armless boss teleports above a clearly marked fixed circular landing danger zone on stone floor; Arc double jumps SIDEWAYS out with two trajectory steps, boss about to land at the warning marker, Relay outside danger.
+8 caption "8 FINISH THE CORE": boss landed in recovery with exposed chest core; Arc shoots it while Relay supports from side. Victory suggested by core cracking with harmless sparks, not body gore.
+A slim footer reads "TWO TELEPORTS → WARNING → DODGE → RECOVERY". Prioritize legible visual explanation and consistency, preserve both arm-target mechanic and final core mechanic. No boss endless teleports. No extra story missions. Concept storyboard, not real screenshot.
+

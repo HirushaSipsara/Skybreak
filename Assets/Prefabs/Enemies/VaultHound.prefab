@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8779836671262737870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EyePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 292135068286624911}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Jaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2727063040803572682}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Front_L_Paw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 171157647355611365}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rear_L_Paw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3950106683099809825}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VaultHound_Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2359776532659528226}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rear_L_Lower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 760706828304712036}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 958898505976690897}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 25681861808911317}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Front_L_Upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +293,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5739837622878087357}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,7 +325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1577624560499445799}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rear_R_Lower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -357,7 +357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1608316195207167745}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rear_R_Upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4088117421176975675}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Front_L_Lower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,7 +421,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 566941916041342467}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rear_L_Upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -453,7 +453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3119457411889612662}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 105367247776732090}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Front_R_Lower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -516,7 +516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9133124111340924691}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Front_R_Paw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +547,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4779102147609147664}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rear_R_Paw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -578,7 +578,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2991943336068462013}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Front_R_Upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,7 +611,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2726163166254644559}
   - component: {fileID: 3134653824250492311}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VaultHound_SkinnedMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -721,7 +721,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5612280833828212079}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -759,7 +759,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3009194506466535012}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -796,7 +796,8 @@ GameObject:
   - component: {fileID: 6744842011771914829}
   - component: {fileID: 8674225216269391429}
   - component: {fileID: 4836192097619650714}
-  m_Layer: 0
+  - component: {fileID: 6098270177022124172}
+  m_Layer: 8
   m_Name: VaultHound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -832,7 +833,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 38382c054bf942dc9b408487e83f875f, type: 3}
   m_Controller: {fileID: 9100000, guid: 7e5629cfe55f417409a0ecb4abfba91e, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -851,17 +852,17 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8995338476081507083}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.45
   m_Speed: 5.5
   m_Acceleration: 12
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 1.8
+  m_StoppingDistance: 0.05
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1.15
+  m_Height: 1.2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -950,7 +951,7 @@ MonoBehaviour:
   stuckSeconds: 1
   minimumProgress: 0.15
   showGizmos: 1
-  showDecisionOverlay: 1
+  showDecisionOverlay: 0
 --- !u!114 &4836192097619650714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -966,3 +967,15 @@ MonoBehaviour:
   brain: {fileID: 0}
   motor: {fileID: 0}
   walkThreshold: 2
+--- !u!114 &6098270177022124172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8995338476081507083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dc1b2f7ffd2d8046858272b504eb1be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Skybreak.AI.SawanIS.VaultHound.VaultHoundDamageAdapter

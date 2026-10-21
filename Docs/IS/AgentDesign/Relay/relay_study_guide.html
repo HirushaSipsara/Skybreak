@@ -1,0 +1,802 @@
+<title>Relay Agent Study Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a field manual for one robot. Left-aligned reading column (~70ch), sticky section index,
+   each layer is a "module" with theory -> Relay -> worked numbers -> viva questions. */
+:root {
+  --bg: #f2f5f5;          /* cool off-white, biased to Relay's teal */
+  --panel: #ffffff;
+  --ink: #1b272c;
+  --muted: #5a6a70;
+  --line: #d3dddf;
+  --teal: #157f7e;        /* Relay shell */
+  --teal-soft: #d8eeed;
+  --orange: #d0611f;      /* Relay accents / warnings */
+  --orange-soft: #fbe5d6;
+  --cyan: #0c9fb0;        /* glow / highlights */
+  --code-bg: #e9efef;
+  --good: #2d7d46;
+  --bad: #b2402d;
+  --font-display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11181b; --panel: #172126; --ink: #e2ebec; --muted: #94a6ab; --line: #2a393f;
+    --teal: #3cc6c3; --teal-soft: #173a3b; --orange: #ff9a55; --orange-soft: #3a2619; --cyan: #4fe0f0;
+    --code-bg: #1d2a30; --good: #6ccf8b; --bad: #ff8a73; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11181b; --panel: #172126; --ink: #e2ebec; --muted: #94a6ab; --line: #2a393f;
+  --teal: #3cc6c3; --teal-soft: #173a3b; --orange: #ff9a55; --orange-soft: #3a2619; --cyan: #4fe0f0;
+  --code-bg: #1d2a30; --good: #6ccf8b; --bad: #ff8a73; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16.5px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; padding-block: 32px 80px; }
+@media (max-width: 860px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 16px; } nav.toc { position: static !important; } }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; font-size: 14px; }
+nav.toc .label { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .12em; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc a { color: var(--ink); text-decoration: none; display: block; padding: 3px 8px; border-left: 2px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { border-left-color: var(--teal); color: var(--teal); outline: none; }
+main { min-width: 0; }
+header.intro { display: grid; gap: 10px; margin-bottom: 28px; }
+.eyebrow { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .14em; font-size: 12.5px; color: var(--teal); font-weight: 600; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; }
+h2 { font-size: 27px; font-weight: 600; margin-top: 8px; }
+h3 { font-size: 19px; font-weight: 600; margin-top: 18px; }
+p, li { max-width: 72ch; }
+p { margin: 10px 0; }
+.lede { font-size: 19px; color: var(--muted); max-width: 66ch; }
+section { padding-top: 34px; margin-top: 34px; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.layer-tag { display: inline-flex; gap: 8px; align-items: center; font-family: var(--font-mono); font-size: 13px; color: var(--teal); background: var(--teal-soft); padding: 3px 10px; border-radius: 4px; }
+.lecture { font-family: var(--font-mono); font-size: 12.5px; color: var(--orange); }
+code, .mono { font-family: var(--font-mono); font-size: .9em; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+pre { background: var(--code-bg); padding: 14px 16px; border-radius: 6px; overflow-x: auto; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.55; margin: 12px 0; }
+pre code { background: none; padding: 0; }
+.formula { font-family: var(--font-mono); font-size: 15px; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--teal); padding: 10px 14px; margin: 12px 0; overflow-x: auto; }
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .04em; color: var(--muted); text-transform: uppercase; }
+td.num, th.num { text-align: right; }
+.better { color: var(--good); font-weight: 700; }
+.worse { color: var(--bad); font-weight: 700; }
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 14px 0; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+.box h4 { margin: 0 0 6px; font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.note { background: var(--orange-soft); border-radius: 6px; padding: 10px 14px; margin: 12px 0; }
+details.qa { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; margin: 8px 0; }
+details.qa summary { cursor: pointer; padding: 10px 14px; font-weight: 700; list-style: none; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::before { content: "Q  "; font-family: var(--font-mono); color: var(--orange); }
+details.qa[open] summary { border-bottom: 1px solid var(--line); }
+details.qa .a { padding: 4px 14px 10px; }
+.files { columns: 2 280px; font-family: var(--font-mono); font-size: 13px; }
+.files div { break-inside: avoid; padding: 2px 0; }
+/* interactive tools */
+.tool { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin: 16px 0; }
+.tool h3 { margin-top: 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; margin: 10px 0; }
+.controls label { display: grid; gap: 4px; font-size: 14px; min-width: 210px; }
+.controls input[type=range] { width: 100%; accent-color: var(--teal); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: inherit; font-size: 13.5px; border: 0; background: transparent; color: var(--ink); padding: 6px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--teal); color: var(--panel); }
+.seg button:focus-visible, button.plain:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+button.plain { font: inherit; font-size: 13.5px; border: 1px solid var(--line); background: transparent; color: var(--ink); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.readout { font-family: var(--font-mono); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.bars { display: grid; gap: 6px; margin-top: 8px; }
+.bar { display: grid; grid-template-columns: 150px minmax(0, 1fr) 52px; gap: 10px; align-items: center; font-size: 14px; }
+.bar .track { height: 10px; background: var(--code-bg); border-radius: 5px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--teal); border-radius: 5px; }
+.bar.win .fill { background: var(--orange); }
+.bar .v { font-family: var(--font-mono); font-size: 13px; text-align: right; }
+canvas { max-width: 100%; display: block; border-radius: 6px; background: var(--code-bg); }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; background: var(--c); }
+pre.mermaid { background: var(--panel); border: 1px solid var(--line); text-align: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Sections">
+  <div class="label">Field manual</div>
+  <ol>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#peas">PEAS and environment</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#reflex">L0 Reflexes</a></li>
+    <li><a href="#model">L1 World model</a></li>
+    <li><a href="#fuzzy">L2 Fuzzy inference</a></li>
+    <li><a href="#utility">L3 Expected utility</a></li>
+    <li><a href="#astar">L4 Tactical A*</a></li>
+    <li><a href="#annealing">L5 Simulated annealing</a></li>
+    <li><a href="#evidence">Testing and evaluation</a></li>
+    <li><a href="#boss">Rift Warden boss</a></li>
+    <li><a href="#other">Other lectures</a></li>
+    <li><a href="#viva">Viva questions</a></li>
+    <li><a href="#demo">Demo script</a></li>
+    <li><a href="#files">Where the code is</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="intro">
+  <div class="eyebrow">SE3062 Intelligent Systems · Skybreak · Relay support companion</div>
+  <h1>How Relay thinks, and the theory behind each part</h1>
+  <p class="lede">Relay is the hovering support robot that follows Arc, heals him, shoots at threats and keeps itself out of trouble. This guide walks through every decision layer, the lecture theory it uses, the real numbers from the tests, and the questions an examiner is likely to ask. A second part covers the Rift Warden boss, which learns your habits during the fight.</p>
+</header>
+
+<section id="overview">
+  <h2>Overview in one minute</h2>
+  <p>Relay is a <b>hybrid (subsumption) agent</b>. Every 0.2 seconds it runs one decision cycle made of stacked layers, each a technique from the course:</p>
+  <div class="table-wrap"><table>
+    <tr><th>Layer</th><th>Question it answers</th><th>Technique</th><th>Lecture</th></tr>
+    <tr><td>0 Reflexes</td><td>Is there something I must do right now, no thinking?</td><td>Prioritised condition-action rules</td><td class="lecture">L03</td></tr>
+    <tr><td>1 World model</td><td>What is out there, including what I can no longer see?</td><td>Internal state, transition model, confidence decay</td><td class="lecture">L02, L03</td></tr>
+    <tr><td>2 Assessment</td><td>How urgent is healing, defending, saving myself?</td><td>Mamdani fuzzy inference, centre of gravity</td><td class="lecture">L09</td></tr>
+    <tr><td>3 Decision</td><td>Which action is best right now?</td><td>Expected utility <code>EU = P × U</code></td><td class="lecture">L03</td></tr>
+    <tr><td>4 Planning</td><td>How do I get there safely?</td><td>A* with an admissible, consistent heuristic</td><td class="lecture">L04, L05</td></tr>
+    <tr><td>5 Positioning</td><td>Where exactly should I stand?</td><td>Simulated annealing (local search)</td><td class="lecture">L05</td></tr>
+  </table></div>
+  <p>This is what makes Relay "go beyond a basic uninformed search", the assignment's core requirement: informed search, local search, fuzzy reasoning and utility theory working together, each one testable on its own.</p>
+</section>
+
+<section id="peas">
+  <span class="layer-tag">Task environment</span> <span class="lecture">Lecture 02</span>
+  <h2>PEAS and the environment</h2>
+  <div class="table-wrap"><table>
+    <tr><th>PEAS</th><th>Relay</th></tr>
+    <tr><td>Performance</td><td>Player survival and time kept above 30% health; heals given while the player is in need; damage dealt to threats; little damage taken by Relay; little time spent in the player's line of fire.</td></tr>
+    <tr><td>Environment</td><td>The Skybreak dungeon and Rift Warden arena: walls, crates, a baked NavMesh, the player Arc, the boss and its damageable parts.</td></tr>
+    <tr><td>Actuators</td><td>Hover movement (<code>NavMeshMotor</code>), heal beam (<code>RestoreHealth</code>), defensive shot (<code>ReceiveDamage</code>), turning, beam and sound cues.</td></tr>
+    <tr><td>Sensors</td><td>Line-of-sight raycasts, distances, player and own health, the boss's vulnerable parts, NavMesh queries.</td></tr>
+  </table></div>
+  <h3>The 7 dimensions, and why each matters for the design</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Dimension</th><th>Relay's world</th><th>Design consequence</th></tr>
+    <tr><td>Observable?</td><td>Partially: walls hide enemies, the boss teleports</td><td>Needs memory (layer 1); a simple reflex agent would fail</td></tr>
+    <tr><td>Agents</td><td>Multi-agent: cooperative with Arc, competitive with the boss</td><td>Positions judged against both; Arc's line of fire is a constraint</td></tr>
+    <tr><td>Deterministic?</td><td>Stochastic from Relay's view (player input, boss choices)</td><td>Degrees of belief (fuzzy) and <i>expected</i> utility</td></tr>
+    <tr><td>Episodic?</td><td>Sequential: healing now means cooldown later</td><td>Cooldowns and memory are part of the state; routes are planned</td></tr>
+    <tr><td>Static?</td><td>Dynamic: the world moves while Relay thinks</td><td>Budgets: 0.2 s cycle, 2,500 A* nodes, 60 annealing steps</td></tr>
+    <tr><td>Discrete?</td><td>Continuous positions and health</td><td>Fuzzify inputs; discretise space into a 1 m grid for A*</td></tr>
+    <tr><td>Known?</td><td>Known rules, known map (NavMesh)</td><td>No learning needed for correctness</td></tr>
+  </table></div>
+</section>
+
+<section id="architecture">
+  <span class="layer-tag">Agent program</span> <span class="lecture">Lecture 03</span>
+  <h2>Architecture</h2>
+  <p>Lecture 03 ends with the point that real systems mix architectures. Its example is a self-driving car: a utility engine plans the route, and a reflex layer handles the brakes. Relay works the same way, and each layer feeds the next.</p>
+<pre class="mermaid">
+flowchart TD
+    S[Sensors: line of sight, health, positions] --> M[L1 World model: threat tracks, health trend]
+    M --> R{L0 Reflex rule fires?}
+    R -- yes --> A[Act]
+    R -- no --> F[L2 Fuzzy: heal / defend / self urgency]
+    F --> U[L3 Expected utility: argmax over actions]
+    U --> P5[L5 Annealing: best spot]
+    P5 --> P4[L4 Tactical A*: safest route]
+    P4 --> A
+</pre>
+<pre><code>function RELAY-AGENT(percept) returns action          // RelayBrain.SenseAndDecide
+    model   ← UPDATE-MODEL(model, percept)           // L1 RelayPerception.Sense
+    if a reflex rule matches then return its action  // L0 RelayReflexes (checked every frame)
+    urgency ← FUZZY-ASSESS(model)                    // L2 RelayFuzzyModel.Assess
+    action  ← argmax_a  P(success|a) × U(a)          // L3 RelayUtility.Score / Select
+    if action needs a position:
+        spot ← ANNEAL(objective for action)          // L5 RelayPositionSearch
+        route ← A*(here, spot, cost = length + λ·exposure)   // L4 RelayTacticalGraph
+    execute(action, route)</code></pre>
+</section>
+
+<section id="reflex">
+  <span class="layer-tag">Layer 0 · RelayReflexes.cs</span> <span class="lecture">Lecture 03 simple reflex agents</span>
+  <h2>Reflexes: act without thinking</h2>
+  <p><b>Theory.</b> A simple reflex agent maps the current percept straight to an action with IF-THEN rules. It has no memory, so it is fast but blind to anything hidden. When rules can conflict you must give them a <b>priority</b>, which is the lecture's drone-obstacle question.</p>
+  <p><b>In Relay.</b> Rules checked every frame, before any deliberation (subsumption: the first match wins):</p>
+  <ol>
+    <li>Relay's health is 0 → stay disabled.</li>
+    <li>The player is down → stop and wait.</li>
+  </ol>
+  <div class="note"><b>Say this honestly in the viva:</b> a third rule, "evade the boss's slam zone", is designed but not implemented, because the boss does not publish where its slam lands and the boss code was deliberately not changed. Stepping out of the player's line of fire, first planned as a reflex, is handled by layers 5 and 3 (the Reposition action) instead.</div>
+</section>
+
+<section id="model">
+  <span class="layer-tag">Layer 1 · RelayPerception.cs</span> <span class="lecture">Lecture 03 model-based agents</span>
+  <h2>World model: remembering what it cannot see</h2>
+  <p><b>Theory.</b> A model-based agent keeps <b>internal state</b> about parts of the world it cannot currently see. To update that state it needs a <b>transition model</b> (how the world changes on its own) and a model of what its own actions do. This is the standard answer to partial observability.</p>
+  <p><b>In Relay.</b> Every hostile it sees becomes a <b>track</b>: last position, velocity, time last seen. When a track goes out of sight:</p>
+  <div class="formula">predicted = lastPosition + velocity × Δt   (capped at 4 m)      ← transition model<br>confidence = e<sup>−Δt / 1.5 s</sup>   (forgotten below 0.1, about 3.5 s)</div>
+  <p>Confidence is used later as a weight: an enemy seen 1.5 s ago counts as 0.37 of a threat. Layer 1 also records the <b>player's health trend</b> (health lost per second over the last 2 s) and whether the heal and shot are physically possible from where Relay is (range and line of sight).</p>
+</section>
+
+<section id="fuzzy">
+  <span class="layer-tag">Layer 2 · RelayFuzzyModel.cs + Algorithms/Fuzzy</span> <span class="lecture">Lecture 09 parts 3–4</span>
+  <h2>Fuzzy inference: how urgent is each need?</h2>
+  <p><b>Why fuzzy.</b> "Low health" and "near" are vague. The old code healed only when health fell below exactly 25%, so at 25.1% it did nothing and at 24.9% it healed. That is the crisp-logic failure the lecture describes. Fuzzy sets let a value belong partly to several sets, so urgency changes smoothly.</p>
+
+  <h3>The pipeline (Mamdani, exactly as in the lecture)</h3>
+  <ol>
+    <li><b>Fuzzification:</b> a crisp input gets a membership degree μ ∈ [0,1] in each term. Triangle <code>(a,b,c)</code>, trapezoid <code>(a,b,c,d)</code>. Rising slope <code>(x − start)/(peak − start)</code>, falling slope <code>(end − x)/(end − start)</code>.</li>
+    <li><b>Rules:</b> IF-THEN with Zadeh operators: AND = <code>min</code>, OR = <code>max</code>, NOT = <code>1 − μ</code>. Hedges: Very = <code>μ²</code>, Slightly = <code>√μ</code>. All rules fire in parallel.</li>
+    <li><b>Aggregation:</b> for each output term keep the strongest rule (<code>max</code>), and clip that term's set at that height.</li>
+    <li><b>Defuzzification:</b> centre of gravity, <code>COG = ∫ μ(x)·x dx / ∫ μ(x) dx</code>.</li>
+  </ol>
+  <p>The library is tested against the lecture's own worked examples: 18 °C is 0.4 Cold and 0.6 Optimal; Very gives 0.36 and Slightly 0.77; the hospital-robot rules give strengths 0.6 / 0.4 / 0.2 / 0.2; and the COG is <b>1690 / 41 = 41.22</b>.</p>
+
+  <h3>Relay's fuzzy model</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Input</th><th>Terms</th></tr>
+    <tr><td>PlayerHealth (0–1)</td><td class="mono">Critical (0,0,.15,.3) · Low (.2,.45,.7) · Healthy (.55,.8,1,1)</td></tr>
+    <tr><td>ThreatDistance (0–20 m)</td><td class="mono">Near (0,0,4,8) · Medium (5,10,15) · Far (12,16,20,20)</td></tr>
+    <tr><td>HealthTrend (loss/s)</td><td class="mono">Stable (0,0,.01,.03) · Dropping (.02,.05,.08) · Plummeting (.06,.1,.2,.2)</td></tr>
+    <tr><td>RelayHealth (0–1)</td><td class="mono">Weak (0,0,.2,.4) · Okay (.3,.6,1,1)</td></tr>
+    <tr><td>Outputs (0–1)</td><td class="mono">HealUrgency, DefendUrgency, SelfPreservation: Low (0,0,.2,.4) · Medium (.3,.5,.7) · High (.6,.8,1,1)</td></tr>
+  </table></div>
+  <p>14 rules, for example <code>H2: IF PlayerHealth is Low AND (Trend is Dropping OR Plummeting) THEN HealUrgency is High</code> and <code>D2: IF Threat is Near AND PlayerHealth is NOT Healthy THEN DefendUrgency is Medium</code>. Defending is urgent mainly while the player is healthy; once the player is hurt, healing wins.</p>
+
+  <div class="tool" id="fuzzy-tool">
+    <h3>Try it: Relay's fuzzy model, live</h3>
+    <p>Same membership functions and rules as <code>RelayFuzzyModel.cs</code>. Move the inputs and watch the memberships, the rules that fire and the centre of gravity.</p>
+    <div class="controls">
+      <label for="fz-health">Player health <span class="readout" id="fz-health-v"></span><input id="fz-health" type="range" min="0" max="1" step="0.01" value="0.5"></label>
+      <label for="fz-dist">Threat distance to player <span class="readout" id="fz-dist-v"></span><input id="fz-dist" type="range" min="0" max="20" step="0.1" value="7.5"></label>
+      <label for="fz-trend">Health lost per second <span class="readout" id="fz-trend-v"></span><input id="fz-trend" type="range" min="0" max="0.2" step="0.005" value="0"></label>
+      <label for="fz-relay">Relay's own health <span class="readout" id="fz-relay-v"></span><input id="fz-relay" type="range" min="0" max="1" step="0.01" value="1"></label>
+    </div>
+    <div class="split">
+      <div class="box"><h4>1. Fuzzification (μ)</h4><div class="readout" id="fz-mu"></div></div>
+      <div class="box"><h4>2–3. Rules firing (min / max)</h4><div class="readout" id="fz-rules"></div></div>
+    </div>
+    <h4 style="margin:6px 0 0;font-family:var(--font-display)">4. Centre of gravity</h4>
+    <div class="bars" id="fz-out"></div>
+    <p class="readout" style="color:var(--muted)">Default position = the worked example below: player at 50%, threat 7.5 m away, stable health.</p>
+  </div>
+
+  <h3>Worked example to practise by hand</h3>
+  <p>Player at 50% health, health stable, boss 7.5 m from the player, Relay healthy.</p>
+  <ul>
+    <li>PlayerHealth: Low = (0.7 − 0.5) / 0.25 = <b>0.8</b>; Critical = 0; Healthy = 0.</li>
+    <li>ThreatDistance: Near = (8 − 7.5) / 4 = <b>0.125</b>; Medium = (7.5 − 5) / 5 = <b>0.5</b>.</li>
+    <li>Rules: H3 (Low → Heal Medium) = 0.8; H2 = min(0.8, 0) = 0; D2 = min(0.125, 1 − 0) = 0.125 → Defend Medium; D4 = min(0.5, 1) = 0.5 → Defend Low.</li>
+    <li>COG: HealUrgency = <b>0.50</b> (a symmetric triangle centred on 0.5); DefendUrgency = <b>0.24</b> (most of the mass is in Low).</li>
+  </ul>
+  <p>So Relay heals before it shoots. The first draft of the rules got this wrong (defend 0.53 against heal 0.35). Tracing it by hand caught the bug, which is a good story to tell in the viva.</p>
+</section>
+
+<section id="utility">
+  <span class="layer-tag">Layer 3 · RelayUtility.cs</span> <span class="lecture">Lecture 03 utility-based agents</span>
+  <h2>Expected utility: choosing the action</h2>
+  <p><b>Theory.</b> A goal-based agent only knows "goal reached or not". A utility-based agent scores how good each outcome is. When outcomes are uncertain it maximises <b>expected utility</b>: the utility of each outcome weighted by its probability.</p>
+  <div class="formula">EU(a) = P(success | a, state) × U(a)          action = argmax<sub>a</sub> EU(a)</div>
+  <div class="table-wrap"><table>
+    <tr><th>Action</th><th>U(a)</th><th>P(success)</th></tr>
+    <tr><td>Heal</td><td>HealUrgency</td><td>0 on cooldown or player down; 1 in range with line of sight; 0.7 if it must fly there first</td></tr>
+    <tr><td>Defend</td><td>DefendUrgency</td><td>0 with no target or on cooldown; 1 in range; 0.6 if it must reposition</td></tr>
+    <tr><td>Retreat</td><td>SelfPreservation</td><td>1 if a threat was seen recently, else 0</td></tr>
+    <tr><td>Reposition</td><td>0.3 × exposure removed + 0.5 × fire-lane blocking removed</td><td>1 if layer 5 found a spot better by more than 0.1</td></tr>
+    <tr><td>Follow</td><td>0.2 + 0.4 × clamp(distance / 9)</td><td>1 (always possible: the fallback)</td></tr>
+  </table></div>
+  <p>A <b>hysteresis</b> bonus of +0.05 goes to last cycle's choice, so Relay doesn't flicker between two nearly equal actions. Ties go to Retreat, then Heal, Defend, Reposition, Follow.</p>
+  <div class="note"><b>Limitation to admit:</b> the P values (0.7, 0.6) are designer estimates, not learned or computed with Bayes' rule. A stretch goal is a Bayesian belief "P(player in danger | evidence)" from Lecture 09 part 2.</div>
+  <h3>Real decisions from the lab (step 3 snapshot)</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Situation</th><th>Fuzzy urgencies</th><th>Expected utilities</th><th>Chosen</th></tr>
+    <tr><td>Player at 50%, Relay in range</td><td>heal 0.50 · defend 0.18</td><td>heal 0.50 · follow 0.34 · defend 0.11</td><td>Heal</td></tr>
+    <tr><td>Heal on cooldown, boss out of reach</td><td>heal 0.22 · defend 0.33</td><td>follow 0.29 · defend 0.20 (P = 0.6) · heal 0.05</td><td>Follow</td></tr>
+    <tr><td>Player full health, boss ~7 m away</td><td>defend 0.59</td><td>defend 0.59 · follow 0.34</td><td>Defend</td></tr>
+    <tr><td>Relay at 22% health, recent threat</td><td>self 0.59</td><td>retreat 0.59 · follow 0.29</td><td>Retreat</td></tr>
+    <tr><td>Relay 3 m in front of the player</td><td>—</td><td>reposition 0.50 · follow 0.38</td><td>Reposition</td></tr>
+  </table></div>
+</section>
+
+<section id="astar">
+  <span class="layer-tag">Layer 4 · RelayTacticalGraph.cs + Algorithms/Search</span> <span class="lecture">Lectures 04–05</span>
+  <h2>Tactical A*: the safest route, not just the shortest</h2>
+  <p><b>Theory.</b> A search problem has states, actions, step costs and a goal. Uninformed strategies (BFS, DFS, uniform-cost) expand nodes blindly. Informed strategies use a heuristic <code>h(n)</code>, an estimate of the remaining cost.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Strategy</th><th>f(n)</th><th>Optimal?</th><th>Note</th></tr>
+    <tr><td>Uniform-cost (L04)</td><td class="mono">g(n)</td><td>Yes</td><td>Blind: expands in rings of equal cost</td></tr>
+    <tr><td>Greedy best-first (L05)</td><td class="mono">h(n)</td><td>No</td><td>Fast, but can take a costly route</td></tr>
+    <tr><td>A* (L05)</td><td class="mono">g(n) + h(n)</td><td>Yes, if h is admissible (tree) / consistent (graph)</td><td>Focuses the search towards the goal</td></tr>
+  </table></div>
+  <ul>
+    <li><b>Admissible:</b> <code>h(n) ≤ h*(n)</code>, it never overestimates.</li>
+    <li><b>Consistent:</b> <code>h(n) ≤ c(n, n′) + h(n′)</code> for every step. Then f never decreases along a path, so A* graph search is optimal.</li>
+  </ul>
+
+  <h3>Relay's search problem</h3>
+  <ul>
+    <li><b>States:</b> cells of a 1 m grid sampled on the NavMesh around Relay.</li>
+    <li><b>Actions:</b> move to one of 8 neighbours if the NavMesh connects them.</li>
+    <li><b>Step cost:</b> <code>c(n, n′) = |n − n′| + λ · exposure(n′)</code>, λ = 3. Exposure is the summed confidence of remembered threats that can see the cell (capped at 1).</li>
+    <li><b>Heuristic:</b> <code>h(n) = straight-line distance to the goal</code>.</li>
+  </ul>
+  <div class="formula">Proof: exposure ≥ 0, so every step costs at least its length.<br>⇒ the true remaining cost ≥ straight-line distance ⇒ h is admissible.<br>Triangle inequality: h(n) ≤ |n − n′| + h(n′) ≤ c(n, n′) + h(n′) ⇒ h is consistent ⇒ A* is optimal.</div>
+  <p>Implementation details worth knowing: a binary-heap priority queue; a closed set (graph search); <b>goal test when a node is popped, not when it is generated</b> (otherwise a costlier path can win); a 2,500-node budget; and replanning when the goal moves more than 1.5 m, after 1 s, or when the set of known threats changes.</p>
+
+  <div class="tool" id="astar-tool">
+    <h3>Try it: A*, uniform-cost and greedy on a danger grid</h3>
+    <p>The red square is the boss. Orange cells can be seen by it (exposure 1). Click cells to add or remove walls. Relay goes from S to G.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Strategy">
+        <button type="button" id="st-astar" aria-pressed="true">A*  f = g + h</button>
+        <button type="button" id="st-ucs" aria-pressed="false">Uniform-cost  f = g</button>
+        <button type="button" id="st-greedy" aria-pressed="false">Greedy  f = h</button>
+      </div>
+      <div class="seg" role="group" aria-label="Danger weight">
+        <button type="button" id="lam-0" aria-pressed="false">λ = 0 (shortest)</button>
+        <button type="button" id="lam-3" aria-pressed="true">λ = 3 (tactical)</button>
+      </div>
+      <button type="button" class="plain" id="grid-reset">Reset walls</button>
+    </div>
+    <canvas id="grid" width="800" height="450" aria-label="Search grid"></canvas>
+    <div class="legend" style="margin-top:8px">
+      <span style="--c: var(--teal-soft)">Explored (closed set)</span>
+      <span style="--c: var(--teal)">Route</span>
+      <span style="--c: var(--orange-soft)">Seen by the boss</span>
+      <span style="--c: var(--ink)">Wall</span>
+    </div>
+    <p class="readout" id="grid-out"></p>
+  </div>
+
+  <h3>Measured results</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Test</th><th>Result</th></tr>
+    <tr><td>Lecture 05 Romania, Arad → Bucharest</td><td>A*: 418 km via Sibiu, Rimnicu Vilcea, Pitesti, expanding <b>5</b> nodes. Uniform-cost: 418 km, expanding <b>12</b>. Greedy: <b>450 km</b> via Fagaras (not optimal).</td></tr>
+    <tr><td>60 random danger grids</td><td>A* cost = uniform-cost cost every time, never expanding more nodes</td></tr>
+    <tr><td>Real arena, boss in view, 11.3 m route</td><td>Tactical A* expanded 136 nodes, uniform-cost 279, and λ = 0 A* only 8</td></tr>
+    <tr><td>Real arena, best detour in a 48-goal sweep</td><td>Shortest route 11.7 m through 11 watched cells; tactical route 13.1 m through 9</td></tr>
+  </table></div>
+  <p><b>Why does λ = 3 expand more nodes than λ = 0?</b> The heuristic is admissible in both cases, but it is far better <i>informed</i> when the cost is close to plain distance. When exposure adds a lot to the cost, h underestimates more, so A* has to explore more. That's still about half of what uniform-cost search needs.</p>
+</section>
+
+<section id="annealing">
+  <span class="layer-tag">Layer 5 · RelayPositionSearch.cs + Algorithms/Local</span> <span class="lecture">Lecture 05 local search</span>
+  <h2>Simulated annealing: where to stand</h2>
+  <p><b>Path versus state.</b> A* answers "how do I get there"; the path matters. "Where should I stand" is different: only the final state matters. That makes it an <b>optimisation</b> problem, which is what local search solves. Local search keeps one current state and moves to neighbours.</p>
+  <ul>
+    <li><b>Hill climbing</b> moves only uphill. It is fast, but it stops at the first <b>local maximum</b> ("climbing Everest in thick fog").</li>
+    <li><b>Simulated annealing</b> sometimes accepts a worse move, so it can escape local maxima. The chance is high while the temperature T is high, and drops as T cools.</li>
+  </ul>
+  <div class="formula">P(accept worse move) = e<sup>ΔE / T</sup>   (ΔE &lt; 0)          T<sub>k</sub> = T<sub>0</sub> · α<sup>k</sup>,  T<sub>0</sub> = 1,  α = 0.85<br>e.g. ΔE = −1:  T = 1 → 0.37,   T = 0.1 → e<sup>−10</sup> ≈ 0.00005</div>
+  <h3>Relay's objective E(x) (maximised)</h3>
+  <p>For the Support goal (used by Follow and Reposition):</p>
+  <div class="formula">E(x) = 1.0·inBand(1.8–3.5 m from player) + 0.6·seesPlayer + 1.0·(1 − exposure) − 1.5·inPlayersFireLane − 0.15·distance(formation) − 0.05·travel</div>
+  <p>Heal, Defend and Retreat use the same building blocks with different weights. For example, Retreat values cover and distance from threats most. Neighbours are random points within a radius that shrinks from 3 m to 0.5 m as the search cools, snapped onto the NavMesh. Each search runs 60 iterations (a fixed budget, because the world is dynamic) and is warm-started from the previous best.</p>
+  <h3>Measured results</h3>
+  <ul>
+    <li><b>Two-peak test, 100 seeded runs:</b> annealing reached the global peak <b>38</b> times; hill climbing <b>0</b> times, because it always stops on the first peak.</li>
+    <li><b>In the lab:</b> with Relay 3 m in front of the player, Reposition was chosen (0.50 against Follow's 0.38). The search accepted 9 worse moves while hot, and the chosen spot is out of the fire lane.</li>
+  </ul>
+</section>
+
+<section id="evidence">
+  <span class="layer-tag">Verification</span>
+  <h2>Testing and evaluation</h2>
+  <div class="split">
+    <div class="box"><h4>20 EditMode unit tests</h4><p>Fuzzy (6), search (9), annealing (5). Each uses a lecture worked example or a property such as optimality against uniform-cost search. Run them from Unity's Test Runner, EditMode, <code>Skybreak.AI.Algorithms.Tests</code>.</p></div>
+    <div class="box"><h4>Regression snapshots</h4><p>Nine fixed lab scenarios recorded after every step. Step 2 (pure refactor) was proved by identical before and after files. See <code>Docs/IS/Testing/Relay/</code>.</p></div>
+    <div class="box"><h4>Commit per step</h4><p>Design doc, refactor, fuzzy and utility, A*, annealing, overlay and evaluation. Each commit has its own tests and evidence.</p></div>
+  </div>
+  <h3>Old Relay against layered Relay, in a scripted boss fight</h3>
+  <p>The player walks a 7 m circle around the arena, always facing the boss, for 90 s of game time (or until they fall). The boss and Relay are fully autonomous. The same 8 seeds are used for both versions, and all metrics are measured by the test harness, not by Relay itself.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Mean of 8 fights</th><th class="num">Old Relay (step 2)</th><th class="num">Layered Relay</th><th class="num">Per minute, old → new</th></tr>
+    <tr><td>Player fell</td><td class="num">6 / 8</td><td class="num better">4 / 8</td><td class="num">—</td></tr>
+    <tr><td>Player below 30% health</td><td class="num">14.7 s</td><td class="num better">4.0 s</td><td class="num">11.6 → 3.8 s</td></tr>
+    <tr><td>Lowest player health</td><td class="num">1</td><td class="num better">14</td><td class="num">—</td></tr>
+    <tr><td>Heals given</td><td class="num">7.6</td><td class="num">7.8</td><td class="num">6.0 → 7.5</td></tr>
+    <tr><td>Heals while player &lt; 40%</td><td class="num">1.8</td><td class="num worse">1.4</td><td class="num">—</td></tr>
+    <tr><td>Damage taken by Relay</td><td class="num">77</td><td class="num better">35</td><td class="num">61 → 34</td></tr>
+    <tr><td>In the player's line of fire</td><td class="num">7.8 s</td><td class="num better">4.6 s</td><td class="num">6.2 → 4.4 s</td></tr>
+    <tr><td>In the boss's line of sight</td><td class="num">74.8 s</td><td class="num">62.1 s</td><td class="num">59.1 → 59.5 s</td></tr>
+    <tr><td>Distance to player</td><td class="num">5.8 m</td><td class="num better">3.5 m</td><td class="num">—</td></tr>
+    <tr><td>Decision cycle</td><td class="num">0.005 ms</td><td class="num worse">1.1 ms</td><td class="num">—</td></tr>
+  </table></div>
+  <p><b>How to read it.</b> Relay takes 45% less damage per minute, heals 24% more often, stays 2.3 m closer and spends 29% less time in your line of fire. The player falls less often, but 8 fights is a small sample: the layered runs that did fall, fell earlier, and heals while the player was below 40% did not go up. Time in the boss's sight is unchanged because the arena is open ground; cover-seeking matters more in the corridors. The extra reasoning costs about 1.1 ms per decision, about 0.6% of the 0.2 s cycle.</p>
+  <p><b>Why 8 seeds?</b> Fixed seeds don't make the fights perfectly repeatable, because frame timing varies. Averaging several runs is the honest way to compare.</p>
+</section>
+
+<section id="boss">
+  <span class="layer-tag">Extra agent · Assets/Scripts/AI/RiftWarden</span> <span class="lecture">Lectures 03, 09, 10 + beyond</span>
+  <h2>Rift Warden: the boss that learns your habits</h2>
+  <p>Relay is cooperative; the Rift Warden is <b>competitive</b>, and that changes the theory. The original boss checked distance, intact arms and cooldowns, then picked from a fixed order (blade, then teleport, then cannon), so it was predictable and never noticed how you play. The upgrade keeps every attack, timing, telegraph, effect and sound, and replaces how it <b>reads the fight</b>.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Layer</th><th>What it does</th><th>Theory</th></tr>
+    <tr><td>1 Player model</td><td>Your smoothed velocity, preferred range, strafe habit, and what you did after each attack</td><td>Model-based state (L03); Dirichlet counts, i.e. probability from data (L09)</td></tr>
+    <tr><td>2 Predictive aim</td><td>Cannon shots and the slam circle lead you to where you'll be</td><td>Constant-velocity intercept, capped for fairness (beyond)</td></tr>
+    <tr><td>3 Attack learner</td><td>A belief per attack and range about "this hits <i>you</i>"</td><td>Bayes with Beta–Bernoulli (L09); exploration vs exploitation (L03); multi-armed bandit with Thompson sampling (beyond)</td></tr>
+    <tr><td>4 Combo planner</td><td>Looks two moves ahead over your likely dodge</td><td>Expectimax (L10)</td></tr>
+    <tr><td>5 Phases, tactics, director</td><td>Measured → Enraged → Desperate; shields its weak arm; punishes Relay's heals; cuts off your escape; mercy and pressure</td><td>Hierarchical state machine (L03); dynamic difficulty adjustment (beyond)</td></tr>
+  </table></div>
+
+  <h3>Layer 1: player model</h3>
+  <p>For each attack the boss records what you did between its start and its impact: <b>Stay, Strafe left, Strafe right, Back off, Close in, Jump</b>. Each is classified from your displacement relative to the boss, and counted with a Dirichlet(1,…,1) prior:</p>
+  <div class="formula">P(response r | attack) = (n<sub>r</sub> + 1) / (N + 6)        (uniform 1/6 before any data)<br>velocity v̂ ← v̂ + α(Δp/Δt − v̂),  α = 1 − e<sup>−Δt/0.25 s</sup>   (frame-rate independent)</div>
+  <p>Old answers fade (×0.9 per new one), so recent habits count more.</p>
+
+  <h3>Layer 2: predictive aim</h3>
+  <div class="formula">aim = p + v̂ · t · κ,   |v̂ · t · κ| ≤ 2.5 m,   κ = 0.4 (mercy) / 0.65 (normal) / 0.85 (pressure)</div>
+  <p>The cannon locks at 0.4 s, and its three shots aim 0.17, 0.47 and 0.77 s ahead, so the burst walks along your path. κ &lt; 1 and the cap mean a change of direction always escapes. In the lab, a strafing target took 1 of 3 shots, against 0 with the old aim.</p>
+
+  <h3>Layer 3: Bayesian attack learner (Thompson sampling)</h3>
+  <p>Each (attack, range band) keeps <b>Beta(α, β)</b>, a belief about its hit chance θ against you. Beta is the <i>conjugate prior</i> of a hit/miss outcome, so Bayes' rule is just counting:</p>
+  <div class="formula">hit: α ← α + 1     miss: β ← β + 1     mean = α / (α + β)     prior Beta(2, 2)<br>forgetting: evidence × 0.97 before each update (the bandit follows a player who changes)</div>
+  <p><b>Thompson sampling</b> draws one θ from each available attack's belief and multiplies it by the attack's damage. An attack the boss is unsure about has a wide belief, so it sometimes draws high and gets tried (exploration). A proven attack usually wins (exploitation). This is Lecture 03's exploration-against-exploitation problem, solved the Bayesian way.</p>
+
+  <div class="tool" id="ts-tool">
+    <h3>Try it: Beta beliefs and Thompson sampling</h3>
+    <p>Add hits and misses for each attack, then draw. The curve is the belief about that attack's hit chance; the draw is what the boss would act on this time.</p>
+    <div id="ts-arms" class="split"></div>
+    <div class="controls">
+      <button type="button" class="plain" id="ts-draw">Draw once (Thompson)</button>
+      <button type="button" class="plain" id="ts-many">Draw 1000 times</button>
+      <button type="button" class="plain" id="ts-reset">Reset to Beta(2, 2)</button>
+    </div>
+    <p class="readout" id="ts-out">Damage per trial: cannon shot 8%, slash 30%, rear strike 30%. Value of a draw = θ × damage (a cannon burst is 3 shots).</p>
+  </div>
+
+  <h3>Layer 4: expectimax combo planner</h3>
+  <p>An abstract fight state (range band, cooldown timers, which arms are intact) feeds a depth-2 expectimax search:</p>
+<pre><code>MAX     boss move: Cannon | Slash | DoubleTeleport | Approach | Hold
+CHANCE  your answer r ~ P(r | attack)   (layer 1), hit with P = learner mean (layer 3)
+        reward = P(hit) × damage − riskWeight × extra damage taken vs standing still
+        next state: range band after r (BackOff = one band out, CloseIn = one band in,
+                    rear teleport ends close), cooldowns advanced by the move's duration
+MAX     the best follow-up in that state
+leaf    ½ × the best attack that is (or soon will be) ready, discounted 0.85 per second</code></pre>
+  <p><b>Why expectimax and not minimax?</b> Minimax assumes you always answer perfectly, which makes the boss timid. Expectimax uses the answers you have actually shown, so it exploits habits. The unit test shows the difference: a gamble worth 10 or 0 (expected 5) beats a safe 4 under expectimax, and loses under minimax.</p>
+  <p><b>Relative risk.</b> The boss is shot whatever it does, so a move is only charged for the <i>extra</i> damage it invites: <code>rate × duration × (exposure − 1)</code>. The rear teleport has exposure 0.5, because you must turn around. A first version charged absolute risk and froze the boss while it was being shot; a regression scenario caught it.</p>
+
+  <h3>Layer 5: phases, tactics, director</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Phase</th><th>Trigger</th><th>Temperament</th></tr>
+    <tr><td>Measured</td><td>Both arms</td><td>Normal cooldowns, risk weight 1.0</td></tr>
+    <tr><td>Enraged</td><td>One arm lost</td><td>Cooldowns × 0.8, recovery 0.85 s, risk weight 0.6</td></tr>
+    <tr><td>Desperate</td><td>Core open</td><td>Slam every 5.5 s instead of 7, risk weight 0.3</td></tr>
+  </table></div>
+  <ul>
+    <li><b>Tactics:</b>
+      <ul>
+        <li>While recovering, it turns a damaged arm 25° away from you.</li>
+        <li>After Relay heals you, it fires a cannon burst at Relay, at most once every 12 s. In the lab, Relay went from 90 to 68.4 health.</li>
+        <li>It approaches toward the side you usually strafe to, cutting off your escape.</li>
+      </ul>
+    </li>
+    <li><b>Director (fairness):</b>
+      <ul>
+        <li>Below 25% health you get 6 s of mercy: lead 0.4, no combos, +0.5 s recovery.</li>
+        <li>If you're above 80% health while the boss is losing an arm fast, pressure applies: lead 0.85, cooldowns × 0.9.</li>
+        <li>Telegraphs and damage values never change.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Evaluation: original boss against adaptive boss</h3>
+  <p>Four scripted player styles each fought 3 × 75 s fights, shooting the boss at 6 damage per second.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Style</th><th class="num">Hit rate, original</th><th class="num">Hit rate, adaptive</th><th class="num">Damage dealt</th><th class="num">Attack-mix entropy</th></tr>
+    <tr><td>Strafer (always circles one way)</td><td class="num">38%</td><td class="num better">51%</td><td class="num">190 → 270</td><td class="num">1.95 → 1.74</td></tr>
+    <tr><td>Jumper (jumps every impact)</td><td class="num">71%</td><td class="num better">83%</td><td class="num">320 → 490</td><td class="num">1.34 → 1.39</td></tr>
+    <tr><td>Kiter (backs away along the wall)</td><td class="num">16%</td><td class="num better">37%</td><td class="num">74 → 97</td><td class="num">1.25 → 0.96</td></tr>
+    <tr><td>Camper (stands still)</td><td class="num">100%</td><td class="num worse">90%</td><td class="num">530 → 530</td><td class="num">1.34 → 1.39</td></tr>
+  </table></div>
+  <ul>
+    <li><b>Moving players:</b> the adaptive boss reads them far better.</li>
+    <li><b>The still player:</b> it's hit slightly less, because a few attacks are spent exploring.</li>
+    <li><b>Variety:</b> against a fixed habit the boss gets <i>less</i> varied (entropy 1.95 → 1.74 against the Strafer), because it exploits what works. Say that openly; it's the exploitation side of the bandit. Variety returns against a player who changes, through forgetting and Thompson sampling. Scripted players never change, so this test can't show it.</li>
+  </ul>
+
+  <h3>Boss viva questions</h3>
+  <details class="qa"><summary>What does the Beta distribution represent, and why use it?</summary><div class="a"><p>A belief about an unknown probability, here "this attack hits this player". It's the conjugate prior for hit/miss outcomes, so the Bayes update is exact and just counts: a hit adds 1 to α, a miss adds 1 to β. The mean α/(α+β) is the estimate, and the width shows how unsure the boss still is.</p></div></details>
+  <details class="qa"><summary>Why Thompson sampling instead of always using the best mean?</summary><div class="a"><p>Always taking the best mean never tries anything else, so one early lucky hit could lock the boss in forever. Sampling from each belief gives an uncertain attack a real chance to show it's better, while proven attacks still win most of the time. The test shows it finding the best of three arms within 1500 pulls, while still exploring the others.</p></div></details>
+  <details class="qa"><summary>Why does forgetting matter?</summary><div class="a"><p>A player who adapts makes old evidence wrong. Multiplying the evidence by 0.97 before each update caps it near 33 observations, so the beliefs follow a change. The test switches the best arm halfway, and the bandit follows.</p></div></details>
+  <details class="qa"><summary>Explain expectimax against minimax using your boss.</summary><div class="a"><p>Chance nodes average over your observed answers instead of assuming the worst. If you dodge the cannon sideways 70% of the time, a line that punishes the sideways dodge scores highly, even though a perfect player could avoid it. Minimax would assume the perfect dodge and never take that line.</p></div></details>
+  <details class="qa"><summary>Is the boss fair?</summary><div class="a"><ul><li>Telegraph timings, damage values and the jump rule are unchanged.</li><li>Aim lead is capped (κ ≤ 0.85, at most 2.5 m), so changing direction escapes.</li><li>A mercy window triggers below 25% health.</li><li>Healer punishment is rate-limited.</li><li>In the evaluation it never exceeded the original boss's damage against the still player.</li></ul></div></details>
+  <details class="qa"><summary>How do you know the upgrade didn't break the boss?</summary><div class="a"><ul><li>Step 1 split the brain with no behaviour change: its 14-scenario snapshot matches the original. The only difference, 0.1 m of frame-timing noise, also appears between two runs of the original.</li><li>Each later step re-ran the scenarios.</li><li>The new algorithms have 18 unit tests.</li></ul></div></details>
+  <p><b>Demo:</b> in Play mode press <b>F10</b> to show the boss's reasoning on the left: phase and mood, what it learned about your dodges, its hit-chance table and the expectimax values. In the world: yellow is your velocity, magenta is the predicted lead point, and orange is the cut-off point. F9 still shows Relay on the right.</p>
+</section>
+
+<section id="other">
+  <span class="layer-tag">Scope</span>
+  <h2>The other lectures, and why they aren't in Relay</h2>
+  <p>An examiner may ask why a technique wasn't used. Short, defensible answers:</p>
+  <div class="table-wrap"><table>
+    <tr><th>Topic</th><th>Answer</th></tr>
+    <tr><td>BFS / DFS (L04)</td><td>Uniform-cost search is in the code as the comparison baseline. BFS ignores step costs (exposure), and DFS is neither optimal nor complete in infinite spaces.</td></tr>
+    <tr><td>Logic, forward chaining (L08)</td><td>Relay's knowledge is vague and numeric, which suits fuzzy rules better than crisp logic. The reflex layer is a small condition-action rule base.</td></tr>
+    <tr><td>Bayes' rule (L09 part 2)</td><td>A planned extension: replace hand-set success chances with <code>P(danger | health drop, threat visible)</code>.</td></tr>
+    <tr><td>Minimax, alpha-beta, expectimax (L10)</td><td>Relay is not playing a turn-based zero-sum game against the boss. Expectimax could choose a dodge spot against the boss's random attack choice, which is a stretch goal.</td></tr>
+    <tr><td>CSP (L11)</td><td>The position choice has soft trade-offs (scores), not hard constraints, so optimisation fits better than satisfaction. Range and line of sight could be modelled as CSP constraints, though.</td></tr>
+    <tr><td>Genetic algorithms, PSO, ACO (L06)</td><td>Population methods need many evaluations. Annealing gives a good spot in 60 evaluations inside a 0.2 s decision cycle.</td></tr>
+    <tr><td>Learning agents (L03)</td><td>Not needed in a known environment. A possible extension is a critic that tunes the rule weights from evaluation metrics.</td></tr>
+  </table></div>
+</section>
+
+<section id="viva">
+  <span class="layer-tag">Technical defence</span>
+  <h2>Viva questions with model answers</h2>
+  <details class="qa"><summary>What kind of agent is Relay?</summary><div class="a"><p>A hybrid, subsumption agent (Lecture 03). A reflex layer overrides a deliberative core that is model-based (it remembers threats), utility-based (expected utility over fuzzy urgencies) and goal-based where it plans routes (A*) and positions (simulated annealing).</p></div></details>
+  <details class="qa"><summary>Why isn't a simple reflex agent enough?</summary><div class="a"><p>The environment is partially observable: an enemy behind a wall disappears from the sensors. A reflex agent forgets it instantly. Relay keeps tracks with a transition model (constant velocity) and confidence decay <code>e^(−Δt/1.5)</code>.</p></div></details>
+  <details class="qa"><summary>Fuzzify player health 0.5 for me.</summary><div class="a"><p>Low is a triangle (0.2, 0.45, 0.7). 0.5 is on the falling side: (0.7 − 0.5) / (0.7 − 0.45) = 0.8. Healthy starts rising at 0.55, so it is 0. Critical ends at 0.3, so it is 0.</p></div></details>
+  <details class="qa"><summary>Why is AND the minimum?</summary><div class="a"><p>Zadeh's operator: a conjunction is only as true as its weakest part. OR is the maximum (the most optimistic part), and NOT is 1 − μ.</p></div></details>
+  <details class="qa"><summary>What does the centre of gravity do, and why aggregate first?</summary><div class="a"><p>It turns the aggregated fuzzy shape into one number: the balance point, <code>∫μ(x)·x dx / ∫μ(x) dx</code>. Aggregating with max first means two rules concluding the same term don't count that area twice. The code integrates numerically with the trapezoid rule over 1001 samples, and matches the lecture's 41.22.</p></div></details>
+  <details class="qa"><summary>Where do the probabilities in expected utility come from?</summary><div class="a"><p>They are designer estimates: 1 when the action can succeed immediately, 0.7 or 0.6 when Relay must move first, and 0 on cooldown. Admit this. The natural extension is Bayes' rule from Lecture 09.</p></div></details>
+  <details class="qa"><summary>Prove your A* heuristic is admissible and consistent.</summary><div class="a"><p>Step cost = length + 3 × exposure, with exposure ≥ 0, so every step costs at least its length. Straight-line distance is never more than the length of any path, so h never overestimates. For consistency: h(n) ≤ |n − n′| + h(n′) by the triangle inequality, and |n − n′| ≤ c(n, n′). So f never decreases along a path, and A* graph search returns an optimal route.</p></div></details>
+  <details class="qa"><summary>A*, uniform-cost and greedy: what is the difference, and what did you measure?</summary><div class="a"><p>f = g + h, f = g and f = h. On Romania: A* expanded 5 nodes for the 418 km optimum, uniform-cost expanded 12 for the same route, and greedy found a 450 km route. On the real arena: A* 136 nodes against uniform-cost 279.</p></div></details>
+  <details class="qa"><summary>Why test the goal when a node is popped, not when it is generated?</summary><div class="a"><p>When it is generated, a cheaper path to it may still be on the frontier. Testing at pop time guarantees the first goal popped has the lowest f, which is what the optimality proof needs.</p></div></details>
+  <details class="qa"><summary>Why didn't you just use Unity's NavMesh?</summary><div class="a"><p>NavMesh finds the shortest path and knows nothing about danger. Relay's own A* puts exposure to threats into the step cost, so it can take a slightly longer route through cover. In the arena sweep: 13.1 m through 9 watched cells instead of 11.7 m through 11. The NavMesh is still used as the map, and for the short hop between waypoints.</p></div></details>
+  <details class="qa"><summary>Why simulated annealing rather than hill climbing?</summary><div class="a"><p>The score landscape of positions has local maxima, such as a good spot behind one crate and a better one behind a pillar 3 m away. Hill climbing stops at the first. Annealing accepts worse moves with probability <code>e^(ΔE/T)</code> while hot, so it can cross the dip. Test: global peak 38 of 100 against 0 of 100.</p></div></details>
+  <details class="qa"><summary>Why a fixed 60 iterations?</summary><div class="a"><p>The environment is dynamic (Lecture 02): the world changes while Relay thinks, so the decision has a time budget. The whole decision cycle averages about 1.1 ms. The search is warm-started from the last best spot, so quality builds up across cycles.</p></div></details>
+  <details class="qa"><summary>How do you know your changes didn't break anything?</summary><div class="a"><p>Twenty unit tests built on lecture examples; a regression harness that records nine scenarios after every step (step 2 was proved to change nothing); and a scripted-fight evaluation comparing the old Relay with the new one over 8 seeds.</p></div></details>
+  <details class="qa"><summary>What are the limitations?</summary><div class="a"><ul><li>No hazard-zone reflex yet (the boss doesn't publish its slam zones).</li><li>The success probabilities are hand-set.</li><li>The open arena has little cover, so exposure rarely changes the route there.</li><li>The fights aren't perfectly repeatable because of frame timing, which is why the evaluation uses several seeds.</li><li>The extra intelligence costs about 1.1 ms per decision against microseconds before.</li></ul></div></details>
+  <details class="qa"><summary>Classify the environment along the 7 dimensions.</summary><div class="a"><p>Partially observable, multi-agent (cooperative and competitive), stochastic, sequential, dynamic, continuous and known. Each one maps to a design choice in the PEAS section.</p></div></details>
+</section>
+
+<section id="demo">
+  <span class="layer-tag">Live demo</span>
+  <h2>Demo script</h2>
+  <ol>
+    <li>Open <code>OwnedAgentsLab</code> (or <code>SkybreakMain</code>) and press Play.</li>
+    <li>Press <b>F9</b> to show Relay's reasoning overlay. On screen: every fuzzy membership, the rules firing, the COG urgencies, the expected-utility bars, A* statistics and annealing statistics.</li>
+    <li>In the world: blue crosses are the A* closed set, the cyan line is the route, green and red crosses are accepted and rejected annealing samples, the white ring is the chosen spot, red lines are remembered threats (fading with confidence), and the orange strip is your line of fire.</li>
+    <li>Walk in front of Relay: it repositions out of your line of fire.</li>
+    <li>Take damage: heal urgency rises with low health and a dropping trend, and Relay heals.</li>
+    <li>Press F7 for the boss: Relay defends while you are healthy and retreats when its own health is weak.</li>
+    <li>Show the unit tests passing in the Test Runner, and the commit history.</li>
+  </ol>
+</section>
+
+<section id="files">
+  <span class="layer-tag">Code map</span>
+  <h2>Where the code is</h2>
+  <div class="files">
+    <div>Assets/Scripts/AI/Relay/RelayBrain.cs: decision cycle, actuators</div>
+    <div>RelayReflexes.cs: layer 0</div>
+    <div>RelayPerception.cs: layer 1, threat tracks, health trend</div>
+    <div>RelayFuzzyModel.cs: layer 2, 14 rules</div>
+    <div>RelayUtility.cs: layer 3, expected utility</div>
+    <div>RelayTacticalGraph.cs: layer 4 search problem</div>
+    <div>RelayPositionSearch.cs: layer 5 objective</div>
+    <div>RelayDebugOverlay.cs: F9 overlay</div>
+    <div>Assets/Scripts/AI/Algorithms/Fuzzy/: membership functions, rules, Mamdani FIS</div>
+    <div>Assets/Scripts/AI/Algorithms/Search/: best-first search (A*, UCS, greedy), heap</div>
+    <div>Assets/Scripts/AI/Algorithms/Local/: simulated annealing, hill climbing</div>
+    <div>Assets/Tests/EditMode/RelayAlgorithms/: 20 unit tests</div>
+    <div>Docs/IS/AgentDesign/Relay/RELAY_DESIGN.md: full design</div>
+    <div>Docs/IS/Testing/Relay/: snapshots, test results, evaluation</div>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+(() => {
+  // ---------------------------------------------------------------- fuzzy explorer (mirrors RelayFuzzyModel.cs)
+  const trap = (x, a, b, c, d) => (x < a || x > d) ? 0 : (x >= b && x <= c) ? 1 : x < b ? (x - a) / (b - a) : (d - x) / (d - c);
+  const tri = (x, a, b, c) => trap(x, a, b, b, c);
+  const IN = {
+    PlayerHealth: { Critical: x => trap(x, 0, 0, .15, .3), Low: x => tri(x, .2, .45, .7), Healthy: x => trap(x, .55, .8, 1, 1) },
+    ThreatDistance: { Near: x => trap(x, 0, 0, 4, 8), Medium: x => tri(x, 5, 10, 15), Far: x => trap(x, 12, 16, 20, 20) },
+    HealthTrend: { Stable: x => trap(x, 0, 0, .01, .03), Dropping: x => tri(x, .02, .05, .08), Plummeting: x => trap(x, .06, .1, .2, .2) },
+    RelayHealth: { Weak: x => trap(x, 0, 0, .2, .4), Okay: x => trap(x, .3, .6, 1, 1) },
+  };
+  const OUT = { Low: x => trap(x, 0, 0, .2, .4), Medium: x => tri(x, .3, .5, .7), High: x => trap(x, .6, .8, 1, 1) };
+  const RULES = [
+    ["H1", "Heal", "High", m => m.PlayerHealth.Critical, "PH Critical"],
+    ["H2", "Heal", "High", m => Math.min(m.PlayerHealth.Low, Math.max(m.HealthTrend.Dropping, m.HealthTrend.Plummeting)), "PH Low ∧ (Dropping ∨ Plummeting)"],
+    ["H3", "Heal", "Medium", m => m.PlayerHealth.Low, "PH Low"],
+    ["H4", "Heal", "Low", m => m.PlayerHealth.Healthy, "PH Healthy"],
+    ["D1", "Defend", "High", m => Math.min(m.ThreatDistance.Near, m.PlayerHealth.Healthy), "Near ∧ Healthy"],
+    ["D2", "Defend", "Medium", m => Math.min(m.ThreatDistance.Near, 1 - m.PlayerHealth.Healthy), "Near ∧ ¬Healthy"],
+    ["D3", "Defend", "Medium", m => Math.min(m.ThreatDistance.Medium, m.PlayerHealth.Healthy), "Medium ∧ Healthy"],
+    ["D4", "Defend", "Low", m => Math.min(m.ThreatDistance.Medium, 1 - m.PlayerHealth.Healthy), "Medium ∧ ¬Healthy"],
+    ["D5", "Defend", "Low", m => m.ThreatDistance.Far, "Far"],
+    ["D6", "Defend", "High", m => Math.min(m.HealthTrend.Plummeting, 1 - m.ThreatDistance.Far), "Plummeting ∧ ¬Far"],
+    ["S1", "Self", "High", m => Math.min(m.RelayHealth.Weak, m.ThreatDistance.Near), "Weak ∧ Near"],
+    ["S2", "Self", "Medium", m => Math.min(m.RelayHealth.Weak, m.ThreatDistance.Medium), "Weak ∧ Medium"],
+    ["S3", "Self", "Low", m => Math.min(m.RelayHealth.Weak, m.ThreatDistance.Far), "Weak ∧ Far"],
+    ["S4", "Self", "Low", m => m.RelayHealth.Okay, "Okay"],
+  ];
+  const cog = act => {
+    let area = 0, mom = 0, px = 0, pm = 0, first = true;
+    for (let i = 0; i <= 1000; i++) {
+      const x = i / 1000; let mu = 0;
+      for (const t in OUT) if (act[t] > 0) mu = Math.max(mu, Math.min(act[t], OUT[t](x)));
+      if (!first) { area += (pm + mu) * .5 * .001; mom += (pm * px + mu * x) * .5 * .001; }
+      first = false; px = x; pm = mu;
+    }
+    return area > 1e-12 ? mom / area : 0;
+  };
+  const $ = id => document.getElementById(id);
+  const fmt = (v, d = 2) => Number(v).toFixed(d);
+  function fuzzy() {
+    const x = { PlayerHealth: +$("fz-health").value, ThreatDistance: +$("fz-dist").value, HealthTrend: +$("fz-trend").value, RelayHealth: +$("fz-relay").value };
+    $("fz-health-v").textContent = Math.round(x.PlayerHealth * 100) + "%";
+    $("fz-dist-v").textContent = fmt(x.ThreatDistance, 1) + " m";
+    $("fz-trend-v").textContent = fmt(x.HealthTrend * 100, 1) + "%/s";
+    $("fz-relay-v").textContent = Math.round(x.RelayHealth * 100) + "%";
+    const m = {}; let muHtml = "";
+    for (const v in IN) {
+      m[v] = {};
+      const parts = [];
+      for (const t in IN[v]) { const mu = IN[v][t](x[v]); m[v][t] = mu; parts.push(mu > 0 ? `<b>${t} ${fmt(mu)}</b>` : `${t} 0`); }
+      muHtml += `<div>${v}: ${parts.join(" · ")}</div>`;
+    }
+    $("fz-mu").innerHTML = muHtml;
+    const act = { Heal: { Low: 0, Medium: 0, High: 0 }, Defend: { Low: 0, Medium: 0, High: 0 }, Self: { Low: 0, Medium: 0, High: 0 } };
+    let rulesHtml = "";
+    for (const [id, out, term, f, text] of RULES) {
+      const s = Math.max(0, Math.min(1, f(m)));
+      act[out][term] = Math.max(act[out][term], s);
+      if (s > 0) rulesHtml += `<div>${id} ${text} → ${out} ${term}: <b>${fmt(s)}</b></div>`;
+    }
+    $("fz-rules").innerHTML = rulesHtml || "<div>No rules fire</div>";
+    const res = { "Heal urgency": cog(act.Heal), "Defend urgency": cog(act.Defend), "Self-preservation": cog(act.Self) };
+    const best = Object.keys(res).slice(0, 2).reduce((a, b) => res[a] >= res[b] ? a : b);
+    $("fz-out").innerHTML = Object.entries(res).map(([k, v]) =>
+      `<div class="bar${k === best ? " win" : ""}"><span>${k}</span><div class="track"><div class="fill" style="width:${v * 100}%"></div></div><span class="v">${fmt(v)}</span></div>`).join("");
+  }
+  ["fz-health", "fz-dist", "fz-trend", "fz-relay"].forEach(id => $(id).addEventListener("input", fuzzy));
+  fuzzy();
+
+  // ---------------------------------------------------------------- A* grid (mirrors BestFirstSearch.cs + tactical cost)
+  const W = 16, H = 9, canvas = $("grid"), ctx = canvas.getContext("2d");
+  const START = [1, 4], GOAL = [14, 4], BOSS = [8, 0];
+  const DEFAULT_WALLS = [[6, 2], [6, 3], [6, 4], [6, 5], [10, 3], [10, 4], [10, 5], [10, 6], [3, 6], [4, 6], [12, 2], [13, 2]];
+  let walls = new Set(DEFAULT_WALLS.map(c => c.join(","))), strategy = "astar", lambda = 3;
+  const key = (x, y) => x + "," + y;
+  function visible(x, y) {     // line of sight from the boss cell (Bresenham), blocked by walls
+    let [x0, y0] = BOSS; const dx = Math.abs(x - x0), dy = -Math.abs(y - y0), sx = x0 < x ? 1 : -1, sy = y0 < y ? 1 : -1; let err = dx + dy;
+    while (true) {
+      if (!(x0 === BOSS[0] && y0 === BOSS[1]) && walls.has(key(x0, y0))) return false;
+      if (x0 === x && y0 === y) return true;
+      const e2 = 2 * err; if (e2 >= dy) { err += dy; x0 += sx; } if (e2 <= dx) { err += dx; y0 += sy; }
+    }
+  }
+  function search() {
+    const exposure = (x, y) => visible(x, y) ? 1 : 0;
+    const h = (x, y) => Math.hypot(x - GOAL[0], y - GOAL[1]);
+    const f = (g, hh) => strategy === "astar" ? g + hh : strategy === "ucs" ? g : hh;
+    const g = new Map([[key(...START), 0]]), parent = new Map(), closed = new Set();
+    let frontier = [{ k: key(...START), x: START[0], y: START[1], f: f(0, h(...START)), o: 0 }], order = 1, expanded = 0;
+    while (frontier.length) {
+      frontier.sort((a, b) => a.f - b.f || a.o - b.o);
+      const n = frontier.shift();
+      if (closed.has(n.k)) continue;
+      if (n.x === GOAL[0] && n.y === GOAL[1]) {
+        const path = []; let c = n.k; while (c) { path.push(c.split(",").map(Number)); c = parent.get(c); }
+        return { path: path.reverse(), closed, expanded, cost: g.get(n.k) };
+      }
+      closed.add(n.k); expanded++;
+      for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+        if (!dx && !dy) continue;
+        const x = n.x + dx, y = n.y + dy, k = key(x, y);
+        if (x < 0 || y < 0 || x >= W || y >= H || walls.has(k) || (x === BOSS[0] && y === BOSS[1]) || closed.has(k)) continue;
+        if (dx && dy && (walls.has(key(n.x + dx, n.y)) || walls.has(key(n.x, n.y + dy)))) continue;
+        const ng = g.get(n.k) + Math.hypot(dx, dy) + lambda * exposure(x, y);
+        if (g.has(k) && g.get(k) <= ng) continue;
+        g.set(k, ng); parent.set(k, n.k);
+        frontier.push({ k, x, y, f: f(ng, h(x, y)), o: order++ });
+      }
+    }
+    return { path: [], closed, expanded, cost: Infinity };
+  }
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  function draw() {
+    const r = search(), cw = canvas.width / W, ch = canvas.height / H;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let x = 0; x < W; x++) for (let y = 0; y < H; y++) {
+      const k = key(x, y);
+      ctx.fillStyle = walls.has(k) ? css("--ink") : r.closed.has(k) ? css("--teal-soft") : css("--panel");
+      ctx.fillRect(x * cw + 1, y * ch + 1, cw - 2, ch - 2);
+      if (!walls.has(k) && visible(x, y) && !(x === BOSS[0] && y === BOSS[1])) {
+        ctx.fillStyle = css("--orange-soft"); ctx.globalAlpha = r.closed.has(k) ? .55 : 1;
+        ctx.fillRect(x * cw + 1, y * ch + 1, cw - 2, ch - 2); ctx.globalAlpha = 1;
+        if (r.closed.has(k)) { ctx.fillStyle = css("--teal-soft"); ctx.globalAlpha = .5; ctx.fillRect(x * cw + 1, y * ch + 1, cw - 2, ch - 2); ctx.globalAlpha = 1; }
+      }
+    }
+    ctx.fillStyle = css("--bad"); ctx.fillRect(BOSS[0] * cw + 6, BOSS[1] * ch + 6, cw - 12, ch - 12);
+    if (r.path.length) {
+      ctx.strokeStyle = css("--teal"); ctx.lineWidth = 5; ctx.lineJoin = "round"; ctx.beginPath();
+      r.path.forEach(([x, y], i) => { const px = x * cw + cw / 2, py = y * ch + ch / 2; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.stroke();
+    }
+    ctx.font = `600 ${Math.round(ch * .42)}px ${css("--font-display") || "sans-serif"}`; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillStyle = css("--ink");
+    ctx.fillText("S", START[0] * cw + cw / 2, START[1] * ch + ch / 2); ctx.fillText("G", GOAL[0] * cw + cw / 2, GOAL[1] * ch + ch / 2);
+    let exp = 0, len = 0;
+    r.path.forEach(([x, y], i) => { if (i) { const [px, py] = r.path[i - 1]; len += Math.hypot(x - px, y - py); } if (visible(x, y)) exp++; });
+    const name = { astar: "A*", ucs: "Uniform-cost", greedy: "Greedy best-first" }[strategy];
+    $("grid-out").textContent = r.path.length
+      ? `${name}, λ = ${lambda}: expanded ${r.expanded} nodes · route length ${len.toFixed(1)} · watched cells on route ${exp} · cost ${r.cost.toFixed(1)}`
+      : `${name}: no route (expanded ${r.expanded} nodes)`;
+  }
+  const setPressed = (ids, on) => ids.forEach(id => $(id).setAttribute("aria-pressed", String(id === on)));
+  [["st-astar", "astar"], ["st-ucs", "ucs"], ["st-greedy", "greedy"]].forEach(([id, s]) => $(id).addEventListener("click", () => { strategy = s; setPressed(["st-astar", "st-ucs", "st-greedy"], id); draw(); }));
+  [["lam-0", 0], ["lam-3", 3]].forEach(([id, l]) => $(id).addEventListener("click", () => { lambda = l; setPressed(["lam-0", "lam-3"], id); draw(); }));
+  $("grid-reset").addEventListener("click", () => { walls = new Set(DEFAULT_WALLS.map(c => c.join(","))); draw(); });
+  canvas.addEventListener("click", e => {
+    const rect = canvas.getBoundingClientRect(), x = Math.floor((e.clientX - rect.left) / rect.width * W), y = Math.floor((e.clientY - rect.top) / rect.height * H), k = key(x, y);
+    if ((x === START[0] && y === START[1]) || (x === GOAL[0] && y === GOAL[1]) || (x === BOSS[0] && y === BOSS[1])) return;
+    walls.has(k) ? walls.delete(k) : walls.add(k); draw();
+  });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  draw();
+
+  // ---------------------------------------------------------------- Thompson sampling explorer (mirrors BetaBelief.cs)
+  const ARMS = [
+    { name: "Cannon burst", damage: 24, a: 2, b: 2 },
+    { name: "Blade slash", damage: 30, a: 2, b: 2 },
+    { name: "Rear teleport", damage: 30, a: 2, b: 2 },
+  ];
+  const lgamma = z => {   // Lanczos approximation
+    const g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < .5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lgamma(1 - z);
+    z -= 1; let x = c[0]; for (let i = 1; i < g + 2; i++) x += c[i] / (z + i);
+    const t = z + g + .5; return .5 * Math.log(2 * Math.PI) + (z + .5) * Math.log(t) - t + Math.log(x);
+  };
+  const betaPdf = (x, a, b) => x <= 0 || x >= 1 ? 0 : Math.exp((a - 1) * Math.log(x) + (b - 1) * Math.log(1 - x) + lgamma(a + b) - lgamma(a) - lgamma(b));
+  const normal = () => { const u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  const gamma = k => {   // Marsaglia-Tsang
+    if (k < 1) return gamma(k + 1) * Math.pow(Math.random(), 1 / k);
+    const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
+    for (;;) { let x, v; do { x = normal(); v = 1 + c * x; } while (v <= 0); v = v * v * v; const u = Math.random();
+      if (u < 1 - .0331 * x ** 4 || Math.log(u) < .5 * x * x + d * (1 - v + Math.log(v))) return d * v; }
+  };
+  const sampleBeta = (a, b) => { const x = gamma(a), y = gamma(b); return x / (x + y); };
+  const armsBox = document.getElementById("ts-arms");
+  armsBox.innerHTML = ARMS.map((arm, i) => `
+    <div class="box"><h4>${arm.name}</h4>
+      <canvas id="ts-c${i}" width="300" height="110" aria-label="Belief curve for ${arm.name}"></canvas>
+      <div class="controls" style="margin:8px 0 0"><button type="button" class="plain" data-arm="${i}" data-hit="1">+ hit</button><button type="button" class="plain" data-arm="${i}" data-hit="0">+ miss</button></div>
+      <div class="readout" id="ts-r${i}"></div></div>`).join("");
+  let lastDraw = null;
+  function drawArms() {
+    ARMS.forEach((arm, i) => {
+      const cv = document.getElementById("ts-c" + i), g = cv.getContext("2d"), W = cv.width, H = cv.height;
+      g.clearRect(0, 0, W, H);
+      let max = 0; const ys = []; for (let k = 0; k <= 100; k++) { const y = betaPdf(k / 100, arm.a, arm.b); ys.push(y); max = Math.max(max, y); }
+      g.strokeStyle = css("--teal"); g.lineWidth = 2; g.beginPath();
+      ys.forEach((y, k) => { const px = k / 100 * W, py = H - 8 - y / max * (H - 16); k ? g.lineTo(px, py) : g.moveTo(px, py); }); g.stroke();
+      const mean = arm.a / (arm.a + arm.b);
+      g.strokeStyle = css("--muted"); g.setLineDash([4, 3]); g.beginPath(); g.moveTo(mean * W, 4); g.lineTo(mean * W, H - 4); g.stroke(); g.setLineDash([]);
+      if (lastDraw) { g.fillStyle = css("--orange"); g.beginPath(); g.arc(lastDraw[i] * W, H - 8, 5, 0, Math.PI * 2); g.fill(); }
+      document.getElementById("ts-r" + i).textContent = `Beta(${arm.a}, ${arm.b}) · mean ${mean.toFixed(2)}${lastDraw ? ` · draw ${lastDraw[i].toFixed(2)} → ${(lastDraw[i] * arm.damage).toFixed(1)}%` : ""}`;
+    });
+  }
+  armsBox.addEventListener("click", e => {
+    const b = e.target.closest("button[data-arm]"); if (!b) return;
+    const arm = ARMS[+b.dataset.arm]; if (b.dataset.hit === "1") arm.a++; else arm.b++;
+    lastDraw = null; drawArms();
+  });
+  document.getElementById("ts-draw").addEventListener("click", () => {
+    lastDraw = ARMS.map(a => sampleBeta(a.a, a.b));
+    const best = lastDraw.map((t, i) => t * ARMS[i].damage).reduce((bi, v, i, arr) => v > arr[bi] ? i : bi, 0);
+    document.getElementById("ts-out").textContent = `This time the boss chooses: ${ARMS[best].name} (sampled value ${(lastDraw[best] * ARMS[best].damage).toFixed(1)}%).`;
+    drawArms();
+  });
+  document.getElementById("ts-many").addEventListener("click", () => {
+    const counts = [0, 0, 0];
+    for (let n = 0; n < 1000; n++) { const v = ARMS.map(a => sampleBeta(a.a, a.b) * a.damage); counts[v.indexOf(Math.max(...v))]++; }
+    document.getElementById("ts-out").textContent = "Over 1000 draws the boss would choose: " + ARMS.map((a, i) => `${a.name} ${(counts[i] / 10).toFixed(1)}%`).join(" · ") + ". Uncertain attacks still get picked sometimes: that is exploration.";
+  });
+  document.getElementById("ts-reset").addEventListener("click", () => { ARMS.forEach(a => { a.a = 2; a.b = 2; }); lastDraw = null; document.getElementById("ts-out").textContent = "Reset. Every attack starts at a weak 50/50 belief."; drawArms(); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawArms);
+  new MutationObserver(drawArms).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  drawArms();
+})();
+</script>

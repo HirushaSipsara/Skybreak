@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Skybreak.AI.SawanIS.VaultHound
 {
@@ -47,6 +48,8 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         [Header("Debug")]
         [SerializeField] bool drawGizmos;
+        [SerializeField] bool requireNavMesh;
+        [SerializeField] int agentTypeID;
 
         // ── Data ──────────────────────────────────────────────────────────────
 
@@ -78,6 +81,9 @@ namespace Skybreak.AI.SawanIS.VaultHound
                 Vector3 centre = CellCentre(x, z) + Vector3.up * checkHeight;
                 passable[z * width + x] = !Physics.CheckBox(centre, half,
                     Quaternion.identity, obstacleMask, QueryTriggerInteraction.Ignore);
+                if (requireNavMesh && passable[z * width + x])
+                    passable[z * width + x] = NavMesh.SamplePosition(CellCentre(x, z), out _, cellSize * .6f,
+                        new NavMeshQueryFilter { agentTypeID = agentTypeID, areaMask = NavMesh.AllAreas });
             }
             Version++;
         }

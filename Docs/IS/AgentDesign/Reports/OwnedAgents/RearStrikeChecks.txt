@@ -1,0 +1,5 @@
+Close rear teleport and visible-shot live checks, 10 October 2026.
+PASS: both arrivals 1.6m directly behind current facing; player turned 180 degrees; arrivals one second apart; exactly one 30-point hit on second-arrival frame.
+PASS: obstruction directly behind player cancels sequence without alternate-radius/front landing or damage.
+PASS: airborne player avoids the single close rear strike.
+PASS: three cannon hits still total 24 damage; player and cannon show unlit coloured tracer/muzzle/impact pulses that expire. Actual Unity render: ShotEffects.png.

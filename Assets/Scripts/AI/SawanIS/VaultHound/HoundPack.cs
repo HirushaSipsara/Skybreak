@@ -46,9 +46,16 @@ namespace Skybreak.AI.SawanIS.VaultHound
         /// <summary>Call from each Hound's Awake. Assigns A/B slots and initial roles.</summary>
         public void RegisterHound(VaultHoundBrain hound)
         {
+            if (hound == houndA || hound == houndB) return;
             if (houndA == null)       { houndA = hound; }
             else if (houndB == null)  { houndB = hound; AssignInitialRoles(); }
             else Debug.LogWarning("[HoundPack] More than two hounds registered.", this);
+        }
+
+        public void ResetForEncounter()
+        {
+            houndA = houndB = pursuer = flanker = null;
+            hasSharedSighting = false; sharedSightingTime = float.NegativeInfinity;
         }
 
         /// <summary>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.0586047">
+  <test-suite type="TestSuite" id="1000" name="Skybreak" fullname="Skybreak" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.058605" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1008" name="Skybreak.AI.Algorithms.Tests.dll" fullname="F:/UnityProjects/Skybreak/Library/ScriptAssemblies/Skybreak.AI.Algorithms.Tests.dll" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.048035" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="26136" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1009" name="Skybreak" fullname="Skybreak" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.047421" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1010" name="AI" fullname="Skybreak.AI" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.047187" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1011" name="Algorithms" fullname="Skybreak.AI.Algorithms" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.046974" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1012" name="Tests" fullname="Skybreak.AI.Algorithms.Tests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.046697" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1001" name="FuzzyInferenceTests" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.045232" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1007" name="Centroid_OfSymmetricSet_IsItsCentre_AndNoRulesFiredGivesDefault" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.Centroid_OfSymmetricSet_IsItsCentre_AndNoRulesFiredGivesDefault" methodname="Centroid_OfSymmetricSet_IsItsCentre_AndNoRulesFiredGivesDefault" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="531547563" result="Passed" start-time="2026-10-19 15:41:18Z" end-time="2026-10-19 15:41:19Z" duration="0.020424" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1002" name="Fuzzification_18C_IsFortyPercentColdAndSixtyPercentOptimal" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.Fuzzification_18C_IsFortyPercentColdAndSixtyPercentOptimal" methodname="Fuzzification_18C_IsFortyPercentColdAndSixtyPercentOptimal" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="914395921" result="Passed" start-time="2026-10-19 15:41:19Z" end-time="2026-10-19 15:41:19Z" duration="0.000693" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1004" name="Hedges_VeryAndSlightly_MatchLectureValues" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.Hedges_VeryAndSlightly_MatchLectureValues" methodname="Hedges_VeryAndSlightly_MatchLectureValues" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="1373737652" result="Passed" start-time="2026-10-19 15:41:19Z" end-time="2026-10-19 15:41:19Z" duration="0.001185" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1006" name="HospitalRobot_RuleFiring_AggregationAndCentreOfGravity" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.HospitalRobot_RuleFiring_AggregationAndCentreOfGravity" methodname="HospitalRobot_RuleFiring_AggregationAndCentreOfGravity" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="453690940" result="Passed" start-time="2026-10-19 15:41:19Z" end-time="2026-10-19 15:41:19Z" duration="0.004646" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1003" name="MembershipFunctions_CoreSlopesAndOutside" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.MembershipFunctions_CoreSlopesAndOutside" methodname="MembershipFunctions_CoreSlopesAndOutside" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="100641631" result="Passed" start-time="2026-10-19 15:41:19Z" end-time="2026-10-19 15:41:19Z" duration="0.000396" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1005" name="ZadehOperators_AndIsMin_OrIsMax_NotIsComplement" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.ZadehOperators_AndIsMin_OrIsMax_NotIsComplement" methodname="ZadehOperators_AndIsMin_OrIsMax_NotIsComplement" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="186132250" result="Passed" start-time="2026-10-19 15:41:19Z" end-time="2026-10-19 15:41:19Z" duration="0.000594" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: C:/Users/User/AppData/LocalLow/DefaultCompany/Skybreak\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

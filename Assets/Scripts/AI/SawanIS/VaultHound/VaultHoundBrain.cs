@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Skybreak.Combat;
 
 namespace Skybreak.AI.SawanIS.VaultHound
 {
@@ -191,6 +192,8 @@ namespace Skybreak.AI.SawanIS.VaultHound
         Transform player;
         float     nextDecisionTime;
         bool      lungeHit; // tracks whether the current lunge connected
+        Vector3 chamberPosition;
+        Quaternion chamberRotation;
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
@@ -198,12 +201,15 @@ namespace Skybreak.AI.SawanIS.VaultHound
         {
             motor  = GetComponent<NavMeshAgent>();
             health = GetComponent<CombatHealth>();
+            chamberPosition = transform.position; chamberRotation = transform.rotation;
 
             motor.speed         = deploySpeed;
             motor.updateRotation = true;
             motor.autoRepath     = false; // we manage replanning ourselves
+            motor.stoppingDistance = .05f;
 
             health.DamageTaken += OnDamageTaken;
+            health.OnDefeated.AddListener(OnDefeated);
 
             if (pack != null) pack.RegisterHound(this);
             else Debug.LogWarning("[VaultHound] No HoundPack assigned.", this);
@@ -214,6 +220,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
         void OnDestroy()
         {
             if (health != null) health.DamageTaken -= OnDamageTaken;
+            if (health != null) health.OnDefeated.RemoveListener(OnDefeated);
         }
 
         void Update()
@@ -245,8 +252,24 @@ namespace Skybreak.AI.SawanIS.VaultHound
         public void OnChamberOpen()
         {
             if (currentState != HoundState.Chambered) return;
+            if (!health.IsAlive) return;
             motor.enabled = true;
+            if (!motor.isOnNavMesh) return;
+            motor.isStopped = false;
             TransitionTo(HoundState.Deploying);
+        }
+
+        public void ResetForChamber()
+        {
+            StopAllCoroutines(); health.RestoreFullHealth();
+            motor.enabled = false; transform.SetPositionAndRotation(chamberPosition, chamberRotation); motor.enabled = true;
+            if (motor.isOnNavMesh) { motor.Warp(chamberPosition); motor.ResetPath(); motor.isStopped = true; }
+            foreach (var col in GetComponentsInChildren<Collider>()) col.enabled = true;
+            currentState = previousState = HoundState.Chambered;
+            currentPath.Clear(); CurrentPathCells.Clear(); sweepRoute.Clear(); pathIndex = sweepIndex = 0;
+            hasLastKnown = false; lastSeenTime = float.NegativeInfinity; routeBlocked = false;
+            pack?.RegisterHound(this);
+            var anim = GetComponent<Animator>(); if (anim != null) { anim.Rebind(); anim.Update(0); }
         }
 
         // ── Main decision loop ────────────────────────────────────────────────
@@ -307,8 +330,10 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         void DecidePursue(bool canSee, bool memValid)
         {
+            var role = pack != null && pack.IsFlanker(this) ? HoundState.FlankPursue : HoundState.DirectPursue;
+            if (currentState != role) TransitionTo(role);
             // Close enough to attack?
-            if (player != null &&
+            if (canSee && player != null &&
                 Vector3.Distance(transform.position, player.position) <= attackTriggerRange)
             {
                 StartCoroutine(AttackSequence());
@@ -358,7 +383,11 @@ namespace Skybreak.AI.SawanIS.VaultHound
             if (sweepIndex < sweepRoute.Count)
             {
                 float dist = Vector3.Distance(transform.position, sweepRoute[sweepIndex]);
-                if (dist < waypointThreshold + 0.2f) sweepIndex++;
+                if (dist < waypointThreshold + 0.2f)
+                {
+                    sweepIndex++;
+                    if (sweepIndex < sweepRoute.Count) PlanPathTo(sweepRoute[sweepIndex]);
+                }
             }
 
             if (sweepIndex >= sweepRoute.Count)
@@ -393,6 +422,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         void FollowPath()
         {
+            if (!motor.enabled || !motor.isOnNavMesh) return;
             if (routeBlocked) { TryReplan(); return; }
             if (currentPath.Count == 0 || pathIndex >= currentPath.Count) return;
 
@@ -503,7 +533,11 @@ namespace Skybreak.AI.SawanIS.VaultHound
             {
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsed / lungeDuration);
-                transform.position = Vector3.Lerp(startPos, lungeTarget, t);
+                if (!health.IsAlive) yield break;
+                Vector3 wanted = Vector3.Lerp(startPos, lungeTarget, t);
+                var filter = new NavMeshQueryFilter { agentTypeID = motor.agentTypeID, areaMask = motor.areaMask };
+                if (NavMesh.Raycast(transform.position, wanted, out var obstruction, filter)) wanted = obstruction.position;
+                motor.Move(wanted - transform.position);
                 yield return null;
             }
 
@@ -514,6 +548,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
             {
                 // Short pause after a hit before returning to pursue.
                 yield return new WaitForSeconds(0.3f);
+                if (!health.IsAlive) yield break;
                 TransitionTo(pack != null && pack.IsFlanker(this)
                     ? HoundState.FlankPursue
                     : HoundState.DirectPursue);
@@ -541,6 +576,15 @@ namespace Skybreak.AI.SawanIS.VaultHound
             foreach (var hit in hits)
             {
                 if (hit.transform == transform || hit.transform.IsChildOf(transform)) continue;
+                if (player == null || (hit.transform != player && !hit.transform.IsChildOf(player))) continue;
+                var sink = hit.GetComponentInParent<DamageSink>();
+                if (sink != null)
+                {
+                    if (sink.Team != Allegiance.Player || !sink.Alive || !DamageSink.Visible(transform.position + Vector3.up * .7f, sink, transform)) continue;
+                    float before = sink.Health;
+                    sink.ReceiveDamage(swipeDamage, transform);
+                    return sink.Health < before;
+                }
                 var dmg = hit.GetComponentInParent<IDamageable>();
                 if (dmg == null || !dmg.IsAlive) continue;
                 // Only hit the player team.
@@ -564,13 +608,16 @@ namespace Skybreak.AI.SawanIS.VaultHound
             float distance = offset.magnitude;
             if (distance > sightRange || distance < 0.01f) return false;
             if (Vector3.Angle(transform.forward, offset) > fieldOfView * 0.5f) return false;
-            return !Physics.Raycast(origin, offset / distance, distance, sightMask,
-                QueryTriggerInteraction.Ignore);
+            foreach (var hit in Physics.RaycastAll(origin, offset / distance, distance, sightMask, QueryTriggerInteraction.Ignore))
+                if (!hit.transform.IsChildOf(transform) && hit.transform != player && !hit.transform.IsChildOf(player) && hit.collider.gameObject.layer != 8) return false;
+            return true;
         }
 
         void AcquirePlayer()
         {
             if (player != null) return;
+            foreach (var sink in DamageSink.Active)
+                if (sink != null && sink.Team == Allegiance.Player && sink.Alive) { player = sink.transform; return; }
 #if UNITY_EDITOR || !UNITY_WEBGL
             // ArcController may not exist in all scenes; use try-find pattern safely.
             var allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
@@ -580,25 +627,24 @@ namespace Skybreak.AI.SawanIS.VaultHound
             }
 #endif
 
-            // Fallback: find living IDamageable that is not this hound.
-            foreach (var ch in FindObjectsByType<CombatHealth>(FindObjectsSortMode.None))
-            {
-                if (ch == health || !ch.IsAlive) continue;
-                player = ch.transform;
-                return;
-            }
+            var descent = FindAnyObjectByType<Skybreak.Descent.DescentCharacterController>();
+            if (descent != null) player = descent.transform;
         }
 
         // ── Utility ───────────────────────────────────────────────────────────
 
         void TransitionTo(HoundState next)
         {
+            if (currentState == HoundState.Dead) return;
             previousState = currentState;
             currentState  = next;
 
             if (next == HoundState.Dead)
             {
-                motor.isStopped = true;
+                StopAllCoroutines();
+                if (motor.enabled && motor.isOnNavMesh) motor.isStopped = true;
+                motor.enabled = false;
+                foreach (var col in GetComponentsInChildren<Collider>()) col.enabled = false;
                 pack?.NotifyHoundDestroyed(this);
             }
         }
@@ -637,6 +683,8 @@ namespace Skybreak.AI.SawanIS.VaultHound
                 hasLastKnown = true;
             }
         }
+
+        void OnDefeated() => TransitionTo(HoundState.Dead);
 
         // ── Gizmos ────────────────────────────────────────────────────────────
 

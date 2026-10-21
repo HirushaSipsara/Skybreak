@@ -1,4 +1,6 @@
 using UnityEngine;
+using Skybreak.Combat;
+using Skybreak.PhysicsInteraction;
 
 namespace Skybreak.AI.SawanIS.VaultHound
 {
@@ -35,6 +37,16 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         [Header("Debug")]
         [SerializeField] bool logEvents = true;
+        [SerializeField] DamageSink[] area1Agents = new DamageSink[0];
+        [SerializeField] DungeonHoldingDoor[] holdingDoors = new DungeonHoldingDoor[0];
+        [SerializeField] VaultHoundBrain[] hounds = new VaultHoundBrain[0];
+        [SerializeField] VaultHoundGrid grid;
+        [SerializeField] HoundPack pack;
+        float gatesReadyAt = -1;
+        bool deployed;
+        public bool Released => released;
+        public int TotalEnemies => totalArea1;
+        public int DefeatedEnemies => deadArea1;
 
         // ── Events ────────────────────────────────────────────────────────────
 
@@ -51,6 +63,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         void Start()
         {
+            if (area1Agents.Length > 0) { totalArea1 = area1Agents.Length; return; }
             // Count all living Area 1 enemies and subscribe to their defeat events.
             var allHealth = FindObjectsByType<CombatHealth>(FindObjectsSortMode.None);
             foreach (var h in allHealth)
@@ -62,6 +75,37 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
             if (logEvents)
                 Debug.Log($"[ChamberRelease] Tracking {totalArea1} Area 1 enemies (tag: '{area1Tag}').", this);
+        }
+
+        void Update()
+        {
+            // The shared combat reset restores the guards before this observer runs.
+            if (released)
+                foreach (var enemy in area1Agents)
+                    if (enemy != null && enemy.Alive) { ResetEncounter(); break; }
+            if (!released && area1Agents.Length > 0)
+            {
+                deadArea1 = 0;
+                foreach (var enemy in area1Agents) if (enemy == null || !enemy.Alive) deadArea1++;
+                if (deadArea1 >= totalArea1) Release();
+            }
+            if (!released || deployed) return;
+            foreach (var door in holdingDoors) if (door != null && !door.IsOpen) { gatesReadyAt = -1; return; }
+            if (gatesReadyAt < 0) gatesReadyAt = Time.time;
+            // Allow the lifted gates' carving obstacles to leave the navigation mesh before planning.
+            if (Time.time - gatesReadyAt < .25f) return;
+            grid?.Bake();
+            foreach (var hound in hounds) if (hound != null) hound.OnChamberOpen();
+            deployed = true;
+        }
+
+        public void ResetEncounter()
+        {
+            released = deployed = false; deadArea1 = 0; gatesReadyAt = -1;
+            pack?.ResetForEncounter();
+            foreach (var hound in hounds) if (hound != null) hound.ResetForChamber();
+            foreach (var door in holdingDoors) if (door != null) door.Close();
+            grid?.Bake();
         }
 
         // ── Callbacks ─────────────────────────────────────────────────────────
@@ -80,6 +124,9 @@ namespace Skybreak.AI.SawanIS.VaultHound
         {
             if (released) return;
             released = true;
+            foreach (var sink in DamageSink.Active)
+                if (sink != null && sink.Team == Allegiance.Player && sink.Alive) { pack?.ReportSighting(sink.transform.position); break; }
+            foreach (var door in holdingDoors) if (door != null) door.Open();
 
             if (logEvents) Debug.Log("[ChamberRelease] All Area 1 enemies cleared — opening chambers!", this);
 

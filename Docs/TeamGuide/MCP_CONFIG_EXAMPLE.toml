@@ -1,0 +1,9 @@
+# Merge these entries into your Codex config.toml; do not replace the whole file.
+# Change the project path to your own checkout and avoid duplicate tables.
+[mcp_servers.unity]
+command = "unity"
+args = ["mcp", "--project-path", "F:/UnityProjects/Skybreak"]
+
+[mcp_servers.blender]
+command = "uvx"
+args = ["mcp-for-blender"]

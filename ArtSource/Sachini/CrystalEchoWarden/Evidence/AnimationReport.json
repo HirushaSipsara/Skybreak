@@ -1,0 +1,106 @@
+{
+  "bones": 12,
+  "rigid_mesh_parts": 30,
+  "vertex_weights": "one full-weight bone per vertex",
+  "fps": 30,
+  "root_motion": false,
+  "clips": {
+    "Idle": {
+      "frames": [
+        1,
+        61
+      ],
+      "seconds": 2.0,
+      "loop": true
+    },
+    "Glide": {
+      "frames": [
+        1,
+        31
+      ],
+      "seconds": 1.0,
+      "loop": true
+    },
+    "TurnLeft": {
+      "frames": [
+        1,
+        31
+      ],
+      "seconds": 1.0,
+      "loop": true
+    },
+    "TurnRight": {
+      "frames": [
+        1,
+        31
+      ],
+      "seconds": 1.0,
+      "loop": true
+    },
+    "Retreat": {
+      "frames": [
+        1,
+        31
+      ],
+      "seconds": 1.0,
+      "loop": true
+    },
+    "Attack": {
+      "frames": [
+        1,
+        28
+      ],
+      "seconds": 0.9,
+      "loop": false
+    },
+    "Hit": {
+      "frames": [
+        1,
+        13
+      ],
+      "seconds": 0.4,
+      "loop": false
+    },
+    "Death": {
+      "frames": [
+        1,
+        46
+      ],
+      "seconds": 1.5,
+      "loop": false
+    }
+  },
+  "bindings": {
+    "Amber status strip": "Body",
+    "Arm joint L": "Forearm_L",
+    "Arm joint R": "Forearm_R",
+    "Arm upper L": "UpperArm_L",
+    "Arm upper R": "UpperArm_R",
+    "Blue chest panel": "Body",
+    "CEW_Visor": "Head",
+    "Chest signal L": "Body",
+    "Chest signal R": "Body",
+    "Claw block L": "Forearm_L",
+    "Claw block R": "Forearm_R",
+    "Claw lower L": "Claw_L",
+    "Claw lower R": "Claw_R",
+    "Claw upper L": "Claw_L",
+    "Claw upper R": "Claw_R",
+    "Core recess": "Body",
+    "Core socket": "Body",
+    "Crystal sound sensor L": "Sensor_L",
+    "Crystal sound sensor R": "Sensor_R",
+    "Cyan hover emitter": "Thruster",
+    "Cyan resonance core": "Body",
+    "Head shell": "Head",
+    "Helmet crest": "Head",
+    "Hover stabilizer": "Thruster",
+    "Main hull": "Body",
+    "Sensor frame L": "Sensor_L",
+    "Sensor frame R": "Sensor_R",
+    "Sensor mount L": "Sensor_L",
+    "Sensor mount R": "Sensor_R",
+    "Visor recess": "Head"
+  },
+  "unity_play_mode_tested": false
+}

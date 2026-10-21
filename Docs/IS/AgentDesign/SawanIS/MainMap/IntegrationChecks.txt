@@ -1,0 +1,13 @@
+Vault Hound main-map checks
+PASS: Two chambered hounds, closed gates and four loading-court enemies
+PASS: Models, materials and eight animation clips resolve
+PASS: Chambers remain locked before the last court enemy dies
+PASS: Court clear opens both real gates and deploys both hounds
+PASS: Both hounds navigate out of their chambers
+PASS: Shared sighting produces direct-pursuer and flanker roles
+PASS: Player carbine damages the hound through the shared combat adapter
+PASS: Swipe damages the real player and leaves Relay unharmed
+PASS: Death during a lunge stops movement, damage and colliders
+PASS: Survivor becomes the sole pursuer
+PASS: Reset restores both hounds and clears release/pack memory
+SUMMARY: 11 checks passed; failure=False

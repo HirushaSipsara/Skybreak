@@ -1,0 +1,5 @@
+Rift Disruptor breakup checks
+PASS: Lethal damage produces 18 correctly positioned/scaled armor pieces, hides the source, disables its colliders and ignores characters.
+PASS: Debris expires after four seconds.
+PASS: ResetAgent restores armor visibility, collisions and animation state.
+PASS: Repeated defeat works; disabling the actor immediately clears its debris.

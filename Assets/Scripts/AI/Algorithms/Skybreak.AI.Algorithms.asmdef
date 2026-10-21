@@ -1,0 +1,14 @@
+{
+    "name": "Skybreak.AI.Algorithms",
+    "rootNamespace": "Skybreak.AI.Algorithms",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

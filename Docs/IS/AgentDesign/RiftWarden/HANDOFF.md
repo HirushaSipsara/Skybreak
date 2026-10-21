@@ -1,5 +1,7 @@
 # Rift Warden — animated asset handoff
 
+> **10 October Unity update:** The boss is now placed in the main scene with a gameplay prefab, separate arm/core hitboxes, timed clip presentation, decision logic and a wider arena NavMesh. See [the current implementation and integration guide](../OWNED_AGENT_IMPLEMENTATION.md). The asset-package status and pending integration notes below describe the original 4 October handoff; the new gameplay work remains uncommitted.
+
 > **Skybreak project copy:** These files were transferred locally on 2026-10-04 as Student 1's final-boss work. Open `ArtSource/Student1/RiftWarden/Source/RiftWarden_Animated.blend`; the Unity FBX is `Assets/Models/Custom/RiftWarden/RiftWarden_Animated.fbx`. Video and stills are under `ArtSource/Student1/RiftWarden/Evidence/`. Manifest, palette and validation JSON files are beside this guide. The older `ArtSource/Student1/RiftWarden/Source/RiftWarden.blend` is the unrigged reference. The short Source/Exports/Previews paths below describe the original ZIP layout. No commit or push was made during transfer.
 
 Prepared 4 October 2026. This local package contains the rigged boss, 20 authored animation clips, an FBX export, a preview video and timing data. It has not been placed in a Unity scene, committed or pushed. Blender 5.1.2 was used. Keep the original files when making team edits.

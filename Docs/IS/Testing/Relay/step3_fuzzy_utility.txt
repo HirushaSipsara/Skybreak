@@ -1,0 +1,41 @@
+[heal at 50%] action=Heal decision="Heal / player's fuzzy heal urgency has the highest expected utility"
+  scores follow=0.339 heal=0.500 defend=0.109 retreat=0.156
+  fuzzy heal=0.500 defend=0.182 self=0.156
+  heals=1 attacks=0 playerHealth=68.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[heal on cooldown] action=Follow decision="Follow / recent threat remembered, actions cooling down"
+  scores follow=0.289 heal=0.050 defend=0.199 retreat=0.156
+  fuzzy heal=0.218 defend=0.331 self=0.156
+  heals=1 attacks=0 playerHealth=68.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[defend visible boss] action=Defend decision="Defend / visible threat endangers the player most"
+  scores follow=0.339 heal=0.000 defend=0.593 retreat=0.156
+  fuzzy heal=0.156 defend=0.593 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[retreat at low own health] action=Retreat decision="Retreat / self-preservation has the highest expected utility (recent threat)"
+  scores follow=0.289 heal=0.000 defend=0.050 retreat=0.593
+  fuzzy heal=0.156 defend=0.593 self=0.593
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=20.000
+  motor status="Following complete path" blocked=False stopped=False destination=(44.535,0.050,78.036)
+[follow distant player] action=Follow decision="Follow / no visible threat"
+  scores follow=0.650 heal=0.109 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  motor status="Following complete path" blocked=False stopped=False destination=(43.500,0.050,75.000)
+[follow close to player] action=Follow decision="Follow / no visible threat"
+  scores follow=0.342 heal=0.156 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[player down] action=Follow decision="Player down / waiting for restart"
+  scores follow=0.342 heal=0.156 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=0.000 relayHealth=90.000
+  motor status="Stopped" blocked=False stopped=False destination=none
+[unreachable destination] accepted=False blocked=True
+[lethal damage] action=Disabled decision="Relay disabled"
+  scores follow=0.342 heal=0.156 defend=0.000 retreat=0.000
+  fuzzy heal=0.156 defend=0.156 self=0.156
+  heals=1 attacks=1 playerHealth=100.000 relayHealth=0.000
+  motor status="Stopped" blocked=True stopped=False destination=none

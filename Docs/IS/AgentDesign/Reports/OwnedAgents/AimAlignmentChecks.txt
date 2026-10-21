@@ -1,0 +1,9 @@
+Actual gameplay camera alignment, 10 October 2026.
+Previous version: post-shot recoil moved the impact 12.531 pixels below camera centre.
+PASS: rendered view yaw 0 / pitch 8; impact centre error 0.0349 px.
+PASS: rendered view yaw 0 / pitch -12; impact centre error 0.0168 px.
+PASS: rendered view yaw 0 / pitch 24; impact centre error 0.0127 px.
+PASS: rendered view yaw 15 / pitch 0; impact centre error 0.0118 px.
+PASS: rendered view yaw -15 / pitch -25; impact centre error 0.0367 px.
+PASS: rendered view yaw 0 / pitch 8 with movement and damage shake; impact centre error 0.0122 px.
+PASS: all six actual gameplay views align the barrel, damage ray and rendered camera centre within 0.0367 pixels; tracers retain the original shot path.

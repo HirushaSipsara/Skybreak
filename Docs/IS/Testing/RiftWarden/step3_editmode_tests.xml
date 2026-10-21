@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="33" result="Passed" total="33" passed="33" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.1682819">
+  <test-suite type="TestSuite" id="1000" name="Skybreak" fullname="Skybreak" runstate="Runnable" testcasecount="33" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.168282" total="33" passed="33" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1039" name="Skybreak.AI.Algorithms.Tests.dll" fullname="F:/UnityProjects/Skybreak/Library/ScriptAssemblies/Skybreak.AI.Algorithms.Tests.dll" runstate="Runnable" testcasecount="33" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.158557" total="33" passed="33" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="17288" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1040" name="Skybreak" fullname="Skybreak" runstate="Runnable" testcasecount="33" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.157719" total="33" passed="33" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1041" name="AI" fullname="Skybreak.AI" runstate="Runnable" testcasecount="33" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.157237" total="33" passed="33" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1042" name="Algorithms" fullname="Skybreak.AI.Algorithms" runstate="Runnable" testcasecount="33" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.156767" total="33" passed="33" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1043" name="Tests" fullname="Skybreak.AI.Algorithms.Tests" runstate="Runnable" testcasecount="33" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.156271" total="33" passed="33" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1001" name="BanditTests" fullname="Skybreak.AI.Algorithms.Tests.BanditTests" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.070132" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1002" name="Beta_BayesUpdate_MeanAndVariance" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Beta_BayesUpdate_MeanAndVariance" methodname="Beta_BayesUpdate_MeanAndVariance" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="1966587204" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.018845" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1004" name="Beta_Forgetting_NeverDropsBelowThePrior" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Beta_Forgetting_NeverDropsBelowThePrior" methodname="Beta_Forgetting_NeverDropsBelowThePrior" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="826368182" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.003630" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1003" name="Beta_MoreEvidence_MeansLessUncertainty" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Beta_MoreEvidence_MeansLessUncertainty" methodname="Beta_MoreEvidence_MeansLessUncertainty" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="1809392796" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000230" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1005" name="Beta_Samples_HaveTheRightMoments" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Beta_Samples_HaveTheRightMoments" methodname="Beta_Samples_HaveTheRightMoments" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="997387446" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.011998" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1006" name="Gamma_SmallShape_HasTheRightMean" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Gamma_SmallShape_HasTheRightMean" methodname="Gamma_SmallShape_HasTheRightMean" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="483818516" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.008827" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1007" name="Thompson_LearnsTheBestArm" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Thompson_LearnsTheBestArm" methodname="Thompson_LearnsTheBestArm" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="10606468" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.004367" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Best arm in the last 500 pulls: 500; pulls per arm 6, 13, 1481
+]]></output>
+                </test-case>
+                <test-case id="1009" name="Thompson_SkipsUnavailableArms_AndWeighsPayoffs" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Thompson_SkipsUnavailableArms_AndWeighsPayoffs" methodname="Thompson_SkipsUnavailableArms_AndWeighsPayoffs" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="610548254" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.001020" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1008" name="Thompson_WithForgetting_FollowsAChangeOfBestArm" fullname="Skybreak.AI.Algorithms.Tests.BanditTests.Thompson_WithForgetting_FollowsAChangeOfBestArm" methodname="Thompson_WithForgetting_FollowsAChangeOfBestArm" classname="Skybreak.AI.Algorithms.Tests.BanditTests" runstate="Runnable" seed="1409187666" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000648" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1010" name="BestFirstSearchTests" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.060293" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1015" name="AStar_MatchesUniformCostOptimum_OnRandomDangerGrids" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.AStar_MatchesUniformCostOptimum_OnRandomDangerGrids" methodname="AStar_MatchesUniformCostOptimum_OnRandomDangerGrids" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="232728558" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.044784" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1011" name="AStar_Romania_FindsOptimal418kmRouteViaRimnicuAndPitesti" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.AStar_Romania_FindsOptimal418kmRouteViaRimnicuAndPitesti" methodname="AStar_Romania_FindsOptimal418kmRouteViaRimnicuAndPitesti" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="454020086" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.007762" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1018" name="ExpansionLimit_StopsTheSearch" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.ExpansionLimit_StopsTheSearch" methodname="ExpansionLimit_StopsTheSearch" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="1541919021" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000712" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1012" name="Greedy_Romania_TakesShorterLookingButCostlier450kmRouteViaFagaras" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.Greedy_Romania_TakesShorterLookingButCostlier450kmRouteViaFagaras" methodname="Greedy_Romania_TakesShorterLookingButCostlier450kmRouteViaFagaras" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="1684001854" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000359" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1019" name="MinHeap_PopsInPriorityOrder_TiesInInsertionOrder" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.MinHeap_PopsInPriorityOrder_TiesInInsertionOrder" methodname="MinHeap_PopsInPriorityOrder_TiesInInsertionOrder" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="1786424183" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000436" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1014" name="Romania_StraightLineHeuristic_IsConsistent" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.Romania_StraightLineHeuristic_IsConsistent" methodname="Romania_StraightLineHeuristic_IsConsistent" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="1094699696" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000603" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1016" name="TacticalCost_DetoursAroundExposedCorridor" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.TacticalCost_DetoursAroundExposedCorridor" methodname="TacticalCost_DetoursAroundExposedCorridor" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="1414336484" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.001270" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1013" name="UniformCost_Romania_SameOptimalCostButExpandsMoreNodesThanAStar" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.UniformCost_Romania_SameOptimalCostButExpandsMoreNodesThanAStar" methodname="UniformCost_Romania_SameOptimalCostButExpandsMoreNodesThanAStar" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="1682648513" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000406" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Expanded: A* 5, UCS 12
+]]></output>
+                </test-case>
+                <test-case id="1017" name="Unreachable_ReportsNotFound_AndPathToClosestExploredNode" fullname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests.Unreachable_ReportsNotFound_AndPathToClosestExploredNode" methodname="Unreachable_ReportsNotFound_AndPathToClosestExploredNode" classname="Skybreak.AI.Algorithms.Tests.BestFirstSearchTests" runstate="Runnable" seed="2064259786" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000837" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1020" name="FuzzyInferenceTests" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.012727" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1026" name="Centroid_OfSymmetricSet_IsItsCentre_AndNoRulesFiredGivesDefault" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.Centroid_OfSymmetricSet_IsItsCentre_AndNoRulesFiredGivesDefault" methodname="Centroid_OfSymmetricSet_IsItsCentre_AndNoRulesFiredGivesDefault" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="1946155947" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.003343" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1021" name="Fuzzification_18C_IsFortyPercentColdAndSixtyPercentOptimal" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.Fuzzification_18C_IsFortyPercentColdAndSixtyPercentOptimal" methodname="Fuzzification_18C_IsFortyPercentColdAndSixtyPercentOptimal" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="1484003931" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000680" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1023" name="Hedges_VeryAndSlightly_MatchLectureValues" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.Hedges_VeryAndSlightly_MatchLectureValues" methodname="Hedges_VeryAndSlightly_MatchLectureValues" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="1754187175" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.001335" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1025" name="HospitalRobot_RuleFiring_AggregationAndCentreOfGravity" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.HospitalRobot_RuleFiring_AggregationAndCentreOfGravity" methodname="HospitalRobot_RuleFiring_AggregationAndCentreOfGravity" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="508166778" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.004457" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1022" name="MembershipFunctions_CoreSlopesAndOutside" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.MembershipFunctions_CoreSlopesAndOutside" methodname="MembershipFunctions_CoreSlopesAndOutside" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="46131214" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000279" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1024" name="ZadehOperators_AndIsMin_OrIsMax_NotIsComplement" fullname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests.ZadehOperators_AndIsMin_OrIsMax_NotIsComplement" methodname="ZadehOperators_AndIsMin_OrIsMax_NotIsComplement" classname="Skybreak.AI.Algorithms.Tests.FuzzyInferenceTests" runstate="Runnable" seed="1979679848" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000454" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1027" name="PlayerModelTests" fullname="Skybreak.AI.Algorithms.Tests.PlayerModelTests" classname="Skybreak.AI.Algorithms.Tests.PlayerModelTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.003207" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1032" name="Classify_ResponseFromDisplacement" fullname="Skybreak.AI.Algorithms.Tests.PlayerModelTests.Classify_ResponseFromDisplacement" methodname="Classify_ResponseFromDisplacement" classname="Skybreak.AI.Algorithms.Tests.PlayerModelTests" runstate="Runnable" seed="1847176984" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000359" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1029" name="Dirichlet_Forgetting_LetsRecentHabitsTakeOver" fullname="Skybreak.AI.Algorithms.Tests.PlayerModelTests.Dirichlet_Forgetting_LetsRecentHabitsTakeOver" methodname="Dirichlet_Forgetting_LetsRecentHabitsTakeOver" classname="Skybreak.AI.Algorithms.Tests.PlayerModelTests" runstate="Runnable" seed="1394765659" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000575" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1028" name="Dirichlet_NoData_IsUniform_ThenFollowsCounts" fullname="Skybreak.AI.Algorithms.Tests.PlayerModelTests.Dirichlet_NoData_IsUniform_ThenFollowsCounts" methodname="Dirichlet_NoData_IsUniform_ThenFollowsCounts" classname="Skybreak.AI.Algorithms.Tests.PlayerModelTests" runstate="Runnable" seed="2060180481" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000345" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1030" name="Lead_PredictsAlongVelocity_ScaledAndCapped" fullname="Skybreak.AI.Algorithms.Tests.PlayerModelTests.Lead_PredictsAlongVelocity_ScaledAndCapped" methodname="Lead_PredictsAlongVelocity_ScaledAndCapped" classname="Skybreak.AI.Algorithms.Tests.PlayerModelTests" runstate="Runnable" seed="328401655" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000376" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1031" name="SmoothingAlpha_IsFrameRateIndependent" fullname="Skybreak.AI.Algorithms.Tests.PlayerModelTests.SmoothingAlpha_IsFrameRateIndependent" methodname="SmoothingAlpha_IsFrameRateIndependent" classname="Skybreak.AI.Algorithms.Tests.PlayerModelTests" runstate="Runnable" seed="1939111866" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000268" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1033" name="SimulatedAnnealingTests" fullname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests" classname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.007320" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1034" name="AcceptanceProbability_FollowsExpDeltaOverT" fullname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests.AcceptanceProbability_FollowsExpDeltaOverT" methodname="AcceptanceProbability_FollowsExpDeltaOverT" classname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests" runstate="Runnable" seed="1676680717" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000289" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1037" name="Annealing_AcceptsSomeWorseMovesWhileHot_AndKeepsTheBestSeen" fullname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests.Annealing_AcceptsSomeWorseMovesWhileHot_AndKeepsTheBestSeen" methodname="Annealing_AcceptsSomeWorseMovesWhileHot_AndKeepsTheBestSeen" classname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests" runstate="Runnable" seed="80587473" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.001727" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1036" name="Annealing_FindsGlobalPeakMoreOftenThanHillClimbing" fullname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests.Annealing_FindsGlobalPeakMoreOftenThanHillClimbing" methodname="Annealing_FindsGlobalPeakMoreOftenThanHillClimbing" classname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests" runstate="Runnable" seed="158795714" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.003446" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Global peak found: annealing 38/100, hill climbing 0/100
+]]></output>
+                </test-case>
+                <test-case id="1038" name="HillClimbing_NeverAcceptsWorse" fullname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests.HillClimbing_NeverAcceptsWorse" methodname="HillClimbing_NeverAcceptsWorse" classname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests" runstate="Runnable" seed="1473081808" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000297" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1035" name="Temperature_CoolsGeometrically" fullname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests.Temperature_CoolsGeometrically" methodname="Temperature_CoolsGeometrically" classname="Skybreak.AI.Algorithms.Tests.SimulatedAnnealingTests" runstate="Runnable" seed="596769610" result="Passed" start-time="2026-10-19 17:25:05Z" end-time="2026-10-19 17:25:05Z" duration="0.000200" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: C:/Users/User/AppData/LocalLow/DefaultCompany/Skybreak\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
