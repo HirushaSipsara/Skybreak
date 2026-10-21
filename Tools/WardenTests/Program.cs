@@ -15,6 +15,7 @@ static class Program
         DecisionsAndTactics();
         RegressionAndStress();
         MovementAnimations();
+        ComponentsAndUtilityArchitecture();
         SyntaxChecks.Run();
         Console.WriteLine("TOTAL "+passed);
     }
@@ -156,5 +157,41 @@ static class Program
         Check(likelihood[0]==likelihood[1]&&likelihood[2]<likelihood[0],"equal acoustic paths stay ambiguous");
         var single=new BeliefMap(1); single.See(0,0);
         Check(single[0]==1&&single.Concentration==1,"single-zone belief is safe");
+    }
+    static void ComponentsAndUtilityArchitecture()
+    {
+        // 1. Exact lecture utility formula check: U(a) = 0.35*conf + 0.25*danger + 0.20*combat + 0.10*cover - 0.10*travel
+        double uMax = WardenDecisionMaker.CalculateUtility(1, 1, 1, 1, 0);
+        Check(Math.Abs(uMax - 0.90) < 1e-9, "exact lecture utility formula U(a) = 0.35*conf + 0.25*danger + 0.20*combat + 0.10*cover - 0.10*travel");
+        double uMixed = WardenDecisionMaker.CalculateUtility(0.5, 0.4, 0.2, 0.8, 0.3);
+        Check(Math.Abs(uMixed - 0.365) < 1e-9, "utility calculation with mixed action components");
+
+        // 2. Decision Maker component behavior
+        var dm = new WardenDecisionMaker();
+        Check(dm.Decide(new Situation { Alive = true, Health = 1, CanPatrol = true }, 0) == Intent.Patrol, "decision maker selects patrol under quiet conditions");
+        Check(dm.Decide(new Situation { Alive = true, Health = 1, HasIntercept = true, ObjectiveDanger = 1 }, 1) == Intent.Intercept, "decision maker prioritizes intercept on crystal danger");
+        Check(dm.Decide(new Situation { Alive = true, Health = 0.1, HasRetreat = true, RetreatQuality = 1, Confidence = 1 }, 2) == Intent.Retreat, "decision maker chooses retreat when low health and exposed");
+
+        // 3. World Model component: remembered sightings, sounds, crystal state, and routes
+        var wm = new WardenWorldModel(4);
+        wm.RecordSighting(2, new Point(5, 0, 5), 10.0);
+        Check(wm.HasSighting && wm.LastSeenZone == 2 && wm.LastSeenPosition.X == 5 && wm.Belief[2] > 0.9, "world model records sighting and updates zone belief");
+        wm.RecordCrystalState(80f, 0.75f, 11.0);
+        Check(Math.Abs(wm.CrystalIntegrity - 80f) < 1e-4 && Math.Abs(wm.ObjectiveDanger - 0.75f) < 1e-4, "world model tracks objective status and danger");
+        wm.RecordRoute(new[] { 0, 1, 2 }, 7.5, 12.0);
+        Check(wm.LastRouteNodes.Length == 3 && wm.LastRouteCost == 7.5, "world model records planned route history");
+
+        // 4. Path Planner component: A* routing, admissible heuristic, acoustic loss, and interception
+        var g = new WorldGraph();
+        g.Add(new Point(0, 0, 0));
+        g.Add(new Point(3, 0, 4));
+        g.Connect(0, 1);
+        var planner = new WardenPathPlanner(g);
+        var route = planner.Plan(0, 1);
+        Check(route.Status == RouteStatus.Found && Math.Abs(route.Cost - 5) < 1e-9, "path planner plans A* route with admissible Euclidean heuristic");
+        var loss = planner.CalculateAcousticLoss(0);
+        Check(loss.Length == 2 && loss[0] == 0 && WorldGraph.Finite(loss[1]), "path planner calculates acoustic loss across graph");
+        var intercept = planner.PlanInterception(0, 1, new double[] { 0, 5 }, 2.8, 5.0);
+        Check(intercept >= 0, "path planner evaluates dynamic interception waypoint");
     }
 }

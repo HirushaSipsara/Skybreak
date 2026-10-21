@@ -11,6 +11,7 @@ This records actual implementation stages. Consult Git for author and timestamp;
 | 5 | `ca0ccbb` | Regression/stress cases, firing-transition fix, safe death/reset handling, Unity smoke-check menu and theory/integration/validation documents. |
 | Movement follow-up | See animation commit | 12-bone robot rig, eight authored clips, animated FBX, velocity-driven Unity clip playback and movement-selection tests. |
 | Unity validation follow-up | See validation commit | Installed the matching Editor; corrected object-ID and SphereCast compatibility errors; imported eight clips; passed scene and extended gameplay checks with recorded results. |
+| Architecture & criteria alignment | Current commit | Fulfill all proposal criteria in main: add decoupled WardenWorldModel, WardenDecisionMaker, WardenPathPlanner, WardenMovement, and WardenDebugView components; integrate exact lecture utility formula; add objective event tracking to WardenPerception; expand test suite to 57 checks. |
 
 ## Findings that changed the implementation
 
