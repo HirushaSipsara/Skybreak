@@ -68,6 +68,30 @@ AI assistance: Claude (Anthropic), through Claude Code, at the student's request
 
 -
 
-## Student 4
+## Student 4 — Samith Bandara
 
--
+Assessed IS agent: **Rift Disruptor** (hit-and-run phase drone). Design: `Docs/IS/RiftDisruptor/DESIGN.md`.
+
+### Rift Disruptor intelligent-agent implementation (IS assessment)
+
+AI assistance: Claude (Anthropic), through Claude Code. The agent concept (Rift Disruptor: moves between positions, chooses when to approach or attack, telegraphs a pulse, then relocates) came from the team proposal. The AI chose the architecture after reading the existing agents, and wrote the code, tests and documentation. The student set the goal, reviewed the work and committed it. AI assistance is recorded here rather than in the commit messages.
+
+| Date | Work | How | Evidence |
+|---|---|---|---|
+| 2026-10-21 | Unity-free core: fact states, GOAP planner (A* over world states, admissible heuristic), Disruptor action domain and cost model | AI-written | `Assets/Scripts/AI/Disruptor/Core/` |
+| 2026-10-21 | Threat-aware grid A* (octile, no corner cutting, partial routes) and danger-preserving path smoothing | AI-written | `Core/GridSearch.cs` |
+| 2026-10-21 | Position scoring, Beta–Bernoulli dodge learner with forgetting, utility goal selection with hysteresis | AI-written | `Core/AnchorScoring.cs`, `DodgeLearner.cs`, `GoalSelector.cs` |
+| 2026-10-21 | Runtime brain, aim-aware perception, tactics, nav grid with door/barricade watching, pulse, telegraph, F8 overlay | AI-written | `Assets/Scripts/AI/Disruptor/Runtime/` |
+| 2026-10-21 | Shared `IPathFollower`/`PathResult` contract and a basic follower | AI-written | `Assets/Scripts/Core/Interfaces/IPathFollower.cs`, `Assets/Scripts/AgentMovement/BasicPathFollower.cs` |
+| 2026-10-21 | Self-building lab, 26 EditMode tests, 9 scripted Play Mode gameplay checks | AI-written; run in Unity batch mode | `Assets/Scenes/Tests/RiftDisruptor/`, `Assets/Tests/EditMode/DisruptorCore/`, `Docs/IS/RiftDisruptor/GameplayChecks.txt` |
+
+### Student 4's own contributions
+
+| Date | Contribution |
+|---|---|
+| 2026-10 | Proposed the Rift Disruptor concept in the team pitch: moves between positions, chooses when to approach or attack, telegraphs a pulse, then relocates. Chosen to exercise the Student 4 movement and animation system |
+| 2026-10-21 | Supplied the IS and GV briefs and the team's agent proposals; set the requirement that the agent fit the existing game alongside the other members' agents |
+| 2026-10-21 | Set the work order: IS agent first on `module/is-samith`, then GV movement and animation on `module/gv-samith` |
+| 2026-10-21 | Reviewed the implementation, design document and test evidence; chose not to let the AI commit, and committed the work in eight logical commits under own account |
+
+*Still to add:* own play testing in the lab (what you tried, what you observed) and any tuning or code changes you make yourself.
