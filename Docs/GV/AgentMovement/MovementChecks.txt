@@ -1,0 +1,34 @@
+Rift Disruptor movement and animation checks
+2026-10-21T13:05:03.5257310Z  Unity 6000.6.0f1
+Scene Assets/Scenes/Tests/Student4Movement/AgentMovementLab.unity; prefab Assets/Prefabs/Enemies/RiftDisruptor/RiftDisruptor.prefab
+
+PASS Animation clips bind to the imported model
+     7 clips (RD_Charge 0.80s loop, RD_Death 1.60s, RD_Hurt 0.40s, RD_Idle 2.40s loop, RD_Release 0.55s, RD_Run 0.62s loop, RD_Walk 0.90s loop); 399 curve bindings, 0 unresolved
+PASS Three-point route: correct order, final stop, no teleport
+     report Arrived; waypoints reached in order 3/3; final error 0.120 m; largest step beyond speed x dt 0.0 mm; 9.30 s
+PASS Smooth turning within the turn rate
+     largest yaw change 5.00 deg/frame; allowed 5.00 at 60 fps
+PASS Animator Speed follows measured speed
+     mean |Speed parameter - measured speed| 0.053 m/s over 554 moving frames
+PASS 30 fps and 60 fps give the same motion
+     arrival 9.300 s at 60 fps vs 9.333 s at 30 fps (0.4%); end positions 3.3 cm apart
+PASS Sharp corners at run speed without clipping walls
+     report Arrived; frames with the body (90% radius) inside geometry 0/314; 5.23 s
+PASS Follows an A* path array through the doorway
+     A* Complete, 4 waypoints, 25.4 m; report Arrived; overlaps 0
+PASS Closed door: physical stop and Blocked report
+     report Blocked; furthest body front 4.80 vs door face 4.85
+PASS Locomotion animation stops at the blockage
+     Speed parameter 0.00 after blocking (no running on the spot)
+PASS A new route through the closed door is rejected
+     report Invalid: segment 1 crosses solid geometry
+PASS Invalid, empty, null and zero-speed paths are rejected
+     NaN Invalid, empty Invalid, zero speed Invalid, null Invalid; drift 0.0 mm
+PASS Replacement path: first node consumed, no jump
+     report Arrived; final error 0.116 m; largest step excess 0.0 mm
+PASS Capsule and robot use the same motor
+     capsule run 9.30 s, report Arrived
+PASS Charge, release, hurt and death states
+     charging -> Charge; release -> Release; then Locomotion; hurt -> Hurt; defeated (+ late hurt request) -> Dead
+
+SUMMARY: 14/14 checks passed
