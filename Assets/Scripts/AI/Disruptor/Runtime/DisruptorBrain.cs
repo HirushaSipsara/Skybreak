@@ -89,6 +89,8 @@ namespace Skybreak.AI.Disruptor
 
         // ------------------------------------------------------------------ telemetry (overlay, presentation, tests)
         public event Action<DisruptorBrain> PulseCharging, PulseReleased, PulseStaggered, Defeated;
+        /// <summary>Raised for every hit taken (amount), before any stagger or defeat handling.</summary>
+        public event Action<DisruptorBrain, float> Damaged;
         public DisruptorGoal? Goal { get; private set; }
         public GoapPlan Plan { get; private set; } = new GoapPlan();
         public int StepIndex => stepIndex;
@@ -157,6 +159,7 @@ namespace Skybreak.AI.Disruptor
             if (!Alive || amount <= 0 || float.IsNaN(amount) || float.IsInfinity(amount)) return;
             health = Mathf.Max(0, health - amount);
             if (source != null) senses.NotifyHit(source.position, Time.time);
+            Damaged?.Invoke(this, amount);
             if (!Alive) { Die(); return; }
             if (pulse.AbsorbDamage(amount, staggerDamage))
             {
