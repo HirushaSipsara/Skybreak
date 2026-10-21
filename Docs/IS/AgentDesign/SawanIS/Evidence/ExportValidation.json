@@ -1,0 +1,30 @@
+{
+  "source_skinning": "pass",
+  "single_atlas_uv": "pass",
+  "source_clips": [
+    "Alert",
+    "Death",
+    "Hit",
+    "Idle",
+    "Lunge",
+    "Run",
+    "Sniff",
+    "Walk"
+  ],
+  "run_vertices_moving": 1920,
+  "fbx_meshes": 1,
+  "fbx_bones": 19,
+  "fbx_clips": [
+    "VaultHound_Rig|Alert",
+    "VaultHound_Rig|Death",
+    "VaultHound_Rig|Hit",
+    "VaultHound_Rig|Idle",
+    "VaultHound_Rig|Lunge",
+    "VaultHound_Rig|Run",
+    "VaultHound_Rig|Sniff",
+    "VaultHound_Rig|Walk"
+  ],
+  "fbx_weights": "present for all vertices",
+  "unity_import_tested": false,
+  "gameplay_ai_included": false
+}

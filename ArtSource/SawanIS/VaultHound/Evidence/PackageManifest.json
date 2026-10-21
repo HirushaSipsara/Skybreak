@@ -1,0 +1,78 @@
+{
+  "Evidence/ExportValidation.json": {
+    "bytes": 629,
+    "sha256": "d08e6dbd22f2979000709148bf03270ed90a9cc6d0ccc1f2b3eb394b9c045cef"
+  },
+  "Evidence/ModelReport.json": {
+    "bytes": 1618,
+    "sha256": "67d6eba8bc2697f1043996fda731666701aaac585617de28e76878e8b01817f7"
+  },
+  "Exports/VaultHound.glb": {
+    "bytes": 705208,
+    "sha256": "4ed83ba2b0e4d6e73ea75362efbe93e6fc08f98150b0f8d28a900ff41b2e33bf"
+  },
+  "Exports/VaultHound_Animated.fbx": {
+    "bytes": 1342796,
+    "sha256": "1f34884e22e056ed991811f00f244c526a01cff8f23de01675117445bba88aa8"
+  },
+  "Previews/VaultHound_Front.png": {
+    "bytes": 1314634,
+    "sha256": "ab580fe6b7a41575478a6f9ef7b06491af47bc014314637f4763356f61ad4413"
+  },
+  "Previews/VaultHound_Lunge.png": {
+    "bytes": 378832,
+    "sha256": "5411bab077492bafac0ae0e16d75e7115c783463778d748c1b0a5fa2f5cf38cb"
+  },
+  "Previews/VaultHound_Run.gif": {
+    "bytes": 1154329,
+    "sha256": "333bdb424846f8e25d31b9d0262cd9d1404ff9c68fb3a6f43376180703c0d8c7"
+  },
+  "Previews/VaultHound_Side.png": {
+    "bytes": 1335239,
+    "sha256": "52f69be9740a7ccf61427ac003927c64f953338da505aafd8543b4d62f1f8c53"
+  },
+  "Previews/VaultHound_ThreeQuarter.png": {
+    "bytes": 1412997,
+    "sha256": "59d735d53a199ea377a180bf8898f3bfb3f335dd23aa00b96193cd9e0eb5f8a5"
+  },
+  "README.md": {
+    "bytes": 6052,
+    "sha256": "28801d4daf55d07759d62c1d523234300a7ec110262e15a93d14b75782050d81"
+  },
+  "References/VaultHound_Concept.png": {
+    "bytes": 2040885,
+    "sha256": "e4b935f360f501a0f93f475c23c260b733f75e55401b0765b3fd46ec17cddc43"
+  },
+  "Source/build_vault_hound.py": {
+    "bytes": 19593,
+    "sha256": "aca5c586158a77d14bcebefa3a00d029196fa8884fdccf82b10e26c449420bfc"
+  },
+  "Source/package_handoff.py": {
+    "bytes": 2107,
+    "sha256": "d5621f62dc35763640ce3e8adea5c3f02ce01b32a42a9496b0e71a64d28d2b28"
+  },
+  "Source/render_previews.py": {
+    "bytes": 1417,
+    "sha256": "8257217ce64d9905423e6479eeb3b75cc2d421bca3eff49e6e06eac4d2a9c373"
+  },
+  "Source/validate_exports.py": {
+    "bytes": 2181,
+    "sha256": "5c02a4696d6305b148d97ced0eafe29d4707bdcd10b194f7783fd1a66886f1cc"
+  },
+  "Source/VaultHound_Editable.blend": {
+    "bytes": 209812,
+    "sha256": "87c3a3b9826b28f7c4b73a3ca1b6ba8655d253e5e825b4ac4e80d05eba435d33"
+  },
+  "Source/VaultHound_Rigged.blend": {
+    "bytes": 213667,
+    "sha256": "6becd4a29adb4bef27f0a1ac96e23f0ebd0403d8de465700b8f4b78fc70fbce0"
+  },
+  "Textures/VaultHound_BaseColor.png": {
+    "bytes": 1979,
+    "sha256": "c7fe5ef948a2c294ab97c0908d08305e8574b745a0474a33f5340e8b4b286065"
+  },
+  "Textures/VaultHound_Emission.png": {
+    "bytes": 1539,
+    "sha256": "8327bf83349b9d7e3072111fcd301fc317dc1c9a22176ee8d4f934a8a080f6b7"
+  }
+}
