@@ -19,6 +19,12 @@ namespace Skybreak.Warden
         public override float Health=>health;
         public override float MaximumHealth=>maximumHealth;
         public override Vector3 AimPoint=>transform.position+Vector3.up*.25f;
+        public WardenPerception Perception=>Senses;
+        public WardenWorldModel WorldModel {get;private set;}
+        public WardenDecisionMaker DecisionMaker {get;private set;}
+        public WardenPathPlanner PathPlanner {get;private set;}
+        public WardenMovement Movement=>Motor;
+        public WardenDebugView DebugView {get;private set;}
         public Decision Mind {get;private set;}
         public int Goal {get;private set;}=-1;
         public int Shots {get;private set;}
@@ -34,17 +40,31 @@ namespace Skybreak.Warden
         double[] travel;
         void Awake()
         {
-            health=maximumHealth;Mind=new Decision(weights);
-            Senses=GetComponent<WardenPerception>();Motor=GetComponent<WardenMotor>();
+            health=maximumHealth;
+            DecisionMaker=GetComponent<WardenDecisionMaker>()??gameObject.AddComponent<WardenDecisionMaker>();
+            DecisionMaker.weights=weights;
+            Mind=DecisionMaker.CoreDecisionMaker?.DecisionCore??new Decision(weights);
+            Senses=GetComponent<WardenPerception>();
+            Motor=GetComponent<WardenMotor>();
+            WorldModel=GetComponent<WardenWorldModel>()??gameObject.AddComponent<WardenWorldModel>();
+            WorldModel.perception=Senses;WorldModel.map=map;WorldModel.objective=objective;
+            PathPlanner=GetComponent<WardenPathPlanner>()??gameObject.AddComponent<WardenPathPlanner>();
+            PathPlanner.map=map;
+            DebugView=GetComponent<WardenDebugView>()??gameObject.AddComponent<WardenDebugView>();
+            DebugView.showOverlay=showDebug;
             // Spread newly spawned decision ticks without relying on Unity object identifiers.
             nextThink=Time.time+nextStartOffset*.04f;
             nextStartOffset=(nextStartOffset+1)%5;
         }
         public void ResetForEncounter()
         {
-            health=maximumHealth;Mind=new Decision(weights);home=-1;Goal=-1;Shots=0;
+            health=maximumHealth;
+            DecisionMaker?.ResetForEncounter();
+            Mind=DecisionMaker?.CoreDecisionMaker?.DecisionCore??new Decision(weights);
+            home=-1;Goal=-1;Shots=0;
             nextThink=Time.time;attackReady=Time.time+1;windupAt=-1;patrolCursor=0;routeCursor=-1;
             Motor.ResetForEncounter();Senses.ResetForEncounter();
+            WorldModel?.ResetForEncounter();
             GetComponent<CharacterController>().enabled=true;Status="Guard reset";
             GetComponent<WardenPresentation>()?.ResetDefeatFx();
         }
@@ -80,7 +100,10 @@ namespace Skybreak.Warden
         {
             if(!Alive){Motor.Stop();return;}
             if(map==null||map.Graph==null){Motor.Stop();Status="Navigation unavailable";return;}
-            Motor.map=map;Senses.map=map;Senses.Tick();
+            Motor.map=map;Senses.map=map;Senses.objective=objective;
+            if(WorldModel!=null){WorldModel.map=map;WorldModel.objective=objective;}
+            if(PathPlanner!=null)PathPlanner.map=map;
+            Senses.Tick();
             int here=map.AccessibleNode(transform.position);
             if(here<0){Motor.Stop();Status="No collision-free connection to graph";return;}
             if(home<0)home=here;
@@ -176,6 +199,7 @@ namespace Skybreak.Warden
             }
             if(selected<0||!WorldGraph.Finite(travel[selected]))selected=guard;
             Goal=selected;Motor.Go(selected);
+            WorldModel?.RecordRoute(Motor.Path,selected>=0&&selected<travel.Length?travel[selected]:0);
             Status=Mind.Reason+" / node "+selected+" / "+Motor.LastResult;
             // Face the suspected region at a search destination and let real vision clear it.
             if(Motor.Arrived&&intent==Intent.Investigate)transform.Rotate(0,45,0);

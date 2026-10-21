@@ -39,6 +39,19 @@ Unity 6000.6.0f1 compilation, scene smoke checks and automated runtime tests now
 
 The supplied lectures are the conceptual sources. This implementation does not claim to implement every lecture: no evolutionary optimization, formal inference engine, minimax, reinforcement learning or Bayesian network. The utility function is a manually designed weighted score informed by probabilistic belief; it is not a full expectation over a learned outcome-transition model.
 
+## Code structure and responsibilities
+
+The agent is organized into six decoupled components, exactly as specified in the Crystal Echo Warden architecture proposal:
+
+| Component | Responsibility | Implementation files |
+| --- | --- | --- |
+| `WardenPerception` | sight, hearing, objective events | `Assets/Scripts/AI/CrystalEchoWarden/Runtime/WardenPerception.cs` |
+| `WardenWorldModel` | remembered state and probability zones | `Assets/Scripts/AI/CrystalEchoWarden/Core/WardenWorldModel.cs`<br>`Assets/Scripts/AI/CrystalEchoWarden/Runtime/WardenWorldModel.cs` |
+| `WardenDecisionMaker` | utility scoring and behaviour choice | `Assets/Scripts/AI/CrystalEchoWarden/Core/WardenDecisionMaker.cs`<br>`Assets/Scripts/AI/CrystalEchoWarden/Runtime/WardenDecisionMaker.cs` |
+| `WardenPathPlanner` | waypoint graph and A* | `Assets/Scripts/AI/CrystalEchoWarden/Core/WardenPathPlanner.cs`<br>`Assets/Scripts/AI/CrystalEchoWarden/Runtime/WardenPathPlanner.cs` |
+| `WardenMovement` | NavMesh movement and animation triggers | `Assets/Scripts/AI/CrystalEchoWarden/Runtime/WardenMovement.cs`<br>`Assets/Scripts/AI/CrystalEchoWarden/Runtime/WardenMotor.cs` |
+| `WardenDebugView` | labels, paths, probabilities, current action | `Assets/Scripts/AI/CrystalEchoWarden/Runtime/WardenDebugView.cs` |
+
 ## Perception and beliefs
 
 Navigation nodes also approximate possible intruder zones. Let `b(i)` be the probability of zone `i`. Initially all zones have probability `1/N`. A direct sighting assigns 0.98 to the observed zone and distributes the remaining 0.02 across the others. A single-zone graph assigns 1.

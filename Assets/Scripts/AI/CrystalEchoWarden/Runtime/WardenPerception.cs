@@ -9,15 +9,19 @@ namespace Skybreak.Warden
         public WardenMap map;
         public WardenNoiseBus noise;
         public DamageSink target;
+        public WardenObjective objective;
         public float sightRange=16,fieldOfView=115;
         public Vector3 eyeOffset=new Vector3(0,.65f,0);
         public BeliefMap Belief {get;private set;}
         public bool Visible {get;private set;}
         public Vector3 LastSeen {get;private set;}
+        public int LastSeenZone {get;private set;}=-1;
         public int HeardCount {get;private set;}
         public string Evidence {get;private set;}="No evidence";
+        public bool ObjectiveThreatened=>objective!=null&&objective.Available&&objective.Danger>.1f;
+        public float ObjectiveDanger=>objective!=null&&objective.Available?objective.Danger:0f;
         public Vector3 Eye=>transform.TransformPoint(eyeOffset);
-        public void ResetForEncounter(){Belief=null;Visible=false;LastSeen=Vector3.zero;HeardCount=0;Evidence="No evidence";processedNoise=noise!=null?noise.LatestId:0;lastTick=Time.time;}
+        public void ResetForEncounter(){Belief=null;Visible=false;LastSeen=Vector3.zero;LastSeenZone=-1;HeardCount=0;Evidence="No evidence";processedNoise=noise!=null?noise.LatestId:0;lastTick=Time.time;}
         long processedNoise;
         float lastTick;
         public bool CanSeeNow()
@@ -58,8 +62,13 @@ namespace Skybreak.Warden
             if(Visible)
             {
                 LastSeen=target.AimPoint;
-                Belief.See(map.Graph.Nearest(WardenMap.ToPoint(target.transform.position)),Time.time);
+                LastSeenZone=map.Graph.Nearest(WardenMap.ToPoint(target.transform.position));
+                Belief.See(LastSeenZone,Time.time);
                 Evidence="Direct sight";
+            }
+            else if(ObjectiveThreatened)
+            {
+                Evidence="Objective alarm; danger "+ObjectiveDanger.ToString("0.00");
             }
             else
             {
