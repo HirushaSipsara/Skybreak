@@ -40,6 +40,12 @@ To repeat the automated gameplay suite, use this command from PowerShell with an
 & 'C:\Program Files\Unity\Hub\Editor\6000.6.0f1\Editor\Unity.exe' -batchmode -projectPath '<absolute path to this branch>' -executeMethod Skybreak.WardenEditor.WardenGameplayChecks.Run -logFile '<absolute log path>'
 ```
 
+## Interactive visual check on 21 October 2026
+
+Opened the lab in Unity 6000.6.0f1 and entered Play Mode. The imported floating Warden displayed its dark armour, cyan visor/crystals and amber details without missing-material pink. It approached the FPS player and attacked; the HUD showed two shots and health falling from 100 to 80. The new `Skybreak > Crystal Echo Warden > Inspect live Warden` menu framed the actor for a close scene preview. Play Mode was stopped afterward, leaving the lab open. The scene is built at runtime, so its arena appears when Play is pressed.
+
+This is a basic appearance and live-behaviour check, not exhaustive animation review or a performance benchmark. The interactive log contains a startup licensing token warning, but the Editor opened and Play Mode ran. Importer-generated animation bounds are conservative, so the inspection menu frames the actor directly; culling/performance remains part of the profiler checklist below.
+
 ## Remaining manual acceptance and team integration
 
 Automated assertions cover only the scenarios described above. The following checklist also includes qualitative animation/appearance, human playtesting, congestion and integration that the batch suite cannot establish. Four instances of Sachini's Warden are not the four distinct student agents required for the final group submission.
