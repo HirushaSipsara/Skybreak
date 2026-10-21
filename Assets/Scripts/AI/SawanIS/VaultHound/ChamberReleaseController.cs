@@ -65,7 +65,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
         {
             if (area1Agents.Length > 0) { totalArea1 = area1Agents.Length; return; }
             // Count all living Area 1 enemies and subscribe to their defeat events.
-            var allHealth = FindObjectsByType<CombatHealth>(FindObjectsSortMode.None);
+            var allHealth = FindObjectsByType<CombatHealth>();
             foreach (var h in allHealth)
             {
                 if (!h.CompareTag(area1Tag)) continue;
