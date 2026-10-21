@@ -189,7 +189,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         // ── Attack ────────────────────────────────────────────────────────────
 
-        Transform player;
+        [SerializeField] Transform player;
         float     nextDecisionTime;
         bool      lungeHit; // tracks whether the current lunge connected
         Vector3 chamberPosition;
@@ -631,10 +631,10 @@ namespace Skybreak.AI.SawanIS.VaultHound
             var descent = FindAnyObjectByType<Skybreak.Descent.DescentCharacterController>();
             if (descent != null) { player = descent.transform; return; }
 
-            // Fallback: find living IDamageable that is not this hound.
+            // Lab targets must be explicitly tagged, otherwise the pair can target each other.
             foreach (var ch in FindObjectsByType<CombatHealth>())
             {
-                if (ch == health || !ch.IsAlive) continue;
+                if (ch == health || !ch.IsAlive || !ch.CompareTag("Player")) continue;
                 player = ch.transform;
                 return;
             }

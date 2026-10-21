@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Skybreak.AI.SawanIS.VaultHound;
 
 namespace Skybreak.AI.SawanIS.VaultHound.Testing
@@ -29,9 +30,11 @@ namespace Skybreak.AI.SawanIS.VaultHound.Testing
         void Update()
         {
             // Keyboard controls for live viva demo
-            if (Input.GetKeyDown(KeyCode.Alpha1)) ToggleObstacle();
-            if (Input.GetKeyDown(KeyCode.Alpha2)) EliminateHoundA();
-            if (Input.GetKeyDown(KeyCode.Tab)) showOverlay = !showOverlay;
+            var keyboard = Keyboard.current;
+            if (keyboard == null) return;
+            if (keyboard.digit1Key.wasPressedThisFrame) ToggleObstacle();
+            if (keyboard.digit2Key.wasPressedThisFrame) EliminateHoundA();
+            if (keyboard.tabKey.wasPressedThisFrame) showOverlay = !showOverlay;
         }
 
         public void ToggleObstacle()
@@ -39,7 +42,8 @@ namespace Skybreak.AI.SawanIS.VaultHound.Testing
             if (testObstacle != null)
             {
                 testObstacle.SetActive(!testObstacle.activeSelf);
-                if (grid != null) grid.NotifyWorldChanged();
+                Physics.SyncTransforms();
+                if (grid != null) grid.Bake();
             }
         }
 
