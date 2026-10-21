@@ -3,6 +3,8 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 using Skybreak;
 using Skybreak.AI.SawanIS.VaultHound;
 using Skybreak.AI.SawanIS.VaultHound.Testing;
@@ -63,6 +65,8 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
 
             // Test Obstacle (blocks right door opening at (6, 2, 0))
             var obstacle = CreateWall("TestObstacle_DoorBlocker", arenaRoot.transform, new Vector3(6f, 2f, 0f), new Vector3(4f, 4f, 1f));
+            var carving = obstacle.AddComponent<NavMeshObstacle>();
+            carving.shape = NavMeshObstacleShape.Box; carving.size = Vector3.one; carving.carving = true;
             obstacle.SetActive(false); // starts open
 
             // 3. Grid Manager
@@ -74,6 +78,7 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
             serGrid.FindProperty("height").intValue = 40;
             serGrid.FindProperty("cellSize").floatValue = 1f;
             serGrid.FindProperty("drawGizmos").boolValue = true;
+            serGrid.FindProperty("obstacleMask").intValue = ~(1 << 8);
             serGrid.ApplyModifiedProperties();
 
             // 4. Hound Pack Coordinator
@@ -84,6 +89,7 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
             var targetGo = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             targetGo.name = "TargetDummy_Player";
             targetGo.tag = "Player";
+            targetGo.layer = 8;
             targetGo.transform.position = new Vector3(0f, 1f, 12f);
             targetGo.AddComponent<CombatHealth>();
 
@@ -108,6 +114,8 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
 
                 WireBrain(brainA, grid, pack);
                 WireBrain(brainB, grid, pack);
+                foreach (var part in houndAGo.GetComponentsInChildren<Transform>(true)) part.gameObject.layer = 8;
+                foreach (var part in houndBGo.GetComponentsInChildren<Transform>(true)) part.gameObject.layer = 8;
             }
 
             // 7. Test Harness
@@ -129,6 +137,21 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
             camGo.AddComponent<AudioListener>();
             camGo.transform.position = new Vector3(0f, 22f, -22f);
             camGo.transform.rotation = Quaternion.Euler(45f, 0f, 0f);
+
+            // The Hound motor requires a baked surface, even though its planning uses the shared grid.
+            var surface = arenaRoot.AddComponent<NavMeshSurface>();
+            surface.agentTypeID = houndAGo.GetComponent<NavMeshAgent>().agentTypeID;
+            surface.layerMask = ~(1 << 8); surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+            Physics.SyncTransforms(); surface.BuildNavMesh();
+            const string navPath = SceneDir + "/VaultHoundLabNavMesh.asset";
+            var existingNav = AssetDatabase.LoadAssetAtPath<NavMeshData>(navPath);
+            var bakedNav = surface.navMeshData;
+            if (existingNav == null) AssetDatabase.CreateAsset(bakedNav, navPath);
+            else
+            {
+                EditorUtility.CopySerialized(bakedNav, existingNav);
+                surface.RemoveData(); surface.navMeshData = existingNav; surface.AddData();
+            }
 
             // Save Scene
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -156,6 +179,7 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
             if (gProp != null) gProp.objectReferenceValue = grid;
             var pProp = ser.FindProperty("pack");
             if (pProp != null) pProp.objectReferenceValue = pack;
+            ser.FindProperty("player").objectReferenceValue = GameObject.Find("TargetDummy_Player").transform;
             ser.ApplyModifiedProperties();
         }
     }

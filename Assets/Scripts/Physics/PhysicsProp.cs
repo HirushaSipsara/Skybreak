@@ -1,51 +1,64 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
+using Skybreak;
 
 namespace Skybreak.PhysicsInteraction
 {
+    public enum PropState { Resting, Carried, Thrown }
     /// <summary>
-    /// Lifecycle state of a physical movable/throwable prop.
+    /// Interactive physical prop that can be picked up, carried with spring-damped physics,
+    /// dropped, or launched with impulse force to deal kinetic impact damage to targets.
+    /// Implements <see cref="IInteractable"/> for seamless integration with <see cref="Skybreak.Player.PlayerInteractor"/>.
     /// </summary>
-    public enum PropState
-    {
-        Resting,    // Dynamic physics simulation on the floor/environment
-        Carried,    // Held by the player (kinematic movement in FixedUpdate)
-        Thrown      // High-speed ballistic flight with continuous collision detection
-    }
-
-    /// <summary>
-    /// Reusable dynamic physics prop that can be picked up, carried safely without wall-clipping,
-    /// dropped, or thrown with an impulse force. Implements IInteractable for seamless PlayerInteractor support.
-    /// </summary>
-    [SelectionBase]
+    [RequireComponent(typeof(Rigidbody), typeof(Collider))]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Rigidbody))]
+    [SelectionBase]
     public sealed class PhysicsProp : MonoBehaviour, IInteractable
     {
-        [Header("Carry & Positioning")]
-        [Tooltip("Target distance in front of the view camera while carried.")]
-        [SerializeField, Min(0.5f)] float holdDistance = 1.7f;
+        [Header("Prop Identity")]
+        [Tooltip("Display name used in the HUD interaction prompt.")]
+        [SerializeField] string propName = "Supply Crate";
 
-        [Tooltip("Minimum allowable distance when compressed against a wall.")]
-        [SerializeField, Min(0.2f)] float minHoldDistance = 0.5f;
+        [Header("Carry Physics Settings")]
+        [Tooltip("Distance in meters in front of camera to hold the object.")]
+        [SerializeField, Min(1f)] float holdDistance = 2.2f;
 
-        [Tooltip("Vertical offset relative to camera line of sight (negative lowers towards chest).")]
-        [SerializeField] float verticalHoldOffset = -0.2f;
+        [Tooltip("Spring damping multiplier driving the Rigidbody toward the hold point.")]
+        [SerializeField, Min(5f)] float followSpeed = 16f;
 
-        [Header("Throw Physics")]
-        [Tooltip("Instantaneous impulse force applied along camera forward on throw.")]
-        [SerializeField, Min(1f)] float throwImpulse = 15f;
+        [Tooltip("Maximum velocity allowed while being carried to prevent physics explosion against walls.")]
+        [SerializeField, Min(1f)] float maxCarryVelocity = 10f;
 
-        [Tooltip("Collision layers that block the carried prop (must exclude player layer 8).")]
-        [SerializeField] LayerMask obstructionMask = ~(1 << 8);
+        [Tooltip("Break distance: if prop gets pinned by geometry further than this from target, drop automatically.")]
+        [SerializeField, Min(2f)] float breakDistance = 4f;
 
-        [Header("Kinetic Impact")]
-        [Tooltip("Minimum relative collision speed (m/s) required to register a heavy impact.")]
-        [SerializeField, Min(1f)] float minImpactSpeed = 3.5f;
+        [Header("Throw Physics Settings")]
+        [Tooltip("Impulse force applied when throwing the object forward.")]
+        [SerializeField, Min(1f)] float throwImpulse = 18f;
 
-        [Tooltip("Damage dealt per unit of impact velocity (Speed * Mass * Factor).")]
-        [SerializeField] float impactDamageFactor = 1.2f;
+        [Tooltip("Upward trajectory bias to give thrown props an authentic parabolic arc.")]
+        [SerializeField, Range(0f, 0.5f)] float upwardArcBias = 0.12f;
+
+        [Tooltip("Angular impulse added on launch to create natural tumble rotation.")]
+        [SerializeField] float throwSpinImpulse = 4f;
+
+        [Header("Kinetic Impact Damage")]
+        [Tooltip("Minimum impact collision speed required to inflict kinetic damage.")]
+        [FormerlySerializedAs("minImpactSpeed")]
+        [SerializeField, Min(1f)] float minDamageSpeed = 3.5f;
+
+        [Tooltip("Base damage multiplier: Damage = 0.5 * Mass * Speed^2 * Multiplier.")]
+        [SerializeField, Min(0.01f)] float kineticDamageMultiplier = 0.15f;
+
+        [Tooltip("Maximum damage this prop can deal in a single impact.")]
+        [SerializeField, Min(5f)] float maxDamage = 80f;
+
+        [Header("Audio Feedback")]
+        [SerializeField] AudioClip pickupSound;
+        [SerializeField] AudioClip throwSound;
+        [SerializeField] AudioClip impactSound;
 
         [Header("Events")]
         [SerializeField] UnityEvent onPickedUp = new UnityEvent();
@@ -53,205 +66,257 @@ namespace Skybreak.PhysicsInteraction
         [SerializeField] UnityEvent onThrown = new UnityEvent();
         [SerializeField] UnityEvent<float> onImpact = new UnityEvent<float>();
 
+        // Internal State
         Rigidbody rb;
-        Collider propCollider;
-        Collider playerCollider;
-        Camera viewCamera;
+        Collider col;
+        AudioSource audioSource;
 
-        PropState state = PropState.Resting;
-        bool originalGravity;
-        bool originalKinematic;
-        float propBoundingRadius = 0.4f;
+        Transform holdAnchor;
+        GameObject currentCarrier;
+        Collider carrierCollider;
+
+        bool isCarried;
+        bool isThrown;
+        float throwTimestamp;
         int pickUpFrame = -1;
+        bool originalGravity, originalKinematic;
+        float originalDamping;
+        readonly System.Collections.Generic.List<Collider> ignoredCarriers = new System.Collections.Generic.List<Collider>();
 
-        public PropState State => state;
-        public bool IsCarried => state == PropState.Carried;
+        public bool IsCarried => isCarried;
+        public Rigidbody AttachedRigidbody => rb;
         public Rigidbody Rigidbody => rb;
+        public PropState State => isCarried ? PropState.Carried : isThrown ? PropState.Thrown : PropState.Resting;
 
         // IInteractable implementation
-        public string Prompt => state == PropState.Resting ? "F  /  Pick up prop" : string.Empty;
+        public string Prompt => isCarried ? "F  /  Drop object" : $"F  /  Pick up {propName}";
 
-        public bool CanInteract(GameObject actor)
-        {
-            return state == PropState.Resting && actor != null;
-        }
+        public bool CanInteract(GameObject actor) => actor != null && (!isCarried || currentCarrier == actor);
 
         public void Interact(GameObject actor)
         {
-            PickUp(actor);
+            if (!isCarried)
+            {
+                Pickup(actor);
+            }
+            else
+            {
+                Drop();
+            }
         }
 
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            propCollider = GetComponent<Collider>();
+            col = GetComponent<Collider>();
+            audioSource = GetComponent<AudioSource>();
 
-            if (propCollider == null)
-            {
-                propCollider = GetComponentInChildren<Collider>();
-            }
-
-            // Calculate approximate bounding sphere radius for anti-clipping spherecasts
-            if (propCollider != null)
-            {
-                propBoundingRadius = Mathf.Max(propCollider.bounds.extents.x, propCollider.bounds.extents.y, propCollider.bounds.extents.z);
-            }
-
-            // Ensure physics settings are configured for smooth interpolation
+            // Ensure continuous dynamic detection to eliminate fast-motion wall tunneling
+            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             rb.interpolation = RigidbodyInterpolation.Interpolate;
-            originalGravity = rb.useGravity;
-            originalKinematic = rb.isKinematic;
         }
 
         void Update()
         {
-            // Skip the frame it was picked up, so the same F press doesn't drop it again
-            if (state != PropState.Carried || Time.frameCount == pickUpFrame) return;
+            if (!isCarried || Time.frameCount == pickUpFrame) return;
 
-            var keyboard = Keyboard.current;
+            // Handle throw and drop inputs while held
             var mouse = Mouse.current;
-            if (keyboard == null) return;
+            var keyboard = Keyboard.current;
 
-            // F key drops quietly, G key or Left Click throws forward
-            if (keyboard.fKey.wasPressedThisFrame)
-            {
-                Drop();
-            }
-            else if (keyboard.gKey.wasPressedThisFrame || (mouse != null && mouse.leftButton.wasPressedThisFrame))
+            // Left click or primary attack: Throw prop forward
+            if ((mouse != null && mouse.leftButton.wasPressedThisFrame) || (keyboard != null && keyboard.gKey.wasPressedThisFrame))
             {
                 Throw();
+                return;
+            }
+
+            // Right click: Gentle drop
+            if (mouse != null && mouse.rightButton.wasPressedThisFrame)
+            {
+                Drop();
+                return;
             }
         }
 
         void FixedUpdate()
         {
-            if (state != PropState.Carried || viewCamera == null) return;
+            if (!isCarried || holdAnchor == null) return;
 
-            Transform camTrans = viewCamera.transform;
-            Vector3 camPos = camTrans.position;
-            Vector3 camForward = camTrans.forward;
+            Vector3 targetPosition = holdAnchor.position + holdAnchor.forward * holdDistance;
+            Vector3 delta = targetPosition - rb.position;
 
-            // Target position ahead of camera, with slight downward chest offset
-            float targetDistance = holdDistance;
-            Vector3 rayOrigin = camPos;
-
-            // Anti-clipping spherecast: prevent pushing the carried prop through solid environment walls
-            if (Physics.SphereCast(rayOrigin, propBoundingRadius * 0.85f, camForward, out RaycastHit hit, holdDistance, obstructionMask, QueryTriggerInteraction.Ignore))
+            // Auto-break carry if forced too far behind geometry
+            if (delta.magnitude > breakDistance)
             {
-                // Pull the object back safely in front of the obstruction surface
-                targetDistance = Mathf.Clamp(hit.distance - 0.08f, minHoldDistance, holdDistance);
+                Drop();
+                return;
             }
 
-            Vector3 finalTarget = camPos + (camForward * targetDistance) + (Vector3.up * verticalHoldOffset);
+            // Apply spring velocity damping toward anchor
+            Vector3 desiredVelocity = delta * followSpeed;
+            if (desiredVelocity.magnitude > maxCarryVelocity)
+            {
+                desiredVelocity = desiredVelocity.normalized * maxCarryVelocity;
+            }
 
-            // Move kinematic Rigidbody cleanly during physics timestep
-            rb.MovePosition(finalTarget);
-            rb.MoveRotation(Quaternion.Euler(0f, camTrans.eulerAngles.y, 0f));
+            rb.linearVelocity = desiredVelocity;
+            rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, Time.fixedDeltaTime * 10f);
         }
 
-        public void PickUp(GameObject actor)
+        public void Pickup(GameObject carrier)
         {
-            if (state == PropState.Carried || actor == null) return;
+            if (isCarried || carrier == null) return;
             pickUpFrame = Time.frameCount;
+            originalGravity = rb.useGravity; originalKinematic = rb.isKinematic; originalDamping = rb.linearDamping;
+            rb.isKinematic = false;
 
-            // Retrieve camera from actor or main camera
-            viewCamera = actor.GetComponentInChildren<Camera>();
-            if (viewCamera == null) viewCamera = Camera.main;
-            if (viewCamera == null) return;
-
-            state = PropState.Carried;
-
-            // Cache actor collider (e.g. CharacterController) and temporarily ignore collision
-            playerCollider = actor.GetComponent<Collider>();
-            if (playerCollider != null && propCollider != null)
+            currentCarrier = carrier;
+            carrierCollider = carrier.GetComponent<Collider>() ?? carrier.GetComponentInChildren<Collider>();
+            if (carrierCollider != null && col != null)
             {
-                Physics.IgnoreCollision(propCollider, playerCollider, true);
+                Physics.IgnoreCollision(col, carrierCollider, true);
+                if (!ignoredCarriers.Contains(carrierCollider)) ignoredCarriers.Add(carrierCollider);
             }
 
-            // Save physics settings and switch to kinematic while carried
-            originalGravity = rb.useGravity;
-            originalKinematic = rb.isKinematic;
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            // Find look camera on carrier
+            var cam = carrier.GetComponentInChildren<Camera>();
+            holdAnchor = cam != null ? cam.transform : carrier.transform;
 
-            onPickedUp?.Invoke();
+            isCarried = true;
+            isThrown = false;
+            rb.useGravity = false;
+            rb.linearDamping = 1f;
+
+            PlaySound(pickupSound);
+            onPickedUp.Invoke();
         }
+
+        public void PickUp(GameObject actor) => Pickup(actor);
 
         public void Drop()
         {
-            if (state != PropState.Carried) return;
-            Release(false, Vector3.zero);
-            onDropped?.Invoke();
+            if (!isCarried) return;
+
+            RestorePhysicsState();
+            PlaySound(pickupSound);
+            onDropped.Invoke();
         }
 
         public void Throw()
         {
-            if (state != PropState.Carried || viewCamera == null) return;
+            if (!isCarried) return;
 
-            Vector3 throwDirection = viewCamera.transform.forward;
-            Vector3 impulse = throwDirection * throwImpulse;
+            Vector3 launchDirection = holdAnchor != null
+                ? (holdAnchor.forward + Vector3.up * upwardArcBias).normalized
+                : transform.forward;
 
-            Release(true, impulse);
-            onThrown?.Invoke();
+            RestorePhysicsState();
+
+            // Apply impulse force
+            if (!rb.isKinematic)
+            {
+                rb.linearVelocity = launchDirection * (throwImpulse / Mathf.Max(0.5f, rb.mass * 0.1f));
+                rb.AddTorque(Random.insideUnitSphere * throwSpinImpulse, ForceMode.Impulse);
+            }
+
+            isThrown = true;
+            throwTimestamp = Time.time;
+
+            PlaySound(throwSound);
+            onThrown.Invoke();
         }
 
-        void Release(bool isThrow, Vector3 impulseForce)
+        void RestorePhysicsState()
         {
-            state = isThrow ? PropState.Thrown : PropState.Resting;
-
-            // Restore dynamic physics simulation
-            rb.isKinematic = originalKinematic;
+            isCarried = false;
             rb.useGravity = originalGravity;
+            rb.isKinematic = originalKinematic;
+            rb.linearDamping = originalDamping;
 
-            if (isThrow)
+            // Restore collision with carrier after a brief clearing delay
+            if (carrierCollider != null && col != null && isActiveAndEnabled)
             {
-                // Continuous collision detection prevents high-speed tunneling through thin walls
-                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-                rb.AddForce(impulseForce, ForceMode.Impulse);
-            }
-            else
-            {
-                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                StartCoroutine(RestoreCollisionWithCarrierRoutine(carrierCollider));
             }
 
-            // Restore player collision
-            if (playerCollider != null && propCollider != null)
-            {
-                Physics.IgnoreCollision(propCollider, playerCollider, false);
-                playerCollider = null;
-            }
+            currentCarrier = null;
+            carrierCollider = null;
+            holdAnchor = null;
+        }
 
-            viewCamera = null;
+        System.Collections.IEnumerator RestoreCollisionWithCarrierRoutine(Collider other)
+        {
+            yield return new WaitForSeconds(0.25f);
+            if (col != null && other != null)
+            {
+                Physics.IgnoreCollision(col, other, false);
+                ignoredCarriers.Remove(other);
+            }
         }
 
         void OnCollisionEnter(Collision collision)
         {
-            // Evaluate impact speed
-            float relativeSpeed = collision.relativeVelocity.magnitude;
+            float impactSpeed = collision.relativeVelocity.magnitude;
 
-            if (state == PropState.Thrown)
+            // Play impact sound if hitting surfaces with noticeable energy
+            if (impactSpeed > 1.2f)
             {
-                // Once an impact occurs, settle back to resting and discrete collision to save CPU cycles
-                state = PropState.Resting;
-                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
-
-                if (relativeSpeed >= minImpactSpeed)
-                {
-                    float damage = relativeSpeed * rb.mass * impactDamageFactor;
-                    onImpact?.Invoke(damage);
-
-                    // Deliver kinetic damage to enemies or destructibles if present
-                    collision.collider.SendMessage("ApplyDamage", damage, SendMessageOptions.DontRequireReceiver);
-                }
+                PlaySound(impactSound, Mathf.Clamp01(impactSpeed / 8f));
             }
+
+            // Check kinetic damage on impact if recently thrown
+            if (isThrown && Time.time - throwTimestamp < 3.5f && impactSpeed >= minDamageSpeed)
+            {
+                // Ek = 0.5 * m * v^2
+                float kineticEnergy = 0.5f * rb.mass * (impactSpeed * impactSpeed);
+                float damage = Mathf.Clamp(kineticEnergy * kineticDamageMultiplier, 5f, maxDamage);
+
+                onImpact.Invoke(damage);
+                var sink = collision.collider.GetComponentInParent<Skybreak.Combat.DamageSink>();
+                if (sink != null && sink.Alive)
+                {
+                    sink.ReceiveDamage(damage, transform);
+                }
+                else
+                {
+                    var target = collision.collider.GetComponentInParent<IDamageable>();
+                    if (target != null && target.IsAlive) target.ApplyDamage(damage, gameObject);
+                }
+
+                isThrown = false;
+            }
+        }
+
+        void OnDisable()
+        {
+            if (isCarried) RestorePhysicsState();
+            StopAllCoroutines();
+            foreach (var other in ignoredCarriers) if (col != null && other != null) Physics.IgnoreCollision(col, other, false);
+            ignoredCarriers.Clear();
+        }
+
+        void PlaySound(AudioClip clip, float volume = 1f)
+        {
+            if (clip == null) return;
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+                audioSource.spatialBlend = 1f;
+                audioSource.playOnAwake = false;
+            }
+            audioSource.PlayOneShot(clip, volume);
         }
 
         void OnDrawGizmosSelected()
         {
-            Gizmos.color = new Color(0.2f, 0.8f, 1f, 0.4f);
-            Gizmos.DrawWireSphere(transform.position, propBoundingRadius);
+            if (isCarried && holdAnchor != null)
+            {
+                Gizmos.color = Color.yellow;
+                Vector3 holdPos = holdAnchor.position + holdAnchor.forward * holdDistance;
+                Gizmos.DrawWireSphere(holdPos, 0.25f);
+                Gizmos.DrawLine(holdAnchor.position, holdPos);
+            }
         }
     }
 }

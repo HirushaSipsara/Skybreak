@@ -1,0 +1,19 @@
+Member 3 PR9/PR10 integration checks
+PASS: Interaction lab contains throwable props.
+PASS: Interaction lab contains a heavy barricade.
+PASS: Interaction lab contains a security door.
+PASS: Scene has no missing scripts.
+PASS: Scene has no missing scripts.
+PASS: Both lab Hounds spawn on their baked navigation surface.
+PASS: Lab harness deploys both Hounds on the NavMesh.
+PASS: Both Hounds move through the lab.
+PASS: Obstacle toggle rebakes blocked cells and invalidates cached paths.
+PASS: Removing the obstacle restores passability.
+PASS: Surviving Hound inherits the pursuer role.
+PASS: Pickup retains compatibility and ignores carrier collision.
+PASS: Drop restores the original physics settings.
+PASS: Thrown prop deals collision-based kinetic damage.
+PASS: Carrier collision is restored after the throw clears.
+PASS: Disabling a carried prop restores ignored collisions.
+PASS: No runtime errors during the lab and physics checks.
+PASS: Unity compiled the combined PRs and completed runtime checks.

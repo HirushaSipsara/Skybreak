@@ -52,6 +52,10 @@ namespace Skybreak.PhysicsInteraction
         [SerializeField] UnityEvent onClosed = new UnityEvent();
         [SerializeField] UnityEvent<DoorState> onStateChanged = new UnityEvent<DoorState>();
 
+        [Header("AI Grid Integration (IS Module)")]
+        [Tooltip("Notify VaultHoundGrid when door opens or closes so AI agents dynamically update pathfinding.")]
+        [SerializeField] bool updateHoundGrid = true;
+
         DoorState state = DoorState.Closed;
 
         public DoorState State => state;
@@ -157,11 +161,33 @@ namespace Skybreak.PhysicsInteraction
 
             if (state == DoorState.Open)
             {
+                SyncGridPassability(true);
                 onOpened?.Invoke();
             }
             else if (state == DoorState.Closed)
             {
+                SyncGridPassability(false);
                 onClosed?.Invoke();
+            }
+            else if (state == DoorState.Closing)
+            {
+                SyncGridPassability(false);
+            }
+        }
+
+        void SyncGridPassability(bool isPassable)
+        {
+            if (!updateHoundGrid) return;
+            var gridType = System.Type.GetType("Skybreak.AI.SawanIS.VaultHound.VaultHoundGrid, Assembly-CSharp");
+            if (gridType != null)
+            {
+                var instanceProp = gridType.GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                var instance = instanceProp?.GetValue(null);
+                if (instance != null)
+                {
+                    Physics.SyncTransforms();
+                    gridType.GetMethod("Bake")?.Invoke(instance, null);
+                }
             }
         }
 
