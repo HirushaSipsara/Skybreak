@@ -52,10 +52,15 @@ namespace Skybreak.LocalCombatLab
         void Update()
         {
             fireRequested=false;
+            if(!Skybreak.Player.MissionFlowController.InputAllowed)return;
             var keys = Keyboard.current; var mouse = Mouse.current; float dt = Mathf.Min(Time.deltaTime, .05f);
-            if (keys != null && keys.escapeKey.wasPressedThisFrame) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
+            if (Skybreak.Player.MissionFlowController.Instance==null&&keys != null && keys.escapeKey.wasPressedThisFrame) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
             if (mouse != null && mouse.leftButton.wasPressedThisFrame) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
-            if (keys != null && keys.backspaceKey.wasPressedThisFrame) ResetLab();
+            if (keys != null && keys.backspaceKey.wasPressedThisFrame)
+            {
+                if(Skybreak.Player.MissionFlowController.Instance!=null){Skybreak.Player.MissionFlowController.Instance.RestartMission();return;}
+                ResetLab();
+            }
             if (keys != null && keys.f7Key.wasPressedThisFrame) GoToArena();
             if (keys != null && keys.f3Key.wasPressedThisFrame) { boss.Activate();boss.DamagePart(RiftPart.LeftArm,999); }
             if (keys != null && keys.f4Key.wasPressedThisFrame) { boss.Activate();boss.DamagePart(RiftPart.RightArm,999); }
@@ -89,8 +94,10 @@ namespace Skybreak.LocalCombatLab
         }
         void LateUpdate()
         {
+            var mission=Skybreak.Player.MissionFlowController.Instance;
+            if(mission!=null&&mission.State!=Skybreak.Player.MissionState.Playing)return;
             UpdateCamera();
-            if(fireRequested)ShootFromView();
+            if(fireRequested&&Skybreak.Player.MissionFlowController.InputAllowed)ShootFromView();
             UpdateAim(cameraView.ViewportPointToRay(new Vector3(.5f,.5f,0)));
             feedback?.RefreshPose();
         }
@@ -147,6 +154,7 @@ namespace Skybreak.LocalCombatLab
         {return ShootInternal(cameraRay,false);}
         bool ShootInternal(Ray cameraRay,bool useView)
         {
+            if(!Skybreak.Player.MissionFlowController.InputAllowed)return false;
             if(!vitals.Alive)return false;
             if(!Magazine.TryFire()){if(Magazine.Rounds==0)Reload();return false;}
             Shots++;LastHit="Miss";bool confirmed=false;ShotBlocked=false;
@@ -198,21 +206,30 @@ namespace Skybreak.LocalCombatLab
         void OnDisable() { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
         void OnGUI()
         {
+            if(Skybreak.Player.MissionFlowController.Instance!=null)
+            {
+                if(!Skybreak.Player.MissionFlowController.InputAllowed)return;
+                DrawReticle();feedback?.DrawHUD();return;
+            }
             GUI.Box(new Rect(16, 16, 760, 184), "ARC / SKYBREAK · "+(IsFirstPerson?"FIRST PERSON":"THIRD PERSON")+" · V switch view");
             GUI.Label(new Rect(28, 44, 720, 25), "WASD / Mouse · LMB fire · R reload · Space double jump · Shift sprint · Backspace restart");
             GUI.Label(new Rect(28, 70, 670, 25), "Arc " + vitals.Health.ToString("F0") + " | L arm " + boss.LeftHealth.ToString("F0") + " | R arm " + boss.RightHealth.ToString("F0") + " | Core " + boss.CoreHealth.ToString("F0") + (boss.CoreExposed ? " exposed" : " shielded"));
             GUI.Label(new Rect(28, 96, 670, 25), "Warden: " + boss.Action + " / " + boss.Decision);
             GUI.Label(new Rect(28, 122, 670, 25), "Relay: " + relay.Action + " / " + relay.Decision + " | Last hit: " + LastHit);
-            GUI.Label(new Rect(28,148,720,25),"F7 boss room · F3/F4 break arms · F5 exposed core · Ammo "+Magazine.Rounds+"/20 + "+Magazine.Reserve+(Magazine.IsReloading?" — RELOADING "+(Magazine.ReloadProgress*100).ToString("F0")+"%":""));
+            GUI.Label(new Rect(28,148,720,25),"F7 boss room · F3/F4 break arms · F5 exposed core · Energy "+Magazine.Rounds+"/20 · Unlimited reserve"+(Magazine.IsReloading?" — RECHARGING "+(Magazine.ReloadProgress*100).ToString("F0")+"%":""));
+            DrawReticle();
+            GUI.Box(new Rect(Screen.width-240,Screen.height-90,220,70),Magazine.IsReloading?"RECHARGING — "+((1-Magazine.ReloadProgress)*Magazine.reloadDuration).ToString("F1")+"s":Magazine.Rounds+" / 20     UNLIMITED ENERGY\nR recharge");
+            if (!vitals.Alive) GUI.Box(new Rect(Screen.width / 2f - 150, Screen.height / 2f - 40, 300, 80), "Arc down — Backspace to restart");
+            if(feedback!=null)feedback.DrawHUD();
+        }
+        void DrawReticle()
+        {
             // Draw geometry at the camera centre; GUI.Label padding displaced the old '+' glyph.
             Rect view=cameraView.pixelRect;float x=view.x+view.width*.5f,y=Screen.height-(view.y+view.height*.5f);Color old=GUI.color;
             GUI.color=ShotBlocked?new Color(1,.55f,.18f):Color.white;
             GUI.DrawTexture(new Rect(x-11,y-1,7,2),Texture2D.whiteTexture);GUI.DrawTexture(new Rect(x+4,y-1,7,2),Texture2D.whiteTexture);
             GUI.DrawTexture(new Rect(x-1,y-11,2,7),Texture2D.whiteTexture);GUI.DrawTexture(new Rect(x-1,y+4,2,7),Texture2D.whiteTexture);
             GUI.DrawTexture(new Rect(x-1,y-1,2,2),Texture2D.whiteTexture);GUI.color=old;
-            GUI.Box(new Rect(Screen.width-240,Screen.height-90,220,70),Magazine.IsReloading?"RELOADING — "+((1-Magazine.ReloadProgress)*Magazine.reloadDuration).ToString("F1")+"s":Magazine.Rounds==0&&Magazine.Reserve==0?"OUT OF AMMO\nBackspace restart":Magazine.Rounds+" / 20     RESERVE "+Magazine.Reserve+"\nR reload");
-            if (!vitals.Alive) GUI.Box(new Rect(Screen.width / 2f - 150, Screen.height / 2f - 40, 300, 80), "Arc down — Backspace to restart");
-            if(feedback!=null)feedback.DrawHUD();
         }
         sealed class HitOrder : System.Collections.Generic.IComparer<RaycastHit>
         { public static readonly HitOrder Instance = new HitOrder(); public int Compare(RaycastHit a, RaycastHit b) => a.distance.CompareTo(b.distance); }

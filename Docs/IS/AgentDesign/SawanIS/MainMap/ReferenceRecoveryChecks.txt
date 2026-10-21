@@ -1,0 +1,3 @@
+PASS: active encounter recovered all missing references without restarting or changing enemy health.
+PASS: three of four defeats keep both cloned gates closed.
+PASS: fourth defeat opens both cloned gate models exactly once. Live actors and gates were not reset or damaged.

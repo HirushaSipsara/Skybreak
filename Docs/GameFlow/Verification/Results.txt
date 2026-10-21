@@ -1,0 +1,10 @@
+PASS: title menu, clickable buttons, controls/back, and gameplay/damage lock
+PASS: mission intro/skip releases gameplay and energy weapon controls
+PASS: pause, controls/back and resume preserve timers/input ownership
+PASS: energy cell recharges to 20 shots, keeps unlimited reserve, and resumes after pause
+PASS: objective progression and pausing/resuming the existing boss intro
+PASS: real arm/core defeat starts the ending once and protects player controls/health
+PASS: existing boss death finishes, return portal powers up, Arc/Relay extract, and victory displays a frozen completion time
+PASS: Play Again reloads a fresh mission, restores all actors, and creates one UI/event system
+PASS: player defeat, retry and fresh health
+PASS: return to main menu after repeated reloads

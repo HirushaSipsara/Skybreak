@@ -94,6 +94,7 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
             // Scale — FBX uses metres; Unity default is 0.01 for FBX. Set to 1.
             importer.globalScale   = 1f;
             importer.useFileScale  = true;
+            importer.isReadable   = true; // Runtime breakup separates the rigid bone-weighted body sections.
 
             // Clip definitions (matches ModelReport.json frame ranges at 30fps)
             importer.clipAnimations = new ModelImporterClipAnimation[]
@@ -384,7 +385,7 @@ namespace Skybreak.AI.SawanIS.VaultHound.Editor
             // NavMeshAgent setup
             var agent = instance.GetComponent<NavMeshAgent>();
             if (agent == null) agent = instance.AddComponent<NavMeshAgent>();
-            agent.speed = 5.5f;
+            agent.speed = 4f;
             agent.angularSpeed = 360f;
             agent.acceleration = 12f;
             agent.stoppingDistance = 1.8f;

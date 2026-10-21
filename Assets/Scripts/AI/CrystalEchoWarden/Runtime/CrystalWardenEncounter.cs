@@ -44,6 +44,7 @@ namespace Skybreak.Warden
         }
         public bool TryDecoy(Ray aim)
         {
+            if(!Skybreak.Player.MissionFlowController.InputAllowed)return false;
             var health=player.GetComponent<DamageSink>();
             if(health==null||!health.Alive||Time.time<decoyReady)return false;
             decoyReady=Time.time+3;

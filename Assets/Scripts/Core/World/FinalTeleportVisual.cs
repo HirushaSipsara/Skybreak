@@ -19,6 +19,7 @@ namespace Skybreak.World
         MaterialPropertyBlock fieldBlock;
         MaterialPropertyBlock crystalBlock;
         float approach;
+        float extractionStrength;
 
         public bool IsPowered => powered;
         public float ApproachStrength => approach;
@@ -53,11 +54,14 @@ namespace Skybreak.World
         public void SetPowered(bool value)
         {
             powered = value;
+            if(!value)extractionStrength=0;
             ApplyVisual(approach, Time.time);
         }
+        public void SetExtractionStrength(float value){extractionStrength=Mathf.Clamp01(value);}
 
         void ApplyVisual(float proximity, float time)
         {
+            proximity=Mathf.Max(proximity,extractionStrength);
             if (fieldBlock == null) fieldBlock = new MaterialPropertyBlock();
             if (crystalBlock == null) crystalBlock = new MaterialPropertyBlock();
             if (energyField != null)

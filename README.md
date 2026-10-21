@@ -12,7 +12,7 @@ A single-player science-fantasy shooter built in Unity for **SE3032 Graphics & V
 
 Arc is a half-human, half-machine pathfinder exploring an ancient fortress around the fractured Aether Core. With Relay's support, Arc crosses stone halls, crystal machinery and security chambers to reach the corrupted Rift Warden.
 
-The science-fantasy mission is to defeat the guardian, awaken the Core, seal the rift and return through the restored gate. The intended closing line is **"Rift sealed. Sky reclaimed."** The complete introduction and victory presentation belong to the pending local work below.
+The science-fantasy mission is to defeat the guardian, awaken the Core, seal the rift and return through the restored gate. The introduction and victory presentation follow this story, ending with **"Rift sealed. Sky reclaimed."**
 
 ## Development status
 
@@ -24,12 +24,11 @@ The science-fantasy mission is to defeat the guardian, awaken the Core, seal the
 | Relay | Support companion that follows, heals, defends, retreats and searches for safer positions. |
 | Crystal Echo Warden | Four hovering crystal guards, with quiet patrol loops, perception, tactical movement, charged attacks and a defeat breakup effect. |
 | Rift Disruptor | Four tactical enemies that respond to the player's aim, telegraph pulses, relocate and adapt to dodges. Defeat scatters the model's armor parts. |
-| Vault Hound | Two coordinated hunters inside the security-wing holding rooms. Clearing the loading-court enemies opens their gates and releases the pair. See [integration](Docs/IS/AgentDesign/SawanIS/MainMap/INTEGRATION.md). |
+| Vault Hound | Two coordinated hunters inside the security-wing holding rooms. Clearing the loading-court enemies opens their gates and releases the pair. Faster deployment/pursuit and an 18-section defeat breakup effect. See [integration](Docs/IS/AgentDesign/SawanIS/MainMap/INTEGRATION.md). |
 | Rift Warden | Final boss with destructible arms, an exposed-core stage, close rear teleports, attack effects and a death sequence. |
+| Mission flow | Title menu, skippable introduction, pause/controls, objectives, defeat/retry, portal extraction, victory and replay. |
 
-**Pending local work:** the maintainer's working copy also contains a title menu, skippable introduction, pause/defeat screens, objectives, portal extraction and a victory screen. Unlimited energy reserve belongs to that uncommitted mission-flow work. A fresh clone of shared main does not include those features yet.
-
-The shared carbine has a **20-shot magazine, 80 reserve rounds and a 2.2-second reload**. The pending local version retains the magazine and recharge delay while making the reserve unlimited. [LocalMagazine.cs](Assets/Scripts/Player/Combat/LocalMagazine.cs) controls those rules.
+The carbine has a **20-shot energy cell, unlimited reserve energy and a 2.2-second recharge**. Emptying the cell still requires reloading; unlimited reserve does not allow continuous firing. [LocalMagazine.cs](Assets/Scripts/Player/Combat/LocalMagazine.cs) controls those rules.
 
 ## Open and play
 
@@ -48,7 +47,7 @@ git config user.email "YOUR OWN GIT ACCOUNT EMAIL"
 
 Repository access must be available to your GitHub account. In Unity Hub, add the cloned project root containing Assets, Packages and ProjectSettings. Allow package restoration and asset import to finish.
 
-Open the main scene linked above and press **Play**. Click the Game view to capture the mouse. Only this scene is enabled in the default build list; see [EditorBuildSettings.asset](ProjectSettings/EditorBuildSettings.asset).
+Open the main scene linked above, press **Play**, then select **Start Mission**. Skip the introduction with Space or its button. Click the Game view to capture the mouse during gameplay. Only this scene is enabled in the default build list; see [EditorBuildSettings.asset](ProjectSettings/EditorBuildSettings.asset).
 
 If the Game view is blank, check the scene path, finish importing assets, run **git lfs pull** and inspect the Console for compilation errors. Opening a project folder alone does not select its main scene.
 
@@ -76,10 +75,10 @@ Reopen Unity and the main scene. If Git refuses the update or reports conflicts,
 | V | Switch first-person/third-person view |
 | F | Interact with nearby objects or guarded crystals |
 | Q | Place a sound decoy, with a cooldown |
-| Escape / click Game view | Release / recapture the cursor in the shared combat controller |
-| Backspace | Reset the shared combat test state |
+| Escape | Pause/resume, or return from the controls screen |
+| Backspace | Restart the mission with a fresh scene |
 
-The pending local mission flow uses Escape for pause/resume and Backspace for a full mission restart. Its title menu starts gameplay through **Start Mission**.
+The menu and ending lock combat input. Destroying Rift Warden's exposed core starts the ending once, restores the gate, extracts Arc and Relay, and displays the victory screen. Play Again and defeat retry reload a fresh mission.
 
 Testing shortcuts in [LocalCombatDriver.cs](Assets/Scripts/Player/Combat/LocalCombatDriver.cs): **F2** activates the boss, **F7** moves Arc to the boss area, **F3/F4** destroy its left/right arms, and **F5** damages the exposed core. Test scenes have their own controls.
 
@@ -115,11 +114,14 @@ Open **http://127.0.0.1:8765**. **Save to Unity** writes the shared [AgentTuning
 | Assets/Scenes/Tests/RiftDisruptor/RiftDisruptorLab.unity | Disruptor decision and combat lab |
 | Assets/Scenes/Tests/Student4Movement/AgentMovementLab.unity | Shared movement and animation checks |
 | Assets/Scenes/Tests/Student2Interactions/InteractionLab.unity | Physics and interaction lab |
+| Assets/Scenes/Tests/SawanIS/VaultHoundLab.unity | Paired Hound navigation, obstacles and survivor behaviour |
 | Assets/Scenes/Tests/StrikerIS/StrikerLab.unity | Legacy Striker experiment; the main map uses Vault Hound |
 
 Earlier demonstration maps are recoverable from Git history. Test scenes are excluded from the default game build.
 
 Recorded checks include [world navigation](Docs/GV/LevelDesign/Reports/WorldFinish/NavigationChecks.txt), [camera views](Docs/IS/CrystalEchoWarden/MainMap/CameraViewChecks.txt), [Disruptor gameplay](Docs/IS/RiftDisruptor/GameplayChecks.txt), [Disruptor breakup](Docs/IS/RiftDisruptor/MainMap/BreakupChecks.txt) and [Vault Hound integration](Docs/IS/AgentDesign/SawanIS/MainMap/IntegrationChecks.txt).
+
+[Mission-flow checks](Docs/GameFlow/Verification/Results.txt) cover menus, pause, energy recharge, arm/core defeat, extraction, victory, replay and defeat/retry. [Release checks](Docs/GameFlow/Verification/ReleaseChecks.txt) record the current main-map dependency audit and Windows build result.
 
 For the engine-independent Crystal Echo Warden checks, install the .NET SDK specified in [Tools/WardenTests/global.json](Tools/WardenTests/global.json), then run:
 

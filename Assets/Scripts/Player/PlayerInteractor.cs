@@ -60,6 +60,7 @@ namespace Skybreak.Player
 
         void Update()
         {
+            if(!MissionFlowController.InputAllowed){currentInteractable=null;currentPrompt=null;return;}
             EnsureCamera();
             if (viewCamera == null) return;
 

@@ -95,7 +95,7 @@ public static class ReviewTeamMapAssets
         var driver=UnityEngine.Object.FindAnyObjectByType<LocalCombatDriver>();
         var encounter=UnityEngine.Object.FindAnyObjectByType<CrystalWardenEncounter>();
         driver.Magazine.Advance();
-        if(driver.Magazine.IsReloading||driver.Magazine.Rounds!=20||driver.Magazine.Reserve!=79)throw new Exception("Reload did not finish at 20/20 with reserve consumed.");
+        if(driver.Magazine.IsReloading||driver.Magazine.Rounds!=20||driver.Magazine.Reserve!=int.MaxValue)throw new Exception("Recharge did not finish at 20/20 with unlimited energy reserve.");
         foreach(var w in encounter.wardens)w.enabled=true;
         driver.enabled=true;driver.relay.enabled=true;
         driver.ResetLab();
@@ -104,7 +104,7 @@ public static class ReviewTeamMapAssets
             if(!w.Alive||!w.GetComponent<WardenAnimation>().Ready)throw new Exception("Warden reset or animation failed.");
             if(w.map.Graph==null||w.Senses.target!=driver.vitals)throw new Exception("Warden scene references are missing.");
         }
-        var report="\nPASS: timed reload refilled 20 rounds and consumed one reserve round.\nPASS: restart restored all four Wardens, the protected crystals, and ammunition. All eight clips bound on each Warden.\n";
+        var report="\nPASS: timed recharge refilled 20 energy shots with unlimited reserve.\nPASS: restart restored all four Wardens, the protected crystals, and energy. All eight clips bound on each Warden.\n";
         File.AppendAllText(Dir+"/RuntimeChecks.txt",report);return report;
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Skybreak.Combat;
 using Skybreak.PhysicsInteraction;
+using System.Collections.Generic;
 
 namespace Skybreak.AI.SawanIS.VaultHound
 {
@@ -30,10 +31,10 @@ namespace Skybreak.AI.SawanIS.VaultHound
         [SerializeField] string area1Tag = "Area1Enemy";
 
         [Tooltip("Doors / triggers to activate when all Area 1 enemies are cleared.")]
-        [SerializeField] GameObject[] chamberDoors;
+        [SerializeField] GameObject[] chamberDoors = System.Array.Empty<GameObject>();
 
         [Tooltip("Optional animator(s) on the doors. Will trigger the 'Open' bool parameter.")]
-        [SerializeField] Animator[] doorAnimators;
+        [SerializeField] Animator[] doorAnimators = System.Array.Empty<Animator>();
 
         [Header("Debug")]
         [SerializeField] bool logEvents = true;
@@ -63,12 +64,13 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         void Start()
         {
+            ResolveSceneReferences();
             if (area1Agents.Length > 0) { totalArea1 = area1Agents.Length; return; }
             // Count all living Area 1 enemies and subscribe to their defeat events.
             var allHealth = FindObjectsByType<CombatHealth>();
             foreach (var h in allHealth)
             {
-                if (!h.CompareTag(area1Tag)) continue;
+                if (h.tag != area1Tag) continue;
                 totalArea1++;
                 h.OnDefeated.AddListener(() => OnArea1EnemyDefeated());
             }
@@ -79,6 +81,12 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         void Update()
         {
+            // Scene reload can be disabled while an Editor script refresh adds serialized fields.
+            if (totalArea1 == 0)
+            {
+                ResolveSceneReferences();
+                totalArea1 = area1Agents.Length;
+            }
             // The shared combat reset restores the guards before this observer runs.
             if (released)
                 foreach (var enemy in area1Agents)
@@ -87,7 +95,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
             {
                 deadArea1 = 0;
                 foreach (var enemy in area1Agents) if (enemy == null || !enemy.Alive) deadArea1++;
-                if (deadArea1 >= totalArea1) Release();
+                if (totalArea1 > 0 && deadArea1 >= totalArea1) Release();
             }
             if (!released || deployed) return;
             foreach (var door in holdingDoors) if (door != null && !door.IsOpen) { gatesReadyAt = -1; return; }
@@ -98,6 +106,25 @@ namespace Skybreak.AI.SawanIS.VaultHound
             foreach (var hound in hounds) if (hound != null) hound.OnChamberOpen();
             deployed = true;
         }
+
+        void ResolveSceneReferences()
+        {
+            if (gameObject.scene.name != "SkybreakMain") return;
+            if (grid == null) grid = GetComponent<VaultHoundGrid>();
+            if (pack == null) pack = GetComponent<HoundPack>();
+            if (hounds.Length == 0) hounds = GetComponentsInChildren<VaultHoundBrain>(true);
+            if (holdingDoors.Length == 0) holdingDoors = FindObjectsByType<DungeonHoldingDoor>();
+            if (area1Agents.Length > 0) return;
+            var court = new List<DamageSink>();
+            // Classify by fixed crystal/home positions, so pursuit cannot move an enemy into another area's count.
+            foreach (var guard in FindObjectsByType<Skybreak.Warden.WardenBrain>(FindObjectsInactive.Include))
+                if (guard.objective != null && InLoadingCourt(guard.objective.transform.position)) court.Add(guard);
+            foreach (var disruptor in FindObjectsByType<Skybreak.AI.Disruptor.DisruptorBrain>(FindObjectsInactive.Include))
+                if (InLoadingCourt(disruptor.Home)) court.Add(disruptor);
+            area1Agents = court.ToArray();
+        }
+
+        static bool InLoadingCourt(Vector3 position) => position.x >= -20 && position.x <= 20 && position.z >= 0 && position.z < 30;
 
         public void ResetEncounter()
         {

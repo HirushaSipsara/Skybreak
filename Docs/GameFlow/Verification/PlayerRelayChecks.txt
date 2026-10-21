@@ -1,0 +1,5 @@
+Player feedback and Relay support smoke checks
+PASS: Two jumps trigger feedback; a third airborne jump is rejected.
+PASS: Incoming damage triggers player hit feedback and camera response.
+PASS: Relay selects healing and restores health when the player is hurt and reachable.
+PASS: Relay healing respects its cooldown.

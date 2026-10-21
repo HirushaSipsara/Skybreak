@@ -140,3 +140,8 @@ InitTestScene*.unity*
 /Tools/WardenTests/bin/
 /Tools/WardenTests/obj/
 !/Tools/WardenTests/WardenTests.csproj
+
+# Local workbench history and Python bytecode.
+/Tools/AIWorkbench/.previous-config.json
+__pycache__/
+*.pyc

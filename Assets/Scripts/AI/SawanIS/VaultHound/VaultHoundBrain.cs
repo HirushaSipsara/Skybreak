@@ -104,8 +104,8 @@ namespace Skybreak.AI.SawanIS.VaultHound
 
         [Header("Pursuit")]
         [SerializeField, Min(0.1f)] float decisionInterval = 0.2f;
-        [SerializeField, Min(0.5f)] float pursueSpeed      = 5.5f;
-        [SerializeField, Min(0.5f)] float deploySpeed      = 3.5f;
+        [SerializeField, Min(0.5f)] float pursueSpeed      = 6.2f;
+        [SerializeField, Min(0.5f)] float deploySpeed      = 4.0f;
         [SerializeField, Min(0.1f)] float waypointThreshold = 0.5f;
 
         [Header("Attack — lunge & swipe")]

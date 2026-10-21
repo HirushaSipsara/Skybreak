@@ -1,0 +1,5 @@
+Skybreak combined main-map validation
+PASS: 11362 main-map objects have no missing scripts, meshes or material shaders.
+PASS: 441 main-map dependencies exist with no unresolved Git LFS pointers.
+PASS: Main scene selected for builds; both Hounds retain faster speeds and readable breakup geometry.
+NOT COMPLETED: Windows development build cancelled during shader compilation; BuildReport errors=1, warnings=30. Standalone build and runtime remain unverified.

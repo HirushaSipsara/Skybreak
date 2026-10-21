@@ -4,6 +4,7 @@ using Skybreak.AI.RiftWarden;
 using Skybreak.Descent;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Skybreak.Player;
 
 namespace Skybreak.LocalCombatLab
 {
@@ -26,7 +27,9 @@ namespace Skybreak.LocalCombatLab
             var arc = Object.FindAnyObjectByType<DescentCharacterController>();
             var boss = Object.FindAnyObjectByType<RiftWardenBrain>();
             var relay = Object.FindAnyObjectByType<RelayBrain>();
-            if (arc == null || boss == null || relay == null || arc.GetComponent<LocalCombatDriver>() != null) return;
+            if (arc == null || boss == null || relay == null) return;
+            if(Object.FindAnyObjectByType<MissionFlowController>()==null)new GameObject("Skybreak mission flow").AddComponent<MissionFlowController>();
+            if(arc.GetComponent<LocalCombatDriver>() != null)return;
             arc.enabled = false;
             var vitals = arc.gameObject.AddComponent<LocalPlayerVitals>();
             var audio = arc.gameObject.AddComponent<CombatAudio>();

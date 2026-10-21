@@ -34,6 +34,15 @@ namespace Skybreak.AI.RiftWarden
         Transform head; Renderer headRenderer; Color headEmission; MaterialPropertyBlock block;
         Texture2D barTex, glowTex;
         GUIStyle titleStyle, subStyle, labelStyle;
+        bool presentationPaused;
+        float presentationPausedAt;
+        public void SuspendPresentation(bool value)
+        {
+            if(value==presentationPaused)return;
+            if(value)presentationPausedAt=Time.unscaledTime;
+            else if(playing)startedAt+=Time.unscaledTime-presentationPausedAt;
+            presentationPaused=value;
+        }
         static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
         void Awake() { if (brain == null) brain = GetComponent<RiftWardenBrain>(); }
@@ -59,6 +68,9 @@ namespace Skybreak.AI.RiftWarden
 
         void Update()
         {
+            if(presentationPaused)return;
+            var mission=Skybreak.Player.MissionFlowController.Instance;
+            if(mission!=null&&mission.State!=Skybreak.Player.MissionState.Playing&&mission.State!=Skybreak.Player.MissionState.Ending)return;
             if (brain == null) return;
             var action = brain.Action;
             // A reset encounter (Backspace / F7 in the lab, or a retry) gets the intro again.
@@ -116,6 +128,7 @@ namespace Skybreak.AI.RiftWarden
 
         void LateUpdate()
         {
+            if(presentationPaused)return;
             if (!playing || cam == null) return;
             float t = Time.unscaledTime - startedAt;
             ShotPose(t, out Vector3 pos, out Quaternion rot);
@@ -165,6 +178,7 @@ namespace Skybreak.AI.RiftWarden
 
         void OnDisable()
         {
+            presentationPaused=false;
             if (ownsTimeScale) { Time.timeScale = 1; ownsTimeScale = false; }
             if (playing) { playing = false; IntroDone = true; }
             if (headRenderer != null) headRenderer.SetPropertyBlock(null);
@@ -191,6 +205,7 @@ namespace Skybreak.AI.RiftWarden
 
         void OnGUI()
         {
+            if(Skybreak.Player.MissionFlowController.Instance!=null&&Skybreak.Player.MissionFlowController.Instance.State!=Skybreak.Player.MissionState.Playing)return;
             if (brain == null) return;
             EnsureStyles();
             float w = Screen.width, h = Screen.height;

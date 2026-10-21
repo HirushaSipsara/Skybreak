@@ -854,7 +854,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -1372625422
   m_Radius: 0.45
-  m_Speed: 5.5
+  m_Speed: 4
   m_Acceleration: 12
   avoidancePriority: 50
   m_AngularSpeed: 360
@@ -931,8 +931,8 @@ MonoBehaviour:
     m_Bits: 4294967295
   memoryDuration: 5
   decisionInterval: 0.2
-  pursueSpeed: 5.5
-  deploySpeed: 3.5
+  pursueSpeed: 6.2
+  deploySpeed: 4
   waypointThreshold: 0.5
   attackTriggerRange: 2.8
   swipeRadius: 1.6

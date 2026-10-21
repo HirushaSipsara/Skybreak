@@ -12,6 +12,7 @@ namespace Skybreak.LocalCombatLab
         public override Vector3 AimPoint => transform.position + Vector3.up * 1.2f;
         public override void ReceiveDamage(float amount, Transform source)
         {
+            if(!Skybreak.Player.MissionFlowController.DamageAllowed)return;
             if (!Alive || amount <= 0 || float.IsNaN(amount) || float.IsInfinity(amount)) return;
             health = Mathf.Max(0,health-amount); var feedback=GetComponent<LocalPlayerFeedback>(); if(feedback!=null)feedback.Hurt(source);
         }

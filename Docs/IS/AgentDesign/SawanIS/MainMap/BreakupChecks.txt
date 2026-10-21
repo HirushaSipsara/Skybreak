@@ -1,0 +1,6 @@
+Vault Hound breakup and speed checks
+PASS: Both map Hounds inherit chase speed 6.2 and deployment speed 4.0 m/s.
+PASS: 18 moving body sections retain all mesh triangles, correct scale/materials, disabled source collisions and actor collision exclusions.
+PASS: Debris and generated meshes expire after four seconds.
+PASS: Reset restores the model, health and collisions.
+PASS: Repeated defeat works; disabling immediately clears debris.

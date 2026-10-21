@@ -73,6 +73,7 @@ public static class CheckVaultHoundIntegration
         var doors = UnityEngine.Object.FindObjectsByType<DungeonHoldingDoor>();
         var driver = UnityEngine.Object.FindAnyObjectByType<LocalCombatDriver>();
         driver.enabled = false;
+        driver.relay.enabled = false;
         foreach (var w in UnityEngine.Object.FindObjectsByType<Skybreak.Warden.WardenBrain>()) w.enabled = false;
         foreach (var d in UnityEngine.Object.FindObjectsByType<Skybreak.AI.Disruptor.DisruptorBrain>()) d.decisionsEnabled = false;
         Check("Two chambered hounds, closed gates and four loading-court enemies", hounds.Length == 2 && hounds.All(x => x.CurrentState == HoundState.Chambered) && doors.All(x => x.IsClosed) && release.TotalEnemies == 4);
@@ -126,6 +127,7 @@ public static class CheckVaultHoundIntegration
         foreach (var _ in Wait(.2f)) yield return null;
         Check("Reset restores both hounds and clears release/pack memory", !release.Released && hounds.All(x => x.CurrentState == HoundState.Chambered && x.GetComponent<VaultHoundDamageAdapter>().Alive && x.GetComponent<NavMeshAgent>().enabled) && !pack.HasActiveSighting);
         Capture(hounds[1].transform.position);
+        driver.relay.enabled = true;
     }
     public static void CaptureCurrent() => Capture(UnityEngine.Object.FindObjectsByType<VaultHoundBrain>().OrderByDescending(x => x.transform.position.x).First().transform.position);
     static void Capture(Vector3 origin)

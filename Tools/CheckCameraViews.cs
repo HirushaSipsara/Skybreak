@@ -51,8 +51,8 @@ public static class CheckCameraViews
                 if(stage==2)
                 {
                     if(Time.time-at<d.Magazine.reloadDuration+.1f)return;
-                    if(d.Magazine.Rounds!=20||d.Magazine.Reserve!=78)throw new Exception("Reload did not finish correctly after switching views.");
-                    File.AppendAllText(Folder+"/CameraViewChecks.txt","PASS: switching during reload preserves the timer and ammunition; 20 rounds loaded, reserve 78.\n");
+                    if(d.Magazine.Rounds!=20||d.Magazine.Reserve!=int.MaxValue)throw new Exception("Recharge did not finish correctly after switching views.");
+                    File.AppendAllText(Folder+"/CameraViewChecks.txt","PASS: switching during recharge preserves the timer; 20 energy shots loaded and reserve remains unlimited.\n");
                     d.SetFirstPerson(true);
                     wall=new GameObject("Camera-to-muzzle cover check");
                     wall.transform.SetPositionAndRotation(Vector3.Lerp(d.cameraView.transform.position,d.Feedback.Muzzle.position,.5f),d.cameraView.transform.rotation);
