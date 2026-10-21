@@ -542,9 +542,10 @@ namespace Skybreak.AI.SawanIS.VaultHound
             }
 
             // Phase 3: Swipe hit check
-            bool connected = TrySwipeHit();
+            if (swipeDelay > 0f) yield return new WaitForSeconds(swipeDelay);
+            lungeHit = TrySwipeHit();
 
-            if (connected)
+            if (lungeHit)
             {
                 // Short pause after a hit before returning to pursue.
                 yield return new WaitForSeconds(0.3f);
@@ -620,7 +621,7 @@ namespace Skybreak.AI.SawanIS.VaultHound
                 if (sink != null && sink.Team == Allegiance.Player && sink.Alive) { player = sink.transform; return; }
 #if UNITY_EDITOR || !UNITY_WEBGL
             // ArcController may not exist in all scenes; use try-find pattern safely.
-            var allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+            var allBehaviours = FindObjectsByType<MonoBehaviour>();
             foreach (var mb in allBehaviours)
             {
                 if (mb.GetType().Name == "ArcController") { player = mb.transform; return; }
@@ -628,7 +629,15 @@ namespace Skybreak.AI.SawanIS.VaultHound
 #endif
 
             var descent = FindAnyObjectByType<Skybreak.Descent.DescentCharacterController>();
-            if (descent != null) player = descent.transform;
+            if (descent != null) { player = descent.transform; return; }
+
+            // Fallback: find living IDamageable that is not this hound.
+            foreach (var ch in FindObjectsByType<CombatHealth>())
+            {
+                if (ch == health || !ch.IsAlive) continue;
+                player = ch.transform;
+                return;
+            }
         }
 
         // ── Utility ───────────────────────────────────────────────────────────
