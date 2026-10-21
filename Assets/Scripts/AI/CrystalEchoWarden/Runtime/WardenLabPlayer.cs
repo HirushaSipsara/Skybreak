@@ -10,6 +10,7 @@ namespace Skybreak.Warden
         public Camera eye;
         public WardenNoiseBus noise;
         public WardenObjective objective;
+        public bool acceptInput=true;
         public override Allegiance Team=>Allegiance.Player;
         public override float Health=>health;
         public override float MaximumHealth=>100;
@@ -24,9 +25,10 @@ namespace Skybreak.Warden
             var body=GetComponent<CharacterController>();body.enabled=false;transform.position=position;body.enabled=true;
             health=100;vertical=0;yaw=0;pitch=0;fireAt=0;decoyAt=0;
         }
-        void Start(){Cursor.lockState=CursorLockMode.Locked;Cursor.visible=false;}
+        void Start(){if(acceptInput){Cursor.lockState=CursorLockMode.Locked;Cursor.visible=false;}}
         void Update()
         {
+            if(!acceptInput)return;
             var k=Keyboard.current;var m=Mouse.current;
             if(k==null||m==null||eye==null)return;
             if(k.escapeKey.wasPressedThisFrame){Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}

@@ -23,7 +23,7 @@ A* owns the complete route. The movement adapter follows it without a second Nav
 Only direct sightings update the exact last-known player location. Sound updates likelihoods over candidate zones.
 Sound propagation is a simulated graph model, not a claim of a physically accurate acoustic engine.
 Tactical eligibility checks are constraints, not a full CSP solver. There is no Minimax or genetic algorithm.
-Unity runtime, four-agent integration and frame-rate validation require Unity 6000.6.0f1 and are pending on this machine.
+Unity 6000.6.0f1 compilation, scene smoke checks and automated runtime tests now pass, including a five-minute run with four Wardens. The final integration of four distinct student agents and rendered frame-rate validation remain pending; see Validation.md for the recorded scope and results.
 
 ## Lecture-to-code mapping
 

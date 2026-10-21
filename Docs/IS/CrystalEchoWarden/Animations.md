@@ -29,4 +29,6 @@ These are in-place clips: `Root` never translates or rotates. `WardenMotor` and 
 
 Inspect `ArtSource/Sachini/CrystalEchoWarden/Evidence/AnimationValidation.txt` for the actual Blender checks. The labelled `CrystalEchoWarden_Movement.gif` shows sampled poses from all eight authored clips; its uniform review timing is not the exact in-game playback speed or a recording of Unity gameplay.
 
-In Unity, reimport the model, enter the FPS lab and run the smoke checks. Then verify continuous movement and turning, stop behind an obstacle, damage the Warden, cancel a wind-up behind cover and defeat it. Check smooth transitions, correct rig orientation, no snapped parts, one attack reaction per shot, and four independent animated Wardens. Unity API compilation, clip binding and Play Mode remain pending on this machine because the editor is unavailable.
+On 20 October 2026, Unity 6000.6.0f1 compiled the runtime and imported/bound all eight clips. Automated Play Mode checks verified actual controller movement selects glide, stopping selects idle, wind-up selects attack and defeat retains death. Cover cancels pending damage, and four Wardens completed a five-minute run with door changes and repeated resets. See `UnitySmokeResults.txt` and `UnityGameplayResults.txt` in this document folder.
+
+These assertions do not measure visual transition quality or rendered frame rate. In the FPS lab, also inspect continuous banking, hit/retreat poses, rig orientation, unsnapped parts and one attack reaction per shot.

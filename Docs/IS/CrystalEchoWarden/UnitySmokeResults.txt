@@ -1,0 +1,20 @@
+Crystal Echo Warden Unity smoke checks
+2026-10-20T17:23:21.7524308Z
+Unity 6000.6.0f1
+PASS FBX model imports as a Unity resource
+PASS Navigation graph builds
+PASS All eight skeletal clips import and bind to the visual model
+PASS Perception and movement references are connected
+PASS Closing the door changes topology and produces a longer legal route
+PASS Direct sight detects the player across the open doorway
+PASS Closed door blocks sight without revealing a new player location
+PASS Occluded sound updates evidence without changing exact last sighting
+PASS A noise event is consumed only once
+PASS Defeat stops navigation, decisions and actor collision
+PASS Four Wardens spawn
+PASS Warden has an independent initialized mind and connected adapters
+PASS Warden has an independent initialized mind and connected adapters
+PASS Warden has an independent initialized mind and connected adapters
+PASS Warden has an independent initialized mind and connected adapters
+PASS Per-agent state is independent
+PASS smoke suite. Combat timing, visual import, frame rates and the other three team agents still require the manual checklist.

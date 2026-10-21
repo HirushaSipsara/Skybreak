@@ -40,7 +40,7 @@ namespace Skybreak.Warden
             Vector3 offset=Vector3.up*.2f, delta=to-from;
             if(Physics.CheckSphere(from+offset,clearanceRadius,environmentMask,QueryTriggerInteraction.Ignore) ||
                Physics.CheckSphere(to+offset,clearanceRadius,environmentMask,QueryTriggerInteraction.Ignore))return false;
-            return delta.sqrMagnitude<.0001f || !Physics.SphereCast(from+offset,clearanceRadius,delta.normalized,delta.magnitude,environmentMask,QueryTriggerInteraction.Ignore);
+            return delta.sqrMagnitude<.0001f || !Physics.SphereCast(from+offset,clearanceRadius,delta.normalized,out _,delta.magnitude,environmentMask,QueryTriggerInteraction.Ignore);
         }
         public int AccessibleNode(Vector3 from)
         {

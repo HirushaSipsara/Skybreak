@@ -27,12 +27,15 @@ namespace Skybreak.Warden
         public event System.Action<Vector3,Vector3> Fired;
         float health,nextThink,attackReady,windupAt=-1;
         int home=-1,patrolCursor,planSeed=17;
+        static int nextStartOffset;
         double[] travel;
         void Awake()
         {
             health=maximumHealth;Mind=new Decision(weights);
             Senses=GetComponent<WardenPerception>();Motor=GetComponent<WardenMotor>();
-            nextThink=Time.time+(Mathf.Abs(GetInstanceID())%5)*.04f;
+            // Spread newly spawned decision ticks without relying on Unity object identifiers.
+            nextThink=Time.time+nextStartOffset*.04f;
+            nextStartOffset=(nextStartOffset+1)%5;
         }
         public override void ReceiveDamage(float amount,Transform source)
         {

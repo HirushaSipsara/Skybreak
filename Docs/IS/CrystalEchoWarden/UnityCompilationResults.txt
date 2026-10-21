@@ -1,0 +1,26 @@
+Crystal Echo Warden Unity compilation
+Date: 20 October 2026
+Editor: 6000.6.0f1 (f7f8ed4d1e24)
+Project: sachini-ISagent-crystal-echo-warden
+
+PASS Unity installed and licensed on the test computer.
+PASS Project package resolution and initial asset import completed.
+PASS Assembly-CSharp and Assembly-CSharp-Editor compiled.
+PASS Unity batch import/compilation exited with code 0.
+
+The first real Unity compilation identified two compatibility errors:
+- GetInstanceID is unavailable in this Editor version. Decision ticks now use
+  an explicit five-slot round-robin start offset.
+- The navigation SphereCast call required an out RaycastHit argument.
+  The call now supplies an out discard while preserving its collision mask.
+
+Existing shared-code deprecated-API warnings and third-party environment
+mesh/shader import warnings were observed. These are not reported as clean
+asset validation for the entire game.
+
+Local detailed logs:
+Logs/Warden-Compile.log          (initial failure)
+Logs/Warden-Compile-Retry.log    (successful compilation and import)
+
+Compilation is separate from gameplay validation. See UnitySmokeResults.txt
+and UnityGameplayResults.txt for their actual outcomes.

@@ -13,7 +13,7 @@ Branch: `sachini-ISagent-crystal-echo-warden`. Base: `main` at `0c4da35`.
 - A standalone FPS lab that builds its layout and actors when Play Mode starts.
 - Local regression tests and a Unity Editor smoke-check menu.
 
-**Validation status:** The core and movement-selection test results are recorded in `CoreTestResults.txt`, including 150 randomized graph comparisons and 1,200 combined cycles across four independent cores. Blender rig/export checks are recorded separately in the animation evidence. Unity is unavailable on the development machine; Unity API compilation, Play Mode, Unity FBX appearance and full team gameplay are still unverified. See [Validation.md](Validation.md).
+**Validation status:** Unity 6000.6.0f1 compilation, the scene smoke suite and automated Play Mode gameplay checks passed on 20 October 2026. The gameplay run covers controller movement, animation selection, door replanning, attack timing, cover/actor obstruction, death and five minutes with four Wardens. The 46 standalone checks and Blender rig/export checks are recorded separately. Rendering performance and integration with four distinct student agents remain to be assessed. See [Validation.md](Validation.md) for evidence, warnings and limits.
 
 ## Open the lab
 
@@ -51,6 +51,7 @@ The lab weapon is a ray-based test weapon with a crosshair. It does not include 
 | Algorithms | `Assets/Scripts/AI/CrystalEchoWarden/Core/` |
 | Unity components | `Assets/Scripts/AI/CrystalEchoWarden/Runtime/` |
 | Unity smoke checks | `Assets/Editor/CrystalEchoWarden/WardenLabChecks.cs` |
+| Automated Unity gameplay checks | `Assets/Editor/CrystalEchoWarden/WardenGameplayChecks.cs` |
 | Standalone tests | `Tools/WardenTests/` |
 
 [Theory and implementation](Implementation.md) · [Team integration](Integration.md) · [Validation and demo checklist](Validation.md) · [Development record](DevelopmentLog.md)

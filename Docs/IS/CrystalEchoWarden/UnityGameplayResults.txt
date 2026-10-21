@@ -1,0 +1,23 @@
+Crystal Echo Warden Unity gameplay checks
+2026-10-20T17:23:21.1618539Z
+Unity 6000.6.0f1
+Graphics: Intel(R) UHD Graphics
+PASS Immediate scene smoke suite
+PASS Controller physically follows a route
+PASS Actual translation selects the skeletal glide clip
+PASS Stopped movement returns to idle
+PASS Door closes mid-route: controller reaches the goal around cover without crossing the door
+PASS Visible in-range player triggers a telegraphed attack
+PASS Wind-up selects the skeletal attack clip
+PASS Closing cover during wind-up prevents damage
+PASS Reopening cover permits a new charge
+PASS A completed charge deals exactly one pulse of damage
+PASS Pulse respects the configured wind-up (one sampled-frame tolerance)
+PASS Intervening actor collider blocks a pulse
+PASS Another attack begins after obstruction is removed
+PASS Defeat during wind-up cancels damage and all root movement
+PASS Defeated actor remains in the authored death animation
+PASS Five-minute four-Warden soak completes through door changes and round resets
+Observed 401258 frames; maximum sampled AI tick 7.847 ms. This is diagnostic timing, not a target-hardware FPS or four-distinct-agent benchmark.
+PASS No Unity error, assertion or exception logged during gameplay checks
+PASS gameplay suite

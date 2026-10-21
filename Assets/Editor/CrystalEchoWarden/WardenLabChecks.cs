@@ -14,14 +14,28 @@ namespace Skybreak.WardenEditor
     {
         const string ScenePath="Assets/Scenes/Tests/CrystalEchoWarden/CrystalEchoWardenLab.unity";
         [MenuItem("Skybreak/Crystal Echo Warden/Open FPS lab")]
-        static void OpenLab()
+        public static void OpenLab()
         {
             if(EditorApplication.isPlaying){Debug.LogWarning("Stop Play Mode before opening the lab.");return;}
             if(EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())EditorSceneManager.OpenScene(ScenePath);
         }
 
+        [MenuItem("Skybreak/Crystal Echo Warden/Inspect live Warden")]
+        public static void InspectWarden()
+        {
+            var lab=UnityEngine.Object.FindFirstObjectByType<WardenLab>();
+            if(!EditorApplication.isPlaying||lab==null||lab.Wardens.Count==0)
+            {Debug.LogWarning("Enter lab Play Mode before inspecting a Warden.");return;}
+            var warden=lab.Wardens[0];
+            // Frame the actor, independent of the imported rig's conservative animation bounds.
+            var view=SceneView.lastActiveSceneView??EditorWindow.GetWindow<SceneView>();
+            view.LookAtDirect(warden.transform.position+Vector3.up*.4f,
+                warden.transform.rotation*Quaternion.Euler(12,160,0),1.7f);
+            view.Focus();
+        }
+
         [MenuItem("Skybreak/Crystal Echo Warden/Run Play Mode smoke checks")]
-        static void CheckLab()
+        public static void CheckLab()
         {
             var lab=UnityEngine.Object.FindFirstObjectByType<WardenLab>();
             if(!EditorApplication.isPlaying||lab==null||lab.Player==null)
