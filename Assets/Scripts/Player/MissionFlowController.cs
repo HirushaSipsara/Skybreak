@@ -58,6 +58,8 @@ namespace Skybreak.Player
             previewFocus=guards!=null && guards.objectives.Length>1?guards.objectives[1].transform.position+Vector3.up*2.3f:player.transform.position+player.transform.forward*8+Vector3.up*2;
             ui=gameObject.AddComponent<MissionInterface>();ui.Build(this);
             bool launch=startAfterReload;startAfterReload=false;
+            // The FPS rifle is pinned to the camera, so keep it hidden while menu cameras frame the scene.
+            player.SetFirstPerson(false);
             SetState(MissionState.MainMenu);
             if(launch)StartMission();
         }
@@ -166,6 +168,7 @@ namespace Skybreak.Player
             if(State!=MissionState.Playing)return;
             CompletionCount++;endingCameraPosition=cameraView.transform.position;endingCameraRotation=cameraView.transform.rotation;
             SetState(MissionState.Ending);
+            player.SetFirstPerson(false);
             if(intro!=null)intro.enabled=false;
             player.relay.motor.Stop();player.relay.enabled=false;
             if(guards!=null)foreach(var guard in guards.wardens)guard.enabled=false;

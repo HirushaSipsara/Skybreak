@@ -54,7 +54,9 @@ namespace Skybreak.LocalCombatLab
             foreach (var r in GetComponentsInChildren<Renderer>()) r.enabled = true;
             // Starting in the FPS rig avoids the clipped over-the-shoulder camera and makes
             // the telescope the first weapon presentation the player receives.
-            SetFirstPerson(true);
+            // When the mission flow owns the camera (main menu / intro), stay out of the FPS rig:
+            // the camera-locked rifle would otherwise float in front of the menu shot.
+            SetFirstPerson(Skybreak.Player.MissionFlowController.Instance==null);
         }
         void Update()
         {
