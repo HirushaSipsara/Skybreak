@@ -65,6 +65,29 @@ def cylinder(name, location, radius, depth, material, vertices=12, rotation=(mat
     bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, location=location, rotation=rotation)
     return finish(bpy.context.object, name, material, bevel)
 
+def open_sleeve(name, location, radius, length, material):
+    # Four concentric loops form the two annular rims, inside wall and outside wall.
+    count = 48
+    vertices, faces = [], []
+    for r, y in ((radius, -length/2), (radius, length/2),
+                 (.077, length/2), (.077, -length/2)):
+        for i in range(count):
+            angle = math.tau * i / count
+            vertices.append((r * math.cos(angle), y, r * math.sin(angle)))
+    for k in range(4):
+        for i in range(count):
+            j, n = (i + 1) % count, (k + 1) % 4
+            faces.append((k*count+i, n*count+i, n*count+j, k*count+j))
+    mesh = bpy.data.meshes.new(name)
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    asset.objects.link(obj)
+    obj.location = location
+    obj.parent = anchor
+    mesh.materials.append(material)
+    parts.append(obj)
+
 def rounded_bar(name, start, end, width, material):
     start, end = Vector(start), Vector(end)
     direction = end - start
@@ -104,10 +127,17 @@ for i in range(3):
     fin.rotation_euler.y = angle
     fin.parent = anchor
 
-# First-person sight and short stock silhouette.
-box('Holographic sight base', (.22, -.50, -.02), (.095, .10, .05), graphite, .009).parent = anchor
-box('Holographic sight frame', (.22, -.52, .045), (.11, .025, .10), steel, .008).parent = anchor
-box('Holographic sight lens', (.22, -.535, .047), (.075, .009, .062), cyan, .002).parent = anchor
+# A centred low-power telescopic sight replaces the old open holographic frame. The two
+# rings and turret caps leave an unmistakable scope profile in the hip-fire silhouette,
+# while the optical axis remains straight down the weapon's forward (-Y) axis for ADS.
+box('Scope mounting rail', (.22, -.51, -.095), (.11, .31, .035), steel, .009).parent = anchor
+for index, y in enumerate((-.46, -.66)):
+    box('Scope mount ' + str(index), (.22, y, -.025), (.085, .055, .105), graphite, .010).parent = anchor
+open_sleeve('Scope main tube', (.22, -.58, .09), .095, .40, graphite)
+open_sleeve('Scope eyepiece', (.22, -.355, .09), .117, .085, steel)
+open_sleeve('Scope objective collar', (.22, -.805, .09), .11, .065, steel)
+cylinder('Scope elevation turret', (.22, -.58, .215), .050, .080, teal, 12, rotation=(0, 0, 0)).parent = anchor
+cylinder('Scope windage turret', (.34, -.58, .055), .044, .070, teal, 12, rotation=(0, math.pi / 2, 0)).parent = anchor
 stock = box('Compact shoulder stock', (.22, -.20, -.22), (.17, .24, .12), graphite, .02)
 stock.rotation_euler.x = -.18
 stock.parent = anchor
@@ -172,6 +202,7 @@ scene.render.resolution_y = 720
 scene.render.resolution_percentage = 100
 scene.render.image_settings.file_format = 'PNG'
 scene.render.filepath = str(BASE / 'Evidence/FirstPersonPreview.png')
+bpy.ops.render.render(write_still=True)
 
 # The actual exported asset excludes camera, lights, and hand reference objects.
 bpy.ops.object.select_all(action='DESELECT')
