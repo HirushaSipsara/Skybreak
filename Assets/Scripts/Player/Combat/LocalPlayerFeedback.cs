@@ -18,7 +18,7 @@ namespace Skybreak.LocalCombatLab
         public bool HitActive => Time.time - hitAt < .4f;
         DescentCharacterController arc;
         Transform headPivot;
-        Transform leftElbow, rightElbow, magazine;
+        Transform leftElbow, rightElbow, magazine, scopeHousing;
         LocalMagazine ammunition;
         Vector3 aimTarget;
         Mesh bevelMesh;
@@ -28,9 +28,15 @@ namespace Skybreak.LocalCombatLab
         Vector3 visualPosition;
         Material dark, teal, orange, cyan, armor;
         LineRenderer jumpRing;
+        Mesh sightMesh;
+        public Transform Sight => scopeHousing;
+        const float SightHeight = .24f;
+        const float FrontRim = .20f;
+        const float Bore = .087f;
         Vector3 burstPosition;
         float fireAt = -100, hitAt = -100, jumpAt = -100, markerAt = -100, gait, aimPitch, pace;
         bool grounded = true;
+        bool scoped;
         int jumpNumber;
         string hitDirection = "";
         public float FireStrength => Mathf.Clamp01(1 - (Time.time - fireAt) / .14f);
@@ -47,6 +53,16 @@ namespace Skybreak.LocalCombatLab
             go.transform.localPosition = position; go.transform.localScale = scale;
             var collider = go.GetComponent<Collider>(); collider.enabled = false; Destroy(collider);
             go.GetComponent<Renderer>().sharedMaterial = material; return go.transform;
+        }
+        Transform Tube(string name, Transform parent, Vector3 position, float radius, float length, Material material, int sides = 16)
+        {
+            var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder); go.name = name; go.layer = 8; go.transform.SetParent(parent, false);
+            go.transform.localPosition = position; go.transform.localRotation = Quaternion.Euler(90,0,0);
+            // Unity cylinders are two units tall on their local Y axis. Rotating puts their
+            // optical axis along the rifle's Z/forward axis.
+            go.transform.localScale = new Vector3(radius*2,length*.5f,radius*2);
+            var collider=go.GetComponent<Collider>();collider.enabled=false;Destroy(collider);
+            go.GetComponent<Renderer>().sharedMaterial=material;return go.transform;
         }
         Mesh BevelMesh()
         {
@@ -136,7 +152,7 @@ namespace Skybreak.LocalCombatLab
             Piece("Magazine charge window",magazine,new Vector3(.515f,0,0),new Vector3(.04f,.55f,.5f),cyan);
             Piece("Rifle muzzle",Weapon.transform,new Vector3(0,0,.548f),new Vector3(.09f,.08f,.025f),cyan);
             Piece("Rifle energy rail",Weapon.transform,new Vector3(0,.105f,.12f),new Vector3(.06f,.02f,.28f),cyan);
-            Armor("Rifle sight",Weapon.transform,new Vector3(0,.15f,-.03f),new Vector3(.10f,.08f,.13f),dark);
+            BuildTelescopicSight();
             var muzzle = new GameObject("Muzzle origin"); muzzle.transform.SetParent(Weapon.transform,false); muzzle.transform.localPosition = new Vector3(0,.025f,.565f); Muzzle = muzzle.transform;
             aimTarget=transform.position+transform.forward*80+Vector3.up*1.6f;
             var click=new float[1920];var random=new System.Random(311);float low=0;
@@ -144,6 +160,57 @@ namespace Skybreak.LocalCombatLab
             reloadClick=AudioClip.Create("Rifle magazine latch",click.Length,1,24000,false);reloadClick.SetData(click,0);
             var ring = new GameObject("Local jump energy burst"); ring.transform.SetParent(transform,false); jumpRing = ring.AddComponent<LineRenderer>();
             jumpRing.useWorldSpace = true; jumpRing.positionCount = 49; jumpRing.sharedMaterial = cyan; jumpRing.shadowCastingMode = ShadowCastingMode.Off; jumpRing.receiveShadows = false; jumpRing.enabled = false;
+        }
+        void BuildTelescopicSight()
+        {
+            scopeHousing=new GameObject("Telescopic sight").transform;scopeHousing.SetParent(Weapon.transform,false);
+            // Two low mounts place the optic on the receiver centreline. The eye piece, tube,
+            // objective collar and lens make its profile read as a scope in both world views.
+            for(int i=0;i<2;i++)Armor("Scope mount "+i,scopeHousing,new Vector3(0,.12f,.09f+i*.09f),new Vector3(.075f,.07f,.038f),dark);
+            var shell = new GameObject("Open sight housing", typeof(MeshFilter), typeof(MeshRenderer));
+            shell.layer = 8;
+            shell.transform.SetParent(scopeHousing, false);
+            shell.transform.localPosition = Vector3.up * SightHeight;
+            sightMesh = BuildSightMesh();
+            shell.GetComponent<MeshFilter>().sharedMesh = sightMesh;
+            shell.GetComponent<MeshRenderer>().sharedMaterial = dark;
+            // Elevation and windage caps keep the sight recognisably telescopic in hip fire.
+            var elevation=Tube("Scope elevation cap",scopeHousing,new Vector3(0,.35f,.145f),.032f,.034f,teal,12);elevation.localRotation=Quaternion.identity;
+            var windage=Tube("Scope windage cap",scopeHousing,new Vector3(.11f,SightHeight,.145f),.029f,.034f,teal,12);windage.localRotation=Quaternion.Euler(0,0,90);
+        }
+        public bool IsScopeActive => scoped;
+        public void SetScoped(bool active) => scoped = active;
+
+        // Revolve the rim profile around Z, leaving the bore empty from end to end.
+        static Mesh BuildSightMesh()
+        {
+            const int segments = 64;
+            Vector2[] profile = {
+                new Vector2(.104f, .095f), new Vector2(.104f, .112f),
+                new Vector2(.099f, .12f), new Vector2(.099f, .173f),
+                new Vector2(.104f, .18f), new Vector2(.104f, FrontRim),
+                new Vector2(Bore, FrontRim), new Vector2(Bore, .095f)
+            };
+            var vertices = new Vector3[segments * profile.Length];
+            var triangles = new int[vertices.Length * 6];
+            for (int row = 0; row < profile.Length; row++)
+            for (int i = 0; i < segments; i++)
+            {
+                float angle = i * Mathf.PI * 2 / segments;
+                int a = row * segments + i;
+                int b = row * segments + (i + 1) % segments;
+                int c = (b + segments) % vertices.Length;
+                int d = (a + segments) % vertices.Length;
+                vertices[a] = new Vector3(Mathf.Cos(angle) * profile[row].x,
+                    Mathf.Sin(angle) * profile[row].x, profile[row].y);
+                int t = a * 6;
+                triangles[t] = a; triangles[t+1] = b; triangles[t+2] = c;
+                triangles[t+3] = a; triangles[t+4] = c; triangles[t+5] = d;
+            }
+            var mesh = new Mesh { name = "Open optic", vertices = vertices, triangles = triangles };
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
         }
         public void Movement(Vector2 input, bool onGround, float pitch, float dt)
         {
@@ -188,9 +255,19 @@ namespace Skybreak.LocalCombatLab
             Weapon.transform.localPosition = new Vector3(.13f,1.20f,.37f-fire*.03f);
             var combat=GetComponent<LocalCombatDriver>();
             if(combat!=null&&combat.IsFirstPerson&&combat.cameraView!=null)
-                Weapon.transform.position=combat.cameraView.transform.TransformPoint(new Vector3(.28f,-.26f,.4f-fire*.06f));
+            {
+                Weapon.transform.position = combat.cameraView.transform.TransformPoint(new Vector3(.28f,-.31f,.78f-fire*.06f));
+            }
             Vector3 direction=aimTarget-Weapon.transform.position;
             if(direction.sqrMagnitude>.001f)Weapon.transform.rotation=Quaternion.LookRotation(direction,transform.up)*Quaternion.Euler(25*motion,10*motion,-32*motion);
+            if (scoped && combat != null && combat.cameraView != null)
+            {
+                var eye = combat.cameraView.transform;
+                var rig = Weapon.transform;
+                rig.rotation = eye.rotation;
+                float distance = Mathf.Max(.34f * rig.lossyScale.z, combat.cameraView.nearClipPlane + .1f * rig.lossyScale.z);
+                rig.position = eye.position + eye.forward * distance - rig.TransformVector(Vector3.up * SightHeight);
+            }
             // Muzzle and barrel share their centre line, so their forward vector reaches the aim point.
             Muzzle.localPosition=new Vector3(0,0,.565f);
             magazine.localPosition=new Vector3(0,-.16f-.26f*motion,.16f);magazine.localRotation=Quaternion.Euler(-10,0,-20*motion);
@@ -237,6 +314,26 @@ namespace Skybreak.LocalCombatLab
             }
             GUI.color = old;
         }
-        void OnDestroy() { foreach (var m in new[]{dark,teal,orange,cyan,armor}) if(m != null) Destroy(m);if(bevelMesh!=null)Destroy(bevelMesh);if(reloadClick!=null)Destroy(reloadClick); }
+        public void DrawScope(Camera camera)
+        {
+            if (!scoped || camera == null) return;
+            var rig = Weapon.transform;
+            Vector3 front = new Vector3(0, SightHeight, FrontRim);
+            Vector3 center = camera.WorldToScreenPoint(rig.TransformPoint(front));
+            Vector3 edge = camera.WorldToScreenPoint(rig.TransformPoint(front + Vector3.right * Bore));
+            float radius = Vector2.Distance(center, edge);
+            float x = center.x, y = Screen.height - center.y;
+            if (center.z <= 0 || radius < 4) return;
+            var old = GUI.color;
+            GUI.color = new Color(.06f, .06f, .06f, .85f);
+            GUI.DrawTexture(new Rect(x-radius, y-.5f, radius-2, 1), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(x+2, y-.5f, radius-2, 1), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(x-.5f, y-radius, 1, radius-2), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(x-.5f, y+2, 1, radius-2), Texture2D.whiteTexture);
+            GUI.color = new Color(1, .15f, .08f, 1);
+            GUI.DrawTexture(new Rect(x-1.5f, y-1.5f, 3, 3), Texture2D.whiteTexture);
+            GUI.color = old;
+        }
+        void OnDestroy() { foreach (var m in new[]{dark,teal,orange,cyan,armor}) if(m != null) Destroy(m);if(bevelMesh!=null)Destroy(bevelMesh);if(reloadClick!=null)Destroy(reloadClick);if(sightMesh!=null)Destroy(sightMesh); }
     }
 }

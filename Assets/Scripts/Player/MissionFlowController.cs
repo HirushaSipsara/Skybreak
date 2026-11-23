@@ -82,7 +82,9 @@ namespace Skybreak.Player
         public void SkipIntroduction()
         {
             if(State!=MissionState.Introduction)return;
-            player.SetFirstPerson(player.IsFirstPerson);
+            // The gameplay camera takes over here, after the cinematic has released it.
+            // Start in the actual FPS weapon rig so the telescopic sight is immediately visible.
+            player.SetFirstPerson(true);
             SetState(MissionState.Playing);
         }
         public void PauseMission(){if(State==MissionState.Playing)SetState(MissionState.Paused);}

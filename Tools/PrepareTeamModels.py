@@ -47,9 +47,8 @@ print("Arc integration export:", len(parts), "skinned material groups; 18 bones"
 bpy.ops.wm.open_mainfile(filepath=str(project / "ArtSource/Student3/ArcRescueCarbine/Source/ArcRescueCarbine.blend"))
 anchor = bpy.data.objects["FP_WeaponAnchor"]
 parts = [o for o in anchor.children if o.type == "MESH" and any(c.name.startswith("ArcRescueCarbine") for c in o.users_collection)]
-if len(parts) != 24:
-    parts = [o for o in anchor.children if o.type == "MESH" and not o.name.startswith(("Right palm", "Right thumb"))]
-assert len(parts) == 24, len(parts)
+required_parts = {"Receiver housing", "Cyan energy cell", "Energy cell window", "Muzzle outer ring"}
+assert required_parts.issubset({part.name for part in parts}), "Incomplete carbine export"
 bpy.context.view_layer.update()
 normalize = Matrix.Translation((-.22, .49, .20)) @ anchor.matrix_world.inverted()
 for obj in parts:

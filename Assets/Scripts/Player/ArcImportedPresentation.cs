@@ -14,6 +14,7 @@ namespace Skybreak.Player
         readonly Dictionary<string, Transform> bones = new Dictionary<string, Transform>();
         readonly Dictionary<Transform, Quaternion> rest = new Dictionary<Transform, Quaternion>();
         Renderer[] oldBody, newBody, gunBody;
+        Renderer[] carrierBody, optic;
         Vector3 previous, magazineRest;
         float phase, pace;
 
@@ -29,6 +30,12 @@ namespace Skybreak.Player
             }
             newBody = modelRoot.GetComponentsInChildren<Renderer>();
             gunBody = carbine.GetComponentsInChildren<Renderer>();
+            var feedback = combat != null ? combat.Feedback : null;
+            if (feedback != null && feedback.Weapon != null)
+            {
+                carrierBody = feedback.Weapon.GetComponentsInChildren<Renderer>(true);
+                optic = feedback.Sight.GetComponentsInChildren<Renderer>(true);
+            }
             var originals = new List<Renderer>();
             foreach (var r in arc.visual.GetComponentsInChildren<Renderer>())
                 if (!r.transform.IsChildOf(modelRoot) && !r.transform.IsChildOf(carbine)) originals.Add(r);
@@ -43,7 +50,12 @@ namespace Skybreak.Player
             bool firstPerson=combat!=null&&combat.IsFirstPerson;
             bool visible = !firstPerson&&(arc.viewCamera == null || Vector3.Distance(arc.viewCamera.transform.position, transform.position + Vector3.up * 1.7f) > 1.1f);
             foreach (var r in newBody) r.enabled = visible;
-            foreach (var r in gunBody) r.enabled = firstPerson||visible;
+            foreach (var r in gunBody) r.enabled = visible;
+            // The local view uses one complete rifle with an open sight.
+            if (carrierBody != null)
+                foreach (var r in carrierBody) r.enabled = firstPerson;
+            if (optic != null)
+                foreach (var r in optic) r.enabled = firstPerson || visible;
             foreach (var pair in rest) pair.Key.localRotation = pair.Value;
             Vector3 movement = transform.position - previous; previous = transform.position; movement.y = 0;
             float speed = Time.deltaTime > 0 && movement.magnitude < 2 ? movement.magnitude / Time.deltaTime : 0;
@@ -63,13 +75,14 @@ namespace Skybreak.Player
                     carbine.localRotation = Quaternion.identity;
                     carbine.localScale = Vector3.one;
                 }
-                foreach (var r in carrier.GetComponentsInChildren<Renderer>())
-                    if (!r.transform.IsChildOf(carbine)) r.enabled = false;
                 SolveArm("L", leftGrip.position, -transform.right - Vector3.up);
                 SolveArm("R", rightGrip.position, transform.right - Vector3.up);
-                var direction = combat.AimPoint - bones["Head"].position;
-                float pitch = Mathf.Atan2(direction.y, new Vector2(direction.x, direction.z).magnitude) * Mathf.Rad2Deg;
-                RotateWorld("Head", -Mathf.Clamp(pitch, -45, 45) * .55f);
+                if (bones.TryGetValue("Head", out var head))
+                {
+                    var direction = combat.AimPoint - head.position;
+                    float pitch = Mathf.Atan2(direction.y, new Vector2(direction.x, direction.z).magnitude) * Mathf.Rad2Deg;
+                    RotateWorld("Head", -Mathf.Clamp(pitch, -45, 45) * .55f);
+                }
                 if (magazine != null && combat.Magazine != null)
                 {
                     float motion = combat.Magazine.IsReloading ? Mathf.Sin(combat.Magazine.ReloadProgress * Mathf.PI) : 0;
@@ -84,9 +97,11 @@ namespace Skybreak.Player
         }
         void SolveArm(string side, Vector3 grip, Vector3 hint)
         {
-            var upper = bones["UpperArm." + side];
-            var lower = bones["Forearm." + side];
-            var hand = bones["Hand." + side];
+            // Some imported explorer variants omit the optional arm-bone naming convention.
+            // Keep the first-person weapon presentation alive instead of throwing each frame.
+            if (!bones.TryGetValue("UpperArm." + side, out var upper) ||
+                !bones.TryGetValue("Forearm." + side, out var lower) ||
+                !bones.TryGetValue("Hand." + side, out var hand)) return;
             Vector3 target = grip - carbine.forward * (.065f * arc.visual.lossyScale.y);
             float a = Vector3.Distance(upper.position, lower.position), b = Vector3.Distance(lower.position, hand.position);
             Vector3 delta = target - upper.position;

@@ -20,7 +20,10 @@ namespace Skybreak.LocalCombatLab
         float yaw, pitch = 8, vertical;
         public float shotDamage = 18;
         public bool IsFirstPerson { get; private set; }
+        /// <summary>True while the player is holding the scope control in first-person view.</summary>
+        public bool IsScoped { get; private set; }
         float thirdPersonNearClip;
+        float defaultFieldOfView;
         public LocalMagazine Magazine { get; private set; }
         public Vector3 AimPoint { get; private set; }
         public Vector3 ShotOrigin { get; private set; }
@@ -45,9 +48,13 @@ namespace Skybreak.LocalCombatLab
             bossSpawn = boss.transform.position; relaySpawn = relay.transform.position;
             yaw = transform.eulerAngles.y; Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false;
             thirdPersonNearClip=cameraView.nearClipPlane;
+            defaultFieldOfView=cameraView.fieldOfView;
             Magazine=GetComponent<LocalMagazine>();if(Magazine==null)Magazine=gameObject.AddComponent<LocalMagazine>();Magazine.ResetMagazine();
             feedback=GetComponent<LocalPlayerFeedback>();if(feedback==null)feedback=gameObject.AddComponent<LocalPlayerFeedback>();feedback.Initialize();
             foreach (var r in GetComponentsInChildren<Renderer>()) r.enabled = true;
+            // Starting in the FPS rig avoids the clipped over-the-shoulder camera and makes
+            // the telescope the first weapon presentation the player receives.
+            SetFirstPerson(true);
         }
         void Update()
         {
@@ -65,7 +72,7 @@ namespace Skybreak.LocalCombatLab
             if (keys != null && keys.f3Key.wasPressedThisFrame) { boss.Activate();boss.DamagePart(RiftPart.LeftArm,999); }
             if (keys != null && keys.f4Key.wasPressedThisFrame) { boss.Activate();boss.DamagePart(RiftPart.RightArm,999); }
             if (keys != null && keys.f5Key.wasPressedThisFrame) boss.DamagePart(RiftPart.Core,999);
-            if (Cursor.lockState != CursorLockMode.Locked || !vitals.Alive) return;
+            if (Cursor.lockState != CursorLockMode.Locked || !vitals.Alive) { SetScoped(false); return; }
             if(keys!=null&&keys.vKey.wasPressedThisFrame)ToggleView();
             if(keys!=null&&keys.rKey.wasPressedThisFrame)Reload();
             if (mouse != null) { var look = mouse.delta.ReadValue(); yaw += look.x * .10f; pitch = Mathf.Clamp(pitch - look.y * .10f, -65, 70); }
@@ -76,6 +83,9 @@ namespace Skybreak.LocalCombatLab
                 if (keys.f2Key.wasPressedThisFrame) boss.Activate();
             }
             MoveCharacter(new Vector2(input.x,input.z),keys!=null&&keys.spaceKey.wasPressedThisFrame,keys!=null&&keys.leftShiftKey.isPressed,dt);
+            // Scope only exists in the first-person rig. Holding RMB gives it the expected
+            // "eye to the optic" behaviour rather than a permanently zoomed camera.
+            SetScoped(IsFirstPerson && mouse != null && mouse.rightButton.isPressed);
             fireRequested=mouse!=null&&mouse.leftButton.isPressed;
         }
         public bool RequestJump()
@@ -109,8 +119,11 @@ namespace Skybreak.LocalCombatLab
             if(IsFirstPerson)
             {
                 cameraView.transform.SetPositionAndRotation(pivot+transform.forward*.08f,rotation);
+                float targetFov=IsScoped?32f:defaultFieldOfView;
+                cameraView.fieldOfView=Mathf.Lerp(cameraView.fieldOfView,targetFov,1-Mathf.Exp(-18f*Time.unscaledDeltaTime));
                 return;
             }
+            cameraView.fieldOfView=Mathf.Lerp(cameraView.fieldOfView,defaultFieldOfView,1-Mathf.Exp(-18f*Time.unscaledDeltaTime));
             Vector3 offset = rotation * new Vector3(1.05f, 0, -4.5f); float distance = offset.magnitude;
             if (Physics.SphereCast(pivot, .2f, offset.normalized, out var hit, distance, ~(1 << 8), QueryTriggerInteraction.Ignore)) distance = Mathf.Max(.2f, hit.distance - .1f);
             cameraView.transform.SetPositionAndRotation(pivot + offset.normalized * distance, rotation);
@@ -119,10 +132,18 @@ namespace Skybreak.LocalCombatLab
         public void SetFirstPerson(bool firstPerson)
         {
             IsFirstPerson=firstPerson;
+            if(!firstPerson) SetScoped(false);
             cameraView.nearClipPlane=firstPerson?Mathf.Min(.05f,thirdPersonNearClip):thirdPersonNearClip;
             UpdateCamera();
             UpdateAim(cameraView.ViewportPointToRay(new Vector3(.5f,.5f,0)));
             feedback?.RefreshPose();
+        }
+        void SetScoped(bool scoped)
+        {
+            scoped &= IsFirstPerson && vitals != null && vitals.Alive;
+            if(IsScoped==scoped)return;
+            IsScoped=scoped;
+            feedback?.SetScoped(scoped);
         }
         public bool Reload()
         {
@@ -203,13 +224,13 @@ namespace Skybreak.LocalCombatLab
             yaw=0;pitch=8;relay.motor.GetComponent<UnityEngine.AI.NavMeshAgent>().Warp(new Vector3(44,.04f,77));
             Physics.SyncTransforms();
         }
-        void OnDisable() { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
+        void OnDisable() { SetScoped(false); Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
         void OnGUI()
         {
             if(Skybreak.Player.MissionFlowController.Instance!=null)
             {
                 if(!Skybreak.Player.MissionFlowController.InputAllowed)return;
-                DrawReticle();feedback?.DrawHUD();return;
+                if(feedback!=null&&feedback.IsScopeActive)feedback.DrawScope(cameraView);else DrawReticle();feedback?.DrawHUD();return;
             }
             GUI.Box(new Rect(16, 16, 760, 184), "ARC / SKYBREAK · "+(IsFirstPerson?"FIRST PERSON":"THIRD PERSON")+" · V switch view");
             GUI.Label(new Rect(28, 44, 720, 25), "WASD / Mouse · LMB fire · R reload · Space double jump · Shift sprint · Backspace restart");
@@ -217,7 +238,7 @@ namespace Skybreak.LocalCombatLab
             GUI.Label(new Rect(28, 96, 670, 25), "Warden: " + boss.Action + " / " + boss.Decision);
             GUI.Label(new Rect(28, 122, 670, 25), "Relay: " + relay.Action + " / " + relay.Decision + " | Last hit: " + LastHit);
             GUI.Label(new Rect(28,148,720,25),"F7 boss room · F3/F4 break arms · F5 exposed core · Energy "+Magazine.Rounds+"/20 · Unlimited reserve"+(Magazine.IsReloading?" — RECHARGING "+(Magazine.ReloadProgress*100).ToString("F0")+"%":""));
-            DrawReticle();
+            if(feedback!=null&&feedback.IsScopeActive)feedback.DrawScope(cameraView);else DrawReticle();
             GUI.Box(new Rect(Screen.width-240,Screen.height-90,220,70),Magazine.IsReloading?"RECHARGING — "+((1-Magazine.ReloadProgress)*Magazine.reloadDuration).ToString("F1")+"s":Magazine.Rounds+" / 20     UNLIMITED ENERGY\nR recharge");
             if (!vitals.Alive) GUI.Box(new Rect(Screen.width / 2f - 150, Screen.height / 2f - 40, 300, 80), "Arc down — Backspace to restart");
             if(feedback!=null)feedback.DrawHUD();

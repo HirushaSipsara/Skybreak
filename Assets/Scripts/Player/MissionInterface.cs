@@ -27,11 +27,20 @@ namespace Skybreak.Player
             var root=new GameObject("Mission interface",typeof(RectTransform),typeof(Canvas),typeof(UnityEngine.UI.CanvasScaler),typeof(UnityEngine.UI.GraphicRaycaster));
             root.transform.SetParent(transform,false);canvas=root.GetComponent<RectTransform>();root.GetComponent<Canvas>().renderMode=RenderMode.ScreenSpaceOverlay;root.GetComponent<Canvas>().sortingOrder=100;
             var scale=root.GetComponent<UnityEngine.UI.CanvasScaler>();scale.uiScaleMode=UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;scale.referenceResolution=new Vector2(1280,720);scale.matchWidthOrHeight=.5f;
-            if(EventSystem.current==null)
+            var eventSystem=EventSystem.current;
+            if(eventSystem==null)
             {
-                var events=new GameObject("Mission UI events",typeof(EventSystem),typeof(InputSystemUIInputModule));events.transform.SetParent(transform,false);
-                events.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
+                var events=new GameObject("Mission UI events",typeof(EventSystem));events.transform.SetParent(transform,false);
+                eventSystem=events.GetComponent<EventSystem>();
             }
+            eventSystem.enabled=true;
+            eventSystem.sendNavigationEvents=true;
+            var inputModule=eventSystem.GetComponent<InputSystemUIInputModule>();
+            if(inputModule==null)inputModule=eventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
+            foreach(var module in eventSystem.GetComponents<BaseInputModule>())
+                if(module!=inputModule)module.enabled=false;
+            inputModule.enabled=true;
+            inputModule.AssignDefaultActions();
             main=Page("Main menu",false);var panel=Image("Menu panel",main.transform,ink);Stretch(panel.rectTransform,new Vector2(0,0),new Vector2(0,1));panel.rectTransform.pivot=new Vector2(0,.5f);panel.rectTransform.anchoredPosition=Vector2.zero;panel.rectTransform.sizeDelta=new Vector2(490,0);
             Label(panel.transform,"SKYBREAK / AURORA RIFT",14,cyan,42,38,410,24);
             Label(panel.transform,"SKYBREAK",66,white,38,112,430,88,FontStyle.Bold);
